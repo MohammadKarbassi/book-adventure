@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { Vazirmatn, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
@@ -15,6 +16,18 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
+export const metadata: Metadata = {
+  title: {
+    template: "%s | ماجراجویی با کتاب",
+    default: "ماجراجویی با کتاب",
+  },
+  description: "ماجراجویی با کتاب؛ پلتفرم کتاب الکترونیکی فارسی",
+  openGraph: {
+    siteName: "ماجراجویی با کتاب",
+    locale: "fa_IR",
+  },
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,7 +38,12 @@ export default function RootLayout({
       lang="fa"
       dir="rtl"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", fontSans.variable)}
+      className={cn(
+        "antialiased",
+        fontMono.variable,
+        "font-sans",
+        fontSans.variable
+      )}
     >
       <body>
         <DirectionProvider direction="rtl">
