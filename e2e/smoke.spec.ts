@@ -37,6 +37,9 @@ test("home page renders in Persian RTL without errors", async ({
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl")
   await expect(page).toHaveTitle(/ماجراجویی با کتاب/)
 
-  await page.waitForLoadState("networkidle")
+  await page.waitForLoadState("load")
+  // The header search becomes interactive once React has hydrated.
+  await page.getByRole("button", { name: "جستجو" }).first().click()
+  await expect(page.getByRole("dialog")).toBeVisible()
   expect(errors).toEqual([])
 })

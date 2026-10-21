@@ -2,8 +2,13 @@ import type { Metadata } from "next"
 import { Vazirmatn, Markazi_Text, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
+import { SiteFooter } from "@/components/site/site-footer"
+import { SiteHeader } from "@/components/site/site-header"
 import { ThemeProvider } from "@/components/theme-provider"
 import { DirectionProvider } from "@/components/ui/direction"
+import { Toaster } from "@/components/ui/sonner"
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 const fontSans = Vazirmatn({
@@ -44,16 +49,34 @@ export default function RootLayout({
       dir="rtl"
       suppressHydrationWarning
       className={cn(
-        "antialiased",
+        "scroll-pt-20 antialiased",
         fontMono.variable,
         "font-sans",
         fontSans.variable,
         fontHeading.variable
       )}
     >
-      <body>
+      <body className="flex min-h-svh flex-col">
         <DirectionProvider direction="rtl">
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            <TooltipProvider>
+              <a
+                href="#main"
+                className={cn(
+                  buttonVariants(),
+                  "sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-3 focus:z-50"
+                )}
+              >
+                پرش به محتوای اصلی
+              </a>
+              <SiteHeader />
+              <main id="main" tabIndex={-1} className="flex-1 outline-none">
+                {children}
+              </main>
+              <SiteFooter />
+              <Toaster position="bottom-left" richColors={false} dir="rtl" />
+            </TooltipProvider>
+          </ThemeProvider>
         </DirectionProvider>
       </body>
     </html>

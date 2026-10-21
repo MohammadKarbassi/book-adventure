@@ -1,21 +1,23 @@
-import { Button } from "@/components/ui/button"
+import { BookRow } from "@/components/book/book-row"
+import { Container } from "@/components/site/container"
+import { getList, toSummary } from "@/lib/catalog"
 
+// Temporary home page to verify the shell; replaced by the shelf in step 3.
 export default function Page() {
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="text-start font-heading text-3xl font-bold">
-            ماجراجویی با کتاب
-          </h1>
-          <p className="text-start">پروژه در مرحلهٔ اولیهٔ راه‌اندازی است.</p>
-          <p className="text-start">این صفحه فعلاً فقط یک نمونهٔ اولیه است.</p>
-          <Button className="mt-2">دکمه</Button>
-        </div>
-        <div className="text-start text-xs text-muted-foreground">
-          برای تغییر حالت تیره، کلید <kbd>d</kbd> را بزنید.
-        </div>
-      </div>
-    </div>
+    <Container className="flex flex-col gap-16 py-12">
+      <BookRow
+        title="پرفروش‌های ماه"
+        description="کتاب‌هایی که این ماه بیشتر از همه خوانده شده‌اند"
+        books={getList("bestsellers").map(toSummary)}
+        priority
+      />
+      <BookRow
+        title="کتاب‌های صوتی پرفروش"
+        description="برای راه، آشپزخانه و پیش از خواب"
+        href="/audiobooks"
+        books={getList("audioBestsellers").map(toSummary)}
+      />
+    </Container>
   )
 }
