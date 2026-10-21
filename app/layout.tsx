@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Vazirmatn, Geist_Mono } from "next/font/google"
+import { Vazirmatn, Markazi_Text, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -9,6 +9,11 @@ import { cn } from "@/lib/utils"
 const fontSans = Vazirmatn({
   subsets: ["arabic", "latin"],
   variable: "--font-sans",
+})
+
+const fontHeading = Markazi_Text({
+  subsets: ["arabic", "latin"],
+  variable: "--font-heading",
 })
 
 const fontMono = Geist_Mono({
@@ -42,7 +47,8 @@ export default function RootLayout({
         "antialiased",
         fontMono.variable,
         "font-sans",
-        fontSans.variable
+        fontSans.variable,
+        fontHeading.variable
       )}
     >
       <body>
