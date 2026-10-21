@@ -1,0 +1,71 @@
+{
+  "generatedAt": "2026-10-21T22:25:23.350Z",
+  "samples": [
+    {
+      "id": "hezar-o-yek-shab-aghaz",
+      "title": "هزار و یکشب - آغاز داستان",
+      "language": "fa",
+      "audioUrl": "https://archive.org/download/hezaroiekshab/0000_aghaze_dastan_1001Shab_podcast.mp3",
+      "durationSeconds": 978,
+      "license": "CC BY-NC-ND 4.0",
+      "licenseUrl": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "attribution": "Soheil Solhjoo — «هزار و یکشب», Internet Archive",
+      "sourceUrl": "https://archive.org/details/hezaroiekshab"
+    },
+    {
+      "id": "hezar-o-yek-shab-1",
+      "title": "هزار و یکشب - شب یکم",
+      "language": "fa",
+      "audioUrl": "https://archive.org/download/hezaroiekshab/0001_1001Shab.mp3",
+      "durationSeconds": 407,
+      "license": "CC BY-NC-ND 4.0",
+      "licenseUrl": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "attribution": "Soheil Solhjoo — «هزار و یکشب», Internet Archive",
+      "sourceUrl": "https://archive.org/details/hezaroiekshab"
+    },
+    {
+      "id": "hezar-o-yek-shab-2",
+      "title": "هزار و یکشب - شب دوم",
+      "language": "fa",
+      "audioUrl": "https://archive.org/download/hezaroiekshab/0002_1001Shab.mp3",
+      "durationSeconds": 728,
+      "license": "CC BY-NC-ND 4.0",
+      "licenseUrl": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "attribution": "Soheil Solhjoo — «هزار و یکشب», Internet Archive",
+      "sourceUrl": "https://archive.org/details/hezaroiekshab"
+    },
+    {
+      "id": "farsi-readings-1",
+      "title": "چیزهای دیگری در جهان هست",
+      "language": "fa",
+      "audioUrl": "https://archive.org/download/FarsiReadings/001_15.09.08_FarsiReadings.mp3",
+      "durationSeconds": 1245,
+      "license": "CC BY-NC-SA 4.0",
+      "licenseUrl": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "attribution": "Soheil Solhjoo — «Farsi Readings», Internet Archive",
+      "sourceUrl": "https://archive.org/details/FarsiReadings"
+    },
+    {
+      "id": "farsi-readings-9",
+      "title": "ما آدم نمیشیم",
+      "language": "fa",
+      "audioUrl": "https://archive.org/download/FarsiReadings/009_15.09.28_FarsiReadings.mp3",
+      "durationSeconds": 1154,
+      "license": "CC BY-NC-SA 4.0",
+      "licenseUrl": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "attribution": "Soheil Solhjoo — «Farsi Readings», Internet Archive",
+      "sourceUrl": "https://archive.org/details/FarsiReadings"
+    },
+    {
+      "id": "masnavi-1",
+      "title": "مثنوی معنوی مولانا - بخش ۱",
+      "language": "fa",
+      "audioUrl": "https://archive.org/download/masnairumiaudio/masnawi-part01.mp3",
+      "durationSeconds": 1725,
+      "license": "Public Domain",
+      "licenseUrl": "http://creativecommons.org/publicdomain/mark/1.0/",
+      "attribution": "Iraj Shahbaz — «Mathnawi-Masnawi-Rumi-audio-book مثنوی معنوی», Internet Archive",
+      "sourceUrl": "https://archive.org/details/masnairumiaudio"
+    }
+  ]
+}
