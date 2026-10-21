@@ -1,7 +1,11 @@
 import { defineConfig, devices } from "@playwright/test"
 
 const PORT = 3100
-const baseURL = `http://localhost:${PORT}`
+
+// E2E_BASE_URL runs the specs against an already running server (e.g. the
+// dev server) instead of building and starting a production one.
+const externalBaseURL = process.env.E2E_BASE_URL
+const baseURL = externalBaseURL ?? `http://localhost:${PORT}`
 
 export default defineConfig({
   testDir: "e2e",
@@ -30,10 +34,12 @@ export default defineConfig({
       testMatch: /.*\.mobile\.spec\.ts/,
     },
   ],
-  webServer: {
-    command: `npm run build && npm run start -- -p ${PORT}`,
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
-  },
+  webServer: externalBaseURL
+    ? undefined
+    : {
+        command: `npm run build && npm run start -- -p ${PORT}`,
+        url: baseURL,
+        reuseExistingServer: !process.env.CI,
+        timeout: 180_000,
+      },
 })
