@@ -1,6 +1,16 @@
 import { STORAGE_PREFIX, expect, test } from "./fixtures"
 
 test.describe("home page", () => {
+  test("header search remains usable while exploring the shelf", async ({
+    page,
+  }) => {
+    await page.goto("/")
+    await page
+      .getByRole("button", { name: "جستجو", exact: true })
+      .first()
+      .click()
+    await expect(page.getByRole("dialog")).toBeVisible()
+  })
   test.beforeEach(async ({ page }) => {
     // The first dev-server compile of "/" can be slow.
     await page.goto("/", { timeout: 120_000 })
@@ -26,6 +36,23 @@ test.describe("home page", () => {
     await expect(page.getByText("بر اساس علاقه‌مندی‌های شما")).toHaveCount(0)
   })
 
+  test("the desktop shelf has a centered physical-book scale", async ({
+    page,
+  }) => {
+    const viewport = page.viewportSize()!
+    const first = (await shelf(page)
+      .getByRole("listitem")
+      .first()
+      .boundingBox())!
+    expect(first.width / viewport.width).toBeGreaterThan(0.45)
+    expect(first.width / viewport.width).toBeLessThan(0.54)
+    expect(
+      Math.abs(first.x + first.width / 2 - viewport.width / 2)
+    ).toBeLessThan(30)
+    expect(first.y / viewport.height).toBeGreaterThan(0.28)
+    expect(first.y / viewport.height).toBeLessThan(0.4)
+  })
+
   test("hovering a shelf book shows its price chip", async ({ page }) => {
     const book = shelf(page).getByRole("link").nth(2)
     const chip = book.getByText("شروع ماجراجویی")
@@ -33,6 +60,20 @@ test.describe("home page", () => {
     await book.hover()
     await expect(chip).toBeVisible()
     await expect(book.getByText(/تومان|رایگان/)).toBeVisible()
+  })
+
+  test("the shelf renders lit book materials without losing its DOM links", async ({
+    page,
+  }) => {
+    await expect(page.locator("[data-shelf-canvas]")).toHaveAttribute(
+      "data-ready",
+      "true"
+    )
+    await expect(shelf(page).getByRole("link").first()).toBeVisible()
+    await expect(shelf(page).locator("[data-shelf-body]").first()).toHaveCSS(
+      "opacity",
+      "0"
+    )
   })
 
   test("clicking a shelf book opens its adventure", async ({ page }) => {

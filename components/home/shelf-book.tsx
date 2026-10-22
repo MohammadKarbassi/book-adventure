@@ -25,7 +25,7 @@ import {
 import { formatNumber } from "@/lib/format"
 
 /** How far the cover (top face) and back (bottom face) reach into the screen. */
-const DEPTH = 180
+const DEPTH = "66cqw"
 const PERSPECTIVE = 1100
 /** Hovered or focused books tip forward at least this much to show a band of their cover. */
 const HOVER_TILT = -24
@@ -92,7 +92,7 @@ export function ShelfBook({
       layout={reduced ? false : "position"}
       transition={{ layout: { type: "spring", stiffness: 170, damping: 26 } }}
       data-shelf-index={index}
-      className="relative"
+      className="@container relative"
       style={{
         zIndex: active ? 200 : (zIndex as MotionValue<number>),
         width: `${widthPct}%`,
@@ -103,7 +103,7 @@ export function ShelfBook({
         href={`/adventures/${book.id}`}
         aria-label={`ماجراجویی ${formatNumber(number)}: ${book.name} — ${book.title} اثر ${book.author}`}
         aria-describedby={priceId}
-        className="group/shelf-book relative block rounded-[3px] outline-none"
+        className="group/shelf-book relative block rounded-[3px] outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
         onPointerEnter={(event) => {
           if (event.pointerType === "mouse") setActive(true)
         }}
@@ -115,12 +115,13 @@ export function ShelfBook({
       >
         <motion.span
           aria-hidden="true"
+          data-shelf-body=""
           className="relative block transform-3d"
           style={{
-            height: thickness,
+            height: `clamp(2rem, ${thickness / 6}cqw, 6.5rem)`,
             rotateX: reduced ? targetTilt : tilt,
             transformPerspective: PERSPECTIVE,
-            transformOrigin: `50% 50% ${-DEPTH / 2}px`,
+            transformOrigin: "50% 50%",
           }}
           initial={false}
           // Pull the book out toward the viewer and the binding side (RTL).
@@ -144,7 +145,7 @@ export function ShelfBook({
                 src={book.image}
                 alt=""
                 fill
-                sizes={`${DEPTH}px`}
+                sizes="(min-width: 768px) 40vw, 65vw"
                 loading={priority ? "eager" : "lazy"}
                 className="object-cover"
               />

@@ -52,9 +52,12 @@ type AdventureSectionProps = {
   showHint: boolean
   onFirstTurn: () => void
   priority: boolean
+  visible?: boolean
+  sceneReady?: boolean
 }
 
-const factClass = "border-foreground/15 bg-foreground/[0.04]"
+const factClass =
+  "rounded-none border-0 border-b border-foreground/20 bg-transparent px-0"
 
 /** Room colors: the gradient and the theme tokens re-scoped to the room. */
 const roomStyle = ({ room }: AdventureView) =>
@@ -79,6 +82,8 @@ export function AdventureSection({
   showHint,
   onFirstTurn,
   priority,
+  visible = true,
+  sceneReady = false,
 }: AdventureSectionProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const { book, room } = adventure
@@ -93,13 +98,19 @@ export function AdventureSection({
       data-adventure-section={adventure.id}
       data-category={adventure.categorySlug}
       data-tone={room.tone}
+      data-section-visible={visible ? "true" : "false"}
+      aria-hidden={!visible}
       aria-labelledby={`${key}-name`}
       className={cn("relative text-foreground", room.tone === "dark" && "dark")}
       style={roomStyle(adventure)}
     >
-      <Container className="grid gap-x-12 pb-16 lg:min-h-svh lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] lg:ps-24 lg:pb-[16svh] xl:gap-x-20 xl:ps-28">
+      <Container
+        data-adventure-info=""
+        style={{ visibility: visible ? "visible" : "hidden" }}
+        className="grid pb-16 min-[900px]:min-h-svh min-[900px]:max-w-[min(84vw,1280px)] min-[900px]:grid-cols-[42%_58%] min-[900px]:px-0 min-[900px]:pb-[14svh]"
+      >
         {/* The book: above the text on small screens, sticky beside it on large ones. */}
-        <div className="flex justify-center pt-10 pb-8 lg:sticky lg:top-0 lg:col-start-2 lg:row-start-1 lg:h-svh lg:items-center lg:self-start lg:py-0">
+        <div className="flex justify-center pt-12 pb-8 min-[900px]:hidden">
           <AdventureBook3D
             adventure={adventure}
             number={number}
@@ -108,10 +119,11 @@ export function AdventureSection({
             showHint={showHint}
             onFirstTurn={onFirstTurn}
             priority={priority}
+            sceneReady={sceneReady}
           />
         </div>
 
-        <div className="flex min-w-0 flex-col gap-11 lg:col-start-1 lg:row-start-1 lg:pt-[20svh]">
+        <div className="flex min-w-0 flex-col gap-10 min-[900px]:col-start-1 min-[900px]:row-start-1 min-[900px]:pt-[20svh]">
           <header className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <p className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
@@ -123,15 +135,15 @@ export function AdventureSection({
             <div className="flex flex-col gap-2">
               <h2
                 id={`${key}-name`}
-                className="font-heading text-[2.15rem] leading-[1.15] font-bold text-balance sm:text-[2.5rem]"
+                className="font-heading text-4xl leading-[1.15] font-bold text-balance sm:text-5xl"
               >
                 {adventure.name}
               </h2>
-              <p className="font-heading text-lg leading-snug text-pretty text-foreground/85">
+              <p className="font-heading text-2xl leading-snug text-pretty text-foreground/85">
                 {adventure.tagline}
               </p>
             </div>
-            <p className="text-[0.8rem] leading-relaxed text-muted-foreground">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               {`بر اساس «${book.title}» اثر ${join(book.authors) || "نویسنده‌ای ناشناس"}`}
               {isAudio && book.narrators?.length
                 ? `، با صدای ${join(book.narrators)}`
@@ -144,7 +156,7 @@ export function AdventureSection({
             {adventure.story.map((paragraph, paragraphIndex) => (
               <p
                 key={paragraphIndex}
-                className="text-[0.95rem] leading-[2] text-pretty"
+                className="font-heading text-2xl leading-[1.7] text-pretty sm:text-[1.75rem]"
               >
                 {paragraph}
               </p>
@@ -292,13 +304,17 @@ export function AdventureSection({
       </Container>
 
       {adventure.reviews.length > 0 ? (
-        <Container className="lg:ps-24 xl:ps-28">
+        <Container
+          data-adventure-praise=""
+          style={{ visibility: visible ? "visible" : "hidden" }}
+          className="min-[900px]:max-w-[min(84vw,1280px)] min-[900px]:px-0"
+        >
           <section
             aria-labelledby={`${key}-reviews`}
             className="flex flex-col gap-9 pb-16"
           >
             <SectionLabel id={`${key}-reviews`}>همسفران</SectionLabel>
-            <ul className="grid gap-x-12 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid gap-x-[4vw] gap-y-10 min-[900px]:grid-cols-3 sm:grid-cols-2">
               {adventure.reviews.map((review, reviewIndex) => (
                 <li key={reviewIndex}>
                   <figure className="flex flex-col gap-3">
@@ -306,7 +322,7 @@ export function AdventureSection({
                       aria-hidden="true"
                       className="size-6 fill-current stroke-0 text-foreground/80"
                     />
-                    <blockquote className="text-sm leading-7 text-pretty">
+                    <blockquote className="font-heading text-2xl leading-relaxed text-pretty">
                       {review.text}
                     </blockquote>
                     <span
@@ -335,9 +351,14 @@ export function AdventureSection({
             </Link>
           </section>
         </Container>
-      ) : null}
+      ) : (
+        <div data-adventure-praise="" />
+      )}
 
-      <Container className="pb-[14svh] lg:ps-24 xl:ps-28">
+      <Container
+        style={{ visibility: visible ? "visible" : "hidden" }}
+        className="pb-[25svh] min-[900px]:max-w-[min(84vw,1280px)] min-[900px]:px-0"
+      >
         <div className="border-t border-foreground/20 pt-8">
           {next ? (
             <Button

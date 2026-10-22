@@ -1,0 +1,38 @@
+{
+  "asset": "book-cloth-height.webp",
+  "createdAt": "2026-10-22",
+  "generator": "OpenAI built-in image_gen",
+  "source": "/Users/mohammad/.codex/generated_images/01a16443-349b-7623-993f-6aa99f4514a3/exec-acad5b48-873b-45b2-8182-ec7fd85d8475.png",
+  "original": true,
+  "referenceImages": [],
+  "rightsNote": "Original AI-generated material. No Stripe Press assets used.",
+  "purpose": "Grayscale bookbinding cloth bump/roughness map",
+  "processing": "Sharp resize to 1024x1024, grayscale conversion, lossless WebP. No procedural texture synthesis or compositing.",
+  "promptFile": "book-cloth-height.prompt.txt",
+  "embeddedPrompt": "book-cloth-height.webp.json",
+  "dimensions": [
+    1024,
+    1024
+  ],
+  "bytes": 693082,
+  "validation": {
+    "visual": "Distinct plain weave yarn bundles, even framing, no text, no border.",
+    "tiling": "Use MirroredRepeatWrapping on both axes. Ordinary RepeatWrapping is not pixel seamless.",
+    "edgeMeanAbsoluteDifference8bit": {
+      "horizontal": 29.3154296875,
+      "vertical": 17.3017578125
+    },
+    "score": "unscored"
+  },
+  "suggestedRepeat": {
+    "cover": [
+      1.3,
+      2
+    ],
+    "broadSpine": [
+      2,
+      0.2
+    ]
+  },
+  "approval": "Parent authorized absent measured comp-spec and MirroredRepeatWrapping."
+}

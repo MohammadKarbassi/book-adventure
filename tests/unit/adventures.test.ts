@@ -12,6 +12,8 @@ import {
   bookDepth,
   nearestTurn,
   tripSeconds,
+  bookTrigger,
+  journeyCamera,
 } from "@/components/adventures/journey-math"
 import {
   NO_SIGNALS,
@@ -100,6 +102,52 @@ describe("orderJourney", () => {
 })
 
 describe("journey math", () => {
+  it("uses the verified 25/30 percent activation breakpoint", () => {
+    expect(bookTrigger(899)).toBe(0.3)
+    expect(bookTrigger(900)).toBe(0.25)
+    expect(activeSection([0, 2000], 1800 + 800 * bookTrigger(1200))).toBe(1)
+    expect(activeSection([0, 2000], 1799 + 800 * bookTrigger(1200))).toBe(0)
+  })
+
+  it("keeps the camera still until Praise reaches the viewport bottom", () => {
+    const args = [1200, 800, [0, 4000], [2000, 6000], [1200, 1000]] as const
+    const camera = (scroll: number) =>
+      journeyCamera(
+        0,
+        scroll,
+        args[0],
+        args[1],
+        [...args[2]],
+        [...args[3]],
+        [...args[4]]
+      )
+    expect(camera(1199).local).toBe(0)
+    expect(camera(1200).local).toBe(0)
+    expect(camera(1500).local).toBe(300)
+    const second = journeyCamera(
+      1,
+      6000,
+      1200,
+      800,
+      [0, 4000],
+      [2000, 6000],
+      [1200, 1000]
+    )
+    expect(second.previous).toBe(2000)
+    expect(second.scroll).toBe(2800)
+    expect(second.ratio).toBeCloseTo((0.027 / (800 / 1018)) * second.scale)
+    const mobile = journeyCamera(
+      1,
+      4200,
+      393,
+      851,
+      [0, 4000],
+      [2000, 6000],
+      [1200, 1000]
+    )
+    expect(mobile.previous).toBe(4000)
+    expect(mobile.local).toBe(200)
+  })
   it("estimates reading time from pages and keeps audio durations", () => {
     expect(tripSeconds({ type: "ebook", pages: 100 })).toBe(
       100 * SECONDS_PER_PAGE
@@ -108,7 +156,7 @@ describe("journey math", () => {
     expect(tripSeconds({ type: "audiobook", durationSeconds: 3600 })).toBe(3600)
   })
 
-  it("book depth grows with length, within 30..70", () => {
+  it("book depth grows with length, within realistic hardcover bounds", () => {
     expect(bookDepth({ type: "ebook", pages: 10 })).toBe(MIN_DEPTH)
     expect(bookDepth({ type: "ebook", pages: 5000 })).toBe(MAX_DEPTH)
     expect(bookDepth({ type: "ebook", pages: 400 })).toBeGreaterThan(

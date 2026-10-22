@@ -22,8 +22,8 @@ const CLOTH: React.CSSProperties = {
   backgroundImage: [
     "linear-gradient(to right, rgb(0 0 0 / 0.32), rgb(0 0 0 / 0) 3.5%, rgb(0 0 0 / 0) 96.5%, rgb(0 0 0 / 0.32))",
     "linear-gradient(to bottom, rgb(255 255 255 / 0.26), rgb(255 255 255 / 0.06) 22%, rgb(0 0 0 / 0) 50%, rgb(0 0 0 / 0.3))",
-    "repeating-linear-gradient(45deg, rgb(255 255 255 / 0.07) 0 1px, transparent 1px 3px)",
-    "repeating-linear-gradient(-45deg, rgb(0 0 0 / 0.09) 0 1px, transparent 1px 3px)",
+    "repeating-linear-gradient(45deg, rgb(255 255 255 / 0.025) 0 1px, transparent 1px 3px)",
+    "repeating-linear-gradient(-45deg, rgb(0 0 0 / 0.025) 0 1px, transparent 1px 3px)",
   ].join(", "),
 }
 

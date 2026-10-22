@@ -1,0 +1,375 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-22T15:50:08.601Z",
+  "title": "Design System: Book Adventure",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Primary",
+        "tonalRamp": [
+          "oklch(0.15 0.15 72)",
+          "oklch(0.26 0.15 72)",
+          "oklch(0.38 0.15 72)",
+          "oklch(0.5 0.15 72)",
+          "oklch(0.62 0.15 72)",
+          "oklch(0.74 0.15 72)",
+          "oklch(0.85 0.15 72)",
+          "oklch(0.95 0.15 72)"
+        ]
+      },
+      "primary-foreground": {
+        "role": "neutral",
+        "displayName": "Primary Foreground",
+        "tonalRamp": [
+          "oklch(0.15 0.03 258)",
+          "oklch(0.26 0.03 258)",
+          "oklch(0.38 0.03 258)",
+          "oklch(0.5 0.03 258)",
+          "oklch(0.62 0.03 258)",
+          "oklch(0.74 0.03 258)",
+          "oklch(0.85 0.03 258)",
+          "oklch(0.95 0.03 258)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Background",
+        "tonalRamp": [
+          "oklch(0.15 0.012 85)",
+          "oklch(0.26 0.012 85)",
+          "oklch(0.38 0.012 85)",
+          "oklch(0.5 0.012 85)",
+          "oklch(0.62 0.012 85)",
+          "oklch(0.74 0.012 85)",
+          "oklch(0.85 0.012 85)",
+          "oklch(0.95 0.012 85)"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Foreground",
+        "tonalRamp": [
+          "oklch(0.15 0.03 258)",
+          "oklch(0.26 0.03 258)",
+          "oklch(0.38 0.03 258)",
+          "oklch(0.5 0.03 258)",
+          "oklch(0.62 0.03 258)",
+          "oklch(0.74 0.03 258)",
+          "oklch(0.85 0.03 258)",
+          "oklch(0.95 0.03 258)"
+        ]
+      },
+      "card": {
+        "role": "neutral",
+        "displayName": "Card",
+        "tonalRamp": [
+          "oklch(0.15 0.006 85)",
+          "oklch(0.26 0.006 85)",
+          "oklch(0.38 0.006 85)",
+          "oklch(0.5 0.006 85)",
+          "oklch(0.62 0.006 85)",
+          "oklch(0.74 0.006 85)",
+          "oklch(0.85 0.006 85)",
+          "oklch(0.95 0.006 85)"
+        ]
+      },
+      "secondary": {
+        "role": "neutral",
+        "displayName": "Secondary",
+        "tonalRamp": [
+          "oklch(0.15 0.014 85)",
+          "oklch(0.26 0.014 85)",
+          "oklch(0.38 0.014 85)",
+          "oklch(0.5 0.014 85)",
+          "oklch(0.62 0.014 85)",
+          "oklch(0.74 0.014 85)",
+          "oklch(0.85 0.014 85)",
+          "oklch(0.95 0.014 85)"
+        ]
+      },
+      "muted-foreground": {
+        "role": "neutral",
+        "displayName": "Muted Foreground",
+        "tonalRamp": [
+          "oklch(0.15 0.025 258)",
+          "oklch(0.26 0.025 258)",
+          "oklch(0.38 0.025 258)",
+          "oklch(0.5 0.025 258)",
+          "oklch(0.62 0.025 258)",
+          "oklch(0.74 0.025 258)",
+          "oklch(0.85 0.025 258)",
+          "oklch(0.95 0.025 258)"
+        ]
+      },
+      "accent": {
+        "role": "secondary",
+        "displayName": "Accent",
+        "tonalRamp": [
+          "oklch(0.15 0.035 200)",
+          "oklch(0.26 0.035 200)",
+          "oklch(0.38 0.035 200)",
+          "oklch(0.5 0.035 200)",
+          "oklch(0.62 0.035 200)",
+          "oklch(0.74 0.035 200)",
+          "oklch(0.85 0.035 200)",
+          "oklch(0.95 0.035 200)"
+        ]
+      },
+      "accent-foreground": {
+        "role": "secondary",
+        "displayName": "Accent Foreground",
+        "tonalRamp": [
+          "oklch(0.15 0.08 200)",
+          "oklch(0.26 0.08 200)",
+          "oklch(0.38 0.08 200)",
+          "oklch(0.5 0.08 200)",
+          "oklch(0.62 0.08 200)",
+          "oklch(0.74 0.08 200)",
+          "oklch(0.85 0.08 200)",
+          "oklch(0.95 0.08 200)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Border",
+        "tonalRamp": [
+          "oklch(0.15 0.015 85)",
+          "oklch(0.26 0.015 85)",
+          "oklch(0.38 0.015 85)",
+          "oklch(0.5 0.015 85)",
+          "oklch(0.62 0.015 85)",
+          "oklch(0.74 0.015 85)",
+          "oklch(0.85 0.015 85)",
+          "oklch(0.95 0.015 85)"
+        ]
+      },
+      "input": {
+        "role": "neutral",
+        "displayName": "Input",
+        "tonalRamp": [
+          "oklch(0.15 0.015 85)",
+          "oklch(0.26 0.015 85)",
+          "oklch(0.38 0.015 85)",
+          "oklch(0.5 0.015 85)",
+          "oklch(0.62 0.015 85)",
+          "oklch(0.74 0.015 85)",
+          "oklch(0.85 0.015 85)",
+          "oklch(0.95 0.015 85)"
+        ]
+      },
+      "ring": {
+        "role": "neutral",
+        "displayName": "Ring",
+        "tonalRamp": [
+          "oklch(0.15 0.14 72)",
+          "oklch(0.26 0.14 72)",
+          "oklch(0.38 0.14 72)",
+          "oklch(0.5 0.14 72)",
+          "oklch(0.62 0.14 72)",
+          "oklch(0.74 0.14 72)",
+          "oklch(0.85 0.14 72)",
+          "oklch(0.95 0.14 72)"
+        ]
+      },
+      "destructive": {
+        "role": "neutral",
+        "displayName": "Destructive",
+        "tonalRamp": [
+          "oklch(0.15 0.2 27)",
+          "oklch(0.26 0.2 27)",
+          "oklch(0.38 0.2 27)",
+          "oklch(0.5 0.2 27)",
+          "oklch(0.62 0.2 27)",
+          "oklch(0.74 0.2 27)",
+          "oklch(0.85 0.2 27)",
+          "oklch(0.95 0.2 27)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Adventure headline",
+        "purpose": "Mobile title, increasing to 3rem at 640px."
+      },
+      "narrative": {
+        "displayName": "Editorial narrative",
+        "purpose": "Reading copy, increasing to 1.75rem at 640px."
+      },
+      "title": {
+        "displayName": "Ending content title",
+        "purpose": "Audio and podcast group headings."
+      },
+      "body": {
+        "displayName": "Supporting body",
+        "purpose": "Utility and supporting copy."
+      },
+      "label": {
+        "displayName": "Compact label",
+        "purpose": "Metadata; excludes the shelf eyebrow defect."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card-ring",
+        "value": "0 0 0 1px color-mix(in oklch,var(--foreground) 10%,transparent)",
+        "purpose": "Reusable card outline, not a raised cast shadow."
+      },
+      {
+        "name": "focus-ring",
+        "value": "0 0 0 3px color-mix(in oklch,var(--ring) 50%,transparent)",
+        "purpose": "Keyboard focus on shared controls."
+      }
+    ],
+    "motion": [
+      {
+        "name": "shelf-tilt",
+        "value": "spring(stiffness:140,damping:26,mass:0.5)",
+        "purpose": "Scroll/hover tilt; static base tilt under reduced motion."
+      },
+      {
+        "name": "shelf-lift",
+        "value": "spring(stiffness:320,damping:26); x:18px; z:42px",
+        "purpose": "Pointer/focus pullout toward reader."
+      },
+      {
+        "name": "book-settle",
+        "value": "spring(stiffness:60,damping:13,mass:1)",
+        "purpose": "Return to three-quarter pose after drag/keys; immediate under reduced motion."
+      },
+      {
+        "name": "book-arrive",
+        "value": "spring(stiffness:38,damping:11,mass:1.1)",
+        "purpose": "Spine-to-cover arrival in the interior; immediate under reduced motion."
+      },
+      {
+        "name": "navigation-panel",
+        "value": "350ms cubic-bezier(0.22,1,0.36,1)",
+        "purpose": "Existing Base UI navigation transitions."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "reading-sm",
+        "value": "640px"
+      },
+      {
+        "name": "shop-md",
+        "value": "768px"
+      },
+      {
+        "name": "adventure-desktop",
+        "value": "900px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Default compact shadcn/Base UI variant; real runtime behavior remains in components/ui/button.tsx.",
+      "html": "<button class=\"ds-control ds-button-primary\" type=\"button\">Continue</button>",
+      "css": ".ds-control{display:inline-flex;align-items:center;justify-content:center;gap:.375rem;height:2rem;padding:0 .625rem;border:1px solid transparent;border-radius:var(--radius);font-family:var(--font-sans);font-size:.875rem;font-weight:500;white-space:nowrap;outline:none;transition:all .15s}.ds-control:active{transform:translateY(1px)}.ds-control:focus-visible{border-color:var(--ring);box-shadow:0 0 0 3px color-mix(in oklch,var(--ring) 50%,transparent)}.ds-control:disabled{pointer-events:none;opacity:.5}.ds-button-primary{background:var(--primary);color:var(--primary-foreground)}.ds-button-primary:hover{background:color-mix(in oklch,var(--primary) 80%,transparent)}"
+    },
+    {
+      "name": "Outline button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Default compact shadcn/Base UI variant; real runtime behavior remains in components/ui/button.tsx.",
+      "html": "<button class=\"ds-control ds-button-outline\" type=\"button\">Browse</button>",
+      "css": ".ds-control{display:inline-flex;align-items:center;justify-content:center;gap:.375rem;height:2rem;padding:0 .625rem;border:1px solid transparent;border-radius:var(--radius);font-family:var(--font-sans);font-size:.875rem;font-weight:500;white-space:nowrap;outline:none;transition:all .15s}.ds-control:active{transform:translateY(1px)}.ds-control:focus-visible{border-color:var(--ring);box-shadow:0 0 0 3px color-mix(in oklch,var(--ring) 50%,transparent)}.ds-control:disabled{pointer-events:none;opacity:.5}.ds-button-outline{background:var(--background);color:var(--foreground);border-color:var(--border)}.ds-button-outline:hover{background:var(--muted)}"
+    },
+    {
+      "name": "Ghost button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Default compact shadcn/Base UI variant; real runtime behavior remains in components/ui/button.tsx.",
+      "html": "<button class=\"ds-control ds-button-ghost\" type=\"button\">Details</button>",
+      "css": ".ds-control{display:inline-flex;align-items:center;justify-content:center;gap:.375rem;height:2rem;padding:0 .625rem;border:1px solid transparent;border-radius:var(--radius);font-family:var(--font-sans);font-size:.875rem;font-weight:500;white-space:nowrap;outline:none;transition:all .15s}.ds-control:active{transform:translateY(1px)}.ds-control:focus-visible{border-color:var(--ring);box-shadow:0 0 0 3px color-mix(in oklch,var(--ring) 50%,transparent)}.ds-control:disabled{pointer-events:none;opacity:.5}.ds-button-ghost{background:transparent;color:var(--foreground)}.ds-button-ghost:hover{background:var(--muted)}"
+    },
+    {
+      "name": "Link button",
+      "kind": "button",
+      "refersTo": "button-link",
+      "description": "Default compact shadcn/Base UI variant; real runtime behavior remains in components/ui/button.tsx.",
+      "html": "<button class=\"ds-control ds-button-link\" type=\"button\">Explore</button>",
+      "css": ".ds-control{display:inline-flex;align-items:center;justify-content:center;gap:.375rem;height:2rem;padding:0 .625rem;border:1px solid transparent;border-radius:var(--radius);font-family:var(--font-sans);font-size:.875rem;font-weight:500;white-space:nowrap;outline:none;transition:all .15s}.ds-control:active{transform:translateY(1px)}.ds-control:focus-visible{border-color:var(--ring);box-shadow:0 0 0 3px color-mix(in oklch,var(--ring) 50%,transparent)}.ds-control:disabled{pointer-events:none;opacity:.5}.ds-button-link{background:transparent;color:var(--primary);text-underline-offset:4px}.ds-button-link:hover{text-decoration:underline}"
+    },
+    {
+      "name": "Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Shared field; RTL direction is explicit, sample label is illustrative.",
+      "html": "<input class=\"ds-field\" dir=\"rtl\" aria-label=\"Search books\" placeholder=\"Search\" />",
+      "css": ".ds-field{width:100%;min-width:0;height:2rem;padding:.25rem .625rem;border:1px solid var(--input);border-radius:var(--radius);background:transparent;color:var(--foreground);font-family:var(--font-sans);font-size:1rem;outline:none;transition:color .15s,border-color .15s}.ds-field::placeholder{color:var(--muted-foreground)}.ds-field:focus-visible{border-color:var(--ring);box-shadow:0 0 0 3px color-mix(in oklch,var(--ring) 50%,transparent)}.ds-field[aria-invalid=true]{border-color:var(--destructive)}.ds-field:disabled{opacity:.5;pointer-events:none;background:color-mix(in oklch,var(--input) 50%,transparent)}@media(min-width:768px){.ds-field{font-size:.875rem}}"
+    },
+    {
+      "name": "Primary badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Noninteractive metadata badge, not an eyebrow style.",
+      "html": "<span class=\"ds-badge\">Available</span>",
+      "css": ".ds-badge{display:inline-flex;align-items:center;justify-content:center;gap:.25rem;height:1.25rem;width:fit-content;padding:.125rem .5rem;overflow:hidden;border:1px solid transparent;border-radius:calc(var(--radius)*2.6);background:var(--primary);color:var(--primary-foreground);font-family:var(--font-sans);font-size:.75rem;font-weight:500;white-space:nowrap}a.ds-badge:hover{background:color-mix(in oklch,var(--primary) 80%,transparent)}.ds-badge:focus-visible{border-color:var(--ring);outline:none;box-shadow:0 0 0 3px color-mix(in oklch,var(--ring) 50%,transparent)}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Default card with 16px inner rhythm; not a replacement for open adventure text.",
+      "html": "<section class=\"ds-card\"><div class=\"ds-card-title\">Book collection</div><div class=\"ds-card-description\">Supporting information</div></section>",
+      "css": ".ds-card{display:flex;flex-direction:column;gap:1rem;padding:1rem 0;overflow:hidden;border-radius:calc(var(--radius)*1.4);background:var(--card);color:var(--card-foreground);box-shadow:0 0 0 1px color-mix(in oklch,var(--foreground) 10%,transparent);font-family:var(--font-sans);font-size:.875rem}.ds-card-title,.ds-card-description{padding-inline:1rem}.ds-card-title{font-family:var(--font-heading);font-size:1rem;font-weight:500;line-height:1.375}.ds-card-description{color:var(--muted-foreground)}"
+    },
+    {
+      "name": "Shop navigation link",
+      "kind": "nav",
+      "description": "Existing desktop navigation item. Does not reproduce the full dropdown or prescribe hero/header composition.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Example navigation\"><a class=\"ds-nav-link\" href=\"#collection\" aria-current=\"page\">Collection</a><a class=\"ds-nav-link\" href=\"#audio\">Audio</a></nav>",
+      "css": ".ds-nav{display:flex;gap:.25rem;direction:rtl}.ds-nav-link{display:inline-flex;align-items:center;justify-content:center;height:2.25rem;width:max-content;padding:.375rem .625rem;border-radius:var(--radius);color:var(--foreground);font-family:var(--font-sans);font-size:.875rem;font-weight:500;text-decoration:none;outline:none;transition:all .15s}.ds-nav-link[aria-current=page]{color:var(--accent-foreground)}.ds-nav-link:hover,.ds-nav-link:focus{background:var(--muted)}.ds-nav-link:focus-visible{box-shadow:0 0 0 3px color-mix(in oklch,var(--ring) 50%,transparent);outline:1px solid var(--ring)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Paper and Lantern",
+    "overview": "This is a source-grounded snapshot of the completed book-material and adventure-interior refinement on 2026-10-22. The existing theme names paper, navy ink, saffron and turquoise; Persian editorial type and physically lit books carry that identity. The material/ending review covers those surfaces only and does not establish whole-page approval.\n\nPRODUCT.md records the user's newer warm, imaginary paper-and-amber illustration direction. That hero and the broader shop hover redesign are pending implementation. The current dark shelf opening and sparse title block are observed state, not approved global composition rules. The shop header remains available on the shelf. Keep this snapshot as evidence while that redesign proceeds; do not treat future imagery as shipped.",
+    "keyCharacteristics": [
+      "Persian RTL reading and native interactive DOM.",
+      "Editorial headings beside legible sans-serif utility text.",
+      "Cover-derived rooms and matte, physically modeled books.",
+      "Theme-aware shopping and a reversible transition into audio content."
+    ],
+    "rules": [
+      {
+        "name": "The Semantic Ink Rule",
+        "body": "Pair each themed surface with its corresponding foreground; cover-specific rooms retain their own readable text tone.",
+        "section": "colors"
+      },
+      {
+        "name": "The Connected Script Rule",
+        "body": "Preserve joined Persian letterforms and RTL reading order; the intro animates Persian words rather than isolated letters.",
+        "section": "typography"
+      },
+      {
+        "name": "The Native Reading Rule",
+        "body": "Keep text, purchase controls, links and drag anchors in DOM and preserve native scrolling while the canvas provides book imagery.",
+        "section": "layout"
+      },
+      {
+        "name": "The Material Truth Rule",
+        "body": "Preserve separate cover color, cloth height and matte roughness; do not describe the generated relief as a genuine per-book foil or emboss map.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** preserve semantic theme variables and readable surface/foreground pairs.",
+      "**Do** keep Persian RTL reading, logical inline spacing and native interactive DOM.",
+      "**Do** preserve cover proportions and separate color, height and roughness maps.",
+      "**Do** keep book motion responsive to pointer, keyboard and reduced-motion settings."
+    ],
+    "donts": [
+      "**Don't** copy Stripe artwork, text, fonts or material maps.",
+      "**Don't** present generated backs, spines or relief as authentic per-book scans.",
+      "**Don't** apply the current dark shelf or sparse hero composition as an approved system-wide template.",
+      "**Don't** describe the pending illustrated hero or shop redesign as implemented."
+    ]
+  }
+}

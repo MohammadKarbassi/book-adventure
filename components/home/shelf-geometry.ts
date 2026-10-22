@@ -26,7 +26,7 @@ export type ShelfBook = {
 export const MIN_THICKNESS = 44
 export const MAX_THICKNESS = 84
 /** Largest tilt, in degrees, at the top and bottom of the viewport. */
-export const MAX_TILT = 28
+export const MAX_TILT = 12
 /** Tilt used instead of scrolling when the user prefers reduced motion. */
 export const STATIC_TILT = -8
 
@@ -70,7 +70,7 @@ export type SpineLayout = {
 
 /** A real stack is never perfectly aligned: vary width and offset per book. */
 export function spineLayout(book: ShelfBook): SpineLayout {
-  const widthPct = Math.round(88 + seeded(book.id, 1) * 12)
+  const widthPct = Math.round(96 + seeded(book.id, 1) * 4)
   const offsetPct = Math.round((100 - widthPct) * seeded(book.id, 2) * 10) / 10
   return { thickness: spineThickness(book), widthPct, offsetPct }
 }

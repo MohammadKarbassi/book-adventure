@@ -39,6 +39,7 @@ test("home page renders in Persian RTL without errors", async ({
 
   await page.waitForLoadState("load")
   // The header search becomes interactive once React has hydrated.
+  await page.getByRole("link", { name: "به فروشگاه بروید" }).click()
   await page.getByRole("button", { name: "جستجو" }).first().click()
   await expect(page.getByRole("dialog")).toBeVisible()
   expect(errors).toEqual([])

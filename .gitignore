@@ -44,3 +44,6 @@ next-env.d.ts
 
 # fetch script caches (covers, raw Fidibo responses)
 /.cache/
+
+# Local visual comparison captures, not production assets
+/.impeccable/review/

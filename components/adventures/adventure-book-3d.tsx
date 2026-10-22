@@ -30,10 +30,10 @@ const BASE_WIDTH = 300
 // the spine toward the reader, a positive one shows the cover and the
 // fore-edge of the pages.
 const SPINE_POSE = -72
-const REST_POSE = 22
-const REST_TILT = 4
+const REST_POSE = -17
+const REST_TILT = 12
 /** Extra turn while the section scrolls by, ± this much. */
-const SCROLL_TURN = 10
+const SCROLL_TURN = 5
 /** Back to the resting pose after this long without input. */
 const IDLE_MS = 1200
 const KEY_IDLE_MS = 2600
@@ -69,6 +69,7 @@ type AdventureBook3DProps = {
   onFirstTurn: () => void
   priority?: boolean
   className?: string
+  sceneReady?: boolean
 }
 
 /** Shade a face by how far it is turned away from the reader. */
@@ -94,6 +95,7 @@ export function AdventureBook3D({
   onFirstTurn,
   priority,
   className,
+  sceneReady = false,
 }: AdventureBook3DProps) {
   const { book, palette, depth } = adventure
   const author = book.authors[0] ?? ""
@@ -265,7 +267,7 @@ export function AdventureBook3D({
   return (
     <div
       className={cn(
-        "relative flex flex-col items-center gap-10 [--bh:16.5rem] [--bw:11rem] sm:[--bh:21rem] sm:[--bw:14rem] lg:[--bh:26.25rem] lg:[--bw:17.5rem] xl:[--bh:28.125rem] xl:[--bw:18.75rem]",
+        "relative flex flex-col items-center gap-8 [--bh:calc(var(--bw)*1.5)] [--bw:min(60vw,16rem)] min-[900px]:[--bw:min(28vw,47svh,29rem)]",
         className
       )}
       style={
@@ -291,7 +293,12 @@ export function AdventureBook3D({
         <motion.div
           data-book-body=""
           className="relative h-(--bh) w-(--bw) transform-3d"
-          style={{ rotateY, rotateX: tilt }}
+          style={{
+            rotateY,
+            rotateX: tilt,
+            rotateZ: 3.5,
+            opacity: sceneReady ? 0 : 1,
+          }}
         >
           {/* Front board: the cover. */}
           <div
@@ -303,7 +310,7 @@ export function AdventureBook3D({
               alt=""
               fill
               draggable={false}
-              sizes="(min-width: 1024px) 300px, 224px"
+              sizes="(min-width: 1024px) 32vw, 60vw"
               loading={priority ? "eager" : "lazy"}
               className="object-cover"
             />
@@ -433,7 +440,7 @@ export function AdventureBook3D({
         <motion.span
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 -bottom-7 mx-auto h-7 w-(--bw) rounded-[50%] bg-black/35 blur-xl"
-          style={{ scaleX: shadowScale }}
+          style={{ scaleX: shadowScale, opacity: sceneReady ? 0 : 1 }}
         />
       </div>
 

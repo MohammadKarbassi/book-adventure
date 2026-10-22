@@ -7,6 +7,7 @@ import {
   toAdventureView,
 } from "@/components/adventures/adventure-views"
 import { getAdventureByBookId, getAdventures } from "@/lib/adventures"
+import { getPodcasts } from "@/lib/podcasts"
 
 type AdventurePageProps = { params: Promise<{ bookId: string }> }
 
@@ -50,6 +51,13 @@ export default async function AdventurePage({ params }: AdventurePageProps) {
       adventures={getAdventures().map(toAdventureView)}
       categoryOf={getCategoryMap()}
       initialId={adventure.book.id}
+      podcast={
+        getPodcasts().map(({ id, title, artwork }) => ({
+          id,
+          title,
+          artwork,
+        }))[0]
+      }
     />
   )
 }

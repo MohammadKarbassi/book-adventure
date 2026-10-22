@@ -26,6 +26,38 @@ const rail = (page: Page) =>
   page.getByRole("navigation", { name: "مسیر ماجراجویی", exact: true })
 
 test.describe("adventure journey", () => {
+  test("the final book continues into listening and a reversible scene wipe", async ({
+    page,
+  }) => {
+    const ids = await adventureIds(page)
+    await page.goto(`/adventures/${ids.at(-1)}`)
+    const sections = page.locator("[data-adventure-section]")
+    const last = sections.last()
+    await last.scrollIntoViewIfNeeded()
+    const ending = page.locator("[data-journey-ending]")
+    await ending.scrollIntoViewIfNeeded()
+    await expect(
+      ending.getByRole("link", { name: "کتاب‌های صوتی" })
+    ).toBeVisible()
+    await expect(ending.getByRole("link", { name: "پادکست‌ها" })).toBeVisible()
+    const historyLength = await page.evaluate(() => history.length)
+    await page.evaluate(() =>
+      window.scrollTo(0, document.documentElement.scrollHeight)
+    )
+    await expect(page.locator("[data-adventure-canvas]")).toHaveCSS(
+      "clip-path",
+      "inset(0px 0px 100%)"
+    )
+    await expect(
+      page.getByRole("link", { name: "بازگشت به قفسه", exact: true }).last()
+    ).toBeInViewport()
+    await last.scrollIntoViewIfNeeded()
+    await expect(page.locator("[data-adventure-canvas]")).toHaveCSS(
+      "clip-path",
+      "inset(0px 0px 0%)"
+    )
+    expect(await page.evaluate(() => history.length)).toBe(historyLength)
+  })
   let ids: number[] = []
 
   test.beforeEach(async ({ page }) => {
@@ -68,6 +100,126 @@ test.describe("adventure journey", () => {
     await expect(page).toHaveURL(new RegExp(`/adventures/${ids[6]}$`))
   })
 
+  test("continuous book activation synchronizes title, model and browser history", async ({
+    page,
+  }) => {
+    await page.goto(`/adventures/${ids[0]}`)
+    await expect(page.locator("[data-active-book]")).toHaveAttribute(
+      "data-active-book",
+      String(ids[0])
+    )
+    const originalTitle = await page.title()
+    const historyLength = await page.evaluate(() => history.length)
+    // A normal scroll across a room boundary, not a route navigation.
+    await section(page, ids[1]).scrollIntoViewIfNeeded()
+    await page.evaluate(
+      (id) => document.getElementById(`adventure-${id}`)!.scrollIntoView(),
+      ids[1]
+    )
+    await expect(page).toHaveURL(new RegExp(`/adventures/${ids[1]}$`))
+    await expect(page.locator("[data-active-book]")).toHaveAttribute(
+      "data-active-book",
+      String(ids[1])
+    )
+    await expect.poll(() => page.title()).not.toBe(originalTitle)
+    const secondTitle = await page.title()
+    expect(await page.evaluate(() => history.length)).toBe(historyLength)
+    await page.evaluate(
+      (id) => document.getElementById(`adventure-${id}`)!.scrollIntoView(),
+      ids[0]
+    )
+    await expect(page).toHaveURL(new RegExp(`/adventures/${ids[0]}$`))
+    await expect(page).toHaveTitle(originalTitle)
+    expect(await page.evaluate(() => history.length)).toBe(historyLength)
+    await page.evaluate(
+      (id) => document.getElementById(`adventure-${id}`)!.scrollIntoView(),
+      ids[1]
+    )
+    await expect(page).toHaveURL(new RegExp(`/adventures/${ids[1]}$`))
+    await page.goBack()
+    await expect(page).toHaveURL(/\/$/)
+    await expect(
+      page.getByRole("heading", { level: 1, name: "سفر ماجراجویی شما" })
+    ).toBeVisible()
+    await page.goForward()
+    await expect(page).toHaveURL(new RegExp(`/adventures/${ids[1]}$`))
+    await expect(page.locator("[data-active-book]")).toHaveAttribute(
+      "data-active-book",
+      String(ids[1])
+    )
+    await expect(page).toHaveTitle(secondTitle)
+    await page.reload()
+    await expect(eyebrow(page, 2, ids.length)).toBeInViewport()
+  })
+
+  test("25 percent activation and distant visibility preserve section geometry", async ({
+    page,
+  }) => {
+    await page.goto(`/adventures/${ids[0]}`)
+    await page.evaluate(() => document.fonts.ready)
+    const heights = await page
+      .locator("[data-adventure-section]")
+      .evaluateAll((elements) =>
+        elements.map((element) => element.getBoundingClientRect().height)
+      )
+    const nextTop = await section(page, ids[1]).evaluate(
+      (element) => element.getBoundingClientRect().top + scrollY
+    )
+    await page.evaluate(
+      (top) => scrollTo(0, top - innerHeight * 0.25 - 3),
+      nextTop
+    )
+    await expect(page.locator("[data-immersive]")).toHaveAttribute(
+      "data-active-index",
+      "0"
+    )
+    await page.evaluate(
+      (top) => scrollTo(0, top - innerHeight * 0.25 + 3),
+      nextTop
+    )
+    await expect(page.locator("[data-immersive]")).toHaveAttribute(
+      "data-active-index",
+      "1"
+    )
+    const after = await page
+      .locator("[data-adventure-section]")
+      .evaluateAll((elements) =>
+        elements.map((element) => element.getBoundingClientRect().height)
+      )
+    heights.forEach((height, index) =>
+      expect(Math.abs(height - after[index])).toBeLessThanOrEqual(1)
+    )
+    await expect(section(page, ids[6])).toHaveAttribute(
+      "data-section-visible",
+      "false"
+    )
+  })
+
+  test("the fixed WebGL camera starts moving at the measured Praise boundary", async ({
+    page,
+  }) => {
+    await page.goto(`/adventures/${ids[0]}`)
+    const canvas = page.locator("[data-adventure-canvas]")
+    await expect(page.locator("[data-immersive]")).toHaveAttribute(
+      "data-scene-ready",
+      "true"
+    )
+    await expect(canvas).toHaveCSS("position", "fixed")
+    await expect(canvas).toHaveAttribute("data-rendered-book", String(ids[0]))
+    const praiseTop = await section(page, ids[0])
+      .locator("[data-adventure-praise]")
+      .evaluate((element) => element.getBoundingClientRect().top + scrollY)
+    await page.evaluate((top) => scrollTo(0, top - innerHeight - 5), praiseTop)
+    await expect(canvas).toHaveAttribute("data-camera-scroll", "0")
+    await page.evaluate(
+      (top) => scrollTo(0, top - innerHeight + 100),
+      praiseTop
+    )
+    await expect
+      .poll(async () => Number(await canvas.getAttribute("data-camera-scroll")))
+      .toBeCloseTo(100, 0)
+  })
+
   test("«ماجراجویی بعدی» moves on to the next adventure", async ({ page }) => {
     await page.goto(`/adventures/${ids[0]}`, { timeout: 120_000 })
     await section(page, ids[0])
@@ -98,7 +250,7 @@ test.describe("adventure journey", () => {
 
   test("the book can be dragged round and springs back", async ({ page }) => {
     await page.goto(`/adventures/${ids[0]}`, { timeout: 120_000 })
-    const stage = section(page, ids[0]).locator("[data-book-stage]")
+    const stage = page.locator("[data-active-book] [data-book-stage]")
     await expect(stage).toHaveAccessibleName("کتاب سه‌بعدی؛ برای چرخاندن بکشید")
     const turn = () =>
       stage
@@ -108,9 +260,9 @@ test.describe("adventure journey", () => {
             /rotateY\((-?[\d.]+)deg\)/.exec(element.style.transform)?.[1] ?? 0
           )
         )
-    // Let the arrival turn (spine, negative → three-quarter view, positive)
-    // happen and settle.
-    await expect.poll(turn, { timeout: 15_000 }).toBeGreaterThan(5)
+    // Let the spine reveal settle into the RTL three-quarter pose.
+    await expect.poll(turn, { timeout: 15_000 }).toBeGreaterThan(-30)
+    await expect.poll(turn).toBeLessThan(-5)
     let rest = await turn()
     await expect
       .poll(
@@ -134,7 +286,9 @@ test.describe("adventure journey", () => {
     // 200px at 0.5°/px: the spine faces the reader.
     expect(Math.abs((await turn()) - rest)).toBeGreaterThan(80)
     await expect(
-      page.getByText("برای چرخاندن، کتاب را بکشید").first()
+      page
+        .locator("[data-active-book]")
+        .getByText("برای چرخاندن، کتاب را بکشید")
     ).toHaveCSS("opacity", "0")
     await page.mouse.up()
     await expect
