@@ -2,9 +2,10 @@
 // Server Components only. Requests go through Next's fetch cache for a day,
 // with a User-Agent as Open Library asks.
 //
-// Test mode: when OPENLIBRARY_FIXTURES names a directory, JSON fixtures are
-// read from it instead of the network (search-<subject>.json,
-// work-<id>.json, search-key-<id>.json).
+// Test mode: when OPENLIBRARY_FIXTURES is set, JSON fixtures are read from
+// e2e/fixtures/openlibrary instead of the network (search-<subject>.json,
+// work-<id>.json, search-key-<id>.json). The folder is a fixed literal so the
+// build only traces that folder, not the whole project.
 
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
@@ -53,10 +54,13 @@ export class OpenLibraryNotFoundError extends OpenLibraryError {
   }
 }
 
-async function readFixture(dir: string, file: string): Promise<unknown> {
+async function readFixture(file: string): Promise<unknown> {
   let text: string
   try {
-    text = await readFile(join(process.cwd(), dir, file), "utf8")
+    text = await readFile(
+      join(process.cwd(), "e2e", "fixtures", "openlibrary", file),
+      "utf8"
+    )
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
       throw new OpenLibraryNotFoundError(`No fixture ${file}`)
@@ -67,8 +71,7 @@ async function readFixture(dir: string, file: string): Promise<unknown> {
 }
 
 async function getJson(path: string, fixture: string): Promise<unknown> {
-  const fixtures = process.env.OPENLIBRARY_FIXTURES
-  if (fixtures) return readFixture(fixtures, fixture)
+  if (process.env.OPENLIBRARY_FIXTURES) return readFixture(fixture)
 
   const url = `${API}${path}`
   let response: Response

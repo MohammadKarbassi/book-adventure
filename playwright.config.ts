@@ -41,7 +41,7 @@ export default defineConfig({
         command: `npm run build && npm run start -- -p ${PORT}`,
         url: baseURL,
         // Open Library answers from recorded JSON, not the network.
-        env: { OPENLIBRARY_FIXTURES: "e2e/fixtures/openlibrary" },
+        env: { OPENLIBRARY_FIXTURES: "1" },
         reuseExistingServer: !process.env.CI,
         timeout: 180_000,
       },
