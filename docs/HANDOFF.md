@@ -7,7 +7,7 @@ Last updated: 2026-10-22 (۳۰ مهر ۱۴۰۵). Deadline: Friday 2026-10-23 (۱
 ## 1. Snapshot
 
 - Repo: https://github.com/MohammadKarbassi/book-adventure (public), branch `master`, remote `origin`.
-- Vercel: the owner imports the repo in vercel.com; every push to `master` then deploys. Not confirmed yet whether the import was done.
+- Vercel: imported by the owner; live URL not known yet (see §4.1). Every push to `master` should deploy.
 - Pushed: everything is on `origin/master`, including the adventures redesign (`0c29f9c`).
 - Last full verification (2026-10-22, main checkout, production build): lint, typecheck, Prettier, 215 unit tests, `next build` (229 static pages, no warnings) and Playwright 72/72 (desktop + mobile), twice in a row.
 
@@ -38,7 +38,7 @@ The home shelf and the per-book inner pages reproduce the press.stripe.com exper
 
 ## 4. Remaining work, in order
 
-1. Ask the owner whether the repo is imported in vercel.com; once live, open the production site and check that Fidibo covers, `/foreign` (live Open Library API), audio samples and podcast audio load, and that the adventures page drags smoothly.
+1. Vercel: the owner imported the repo (2026-10-22) but the live URL is unknown — `book-adventure.vercel.app` and similar guesses return 404, and GitHub shows no deployment statuses. Get the URL from the Vercel project's Domains section; if the deployment failed, read its Build Logs and fix. Then on the live site check that Fidibo covers, `/foreign` (live Open Library API), audio samples and podcast audio load, and that the adventures page drags smoothly.
 2. Update `README.md` (adventures page, foreign books, live link) and `docs/demo-script.md` (add: shelf hover and personalized order, open an adventure, drag the book through all faces, scroll across room seams, rail ticks). Commit and push.
 3. Optional polish: persist the reader's theme and font size; animate full-height section reordering on the adventures page (currently only the shelf and rail animate).
 
