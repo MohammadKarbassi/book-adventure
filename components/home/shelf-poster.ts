@@ -22,6 +22,14 @@ export function createShelfPoster(
     metalness: 0,
   })
   const mesh = new THREE.Mesh(geometry, material)
+  // Poster-only lighting avoids changing the established shelf materials.
+  mesh.layers.set(1)
+  const ambient = new THREE.HemisphereLight(0xfff4dd, 0x344559, 0.65)
+  const creaseLight = new THREE.DirectionalLight(0xfff5e5, 3.2)
+  ambient.layers.set(1)
+  creaseLight.layers.set(1)
+  creaseLight.position.set(-650, 950, 500)
+  scene.add(ambient, creaseLight)
   mesh.visible = false
   scene.add(mesh)
   let pending = false
@@ -69,16 +77,7 @@ export function createShelfPoster(
               map.dispose()
               return
             }
-            const { crop, sourceSize } = HOME_POSTER
             texture = map
-            texture.repeat.set(
-              crop.width / sourceSize,
-              crop.height / sourceSize
-            )
-            texture.offset.set(
-              crop.x / sourceSize,
-              1 - (crop.y + crop.height) / sourceSize
-            )
             texture.colorSpace = THREE.SRGBColorSpace
             material.map = texture
             material.needsUpdate = true
@@ -145,6 +144,7 @@ export function createShelfPoster(
       live = false
       restore()
       scene.remove(mesh)
+      scene.remove(ambient, creaseLight)
       geometry.dispose()
       material.dispose()
       texture?.dispose()

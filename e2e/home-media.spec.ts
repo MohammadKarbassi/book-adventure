@@ -21,6 +21,12 @@ test("homepage continues after its books into audio, podcast and paper shop", as
   await expect(
     podcast.getByRole("button", { name: "شنیدن پادکست" })
   ).toBeVisible()
+  const cover = podcast.locator("[data-home-podcast-anchor]")
+  expect((await cover.boundingBox())!.width).toBeGreaterThan(220)
+  await expect(podcast.locator("[data-home-podcast-cover]")).toHaveAttribute(
+    "src",
+    "/home-media/houston-podcast.webp"
+  )
   await page.locator("[data-home-shop-entrance]").scrollIntoViewIfNeeded()
   expect(await page.evaluate(() => history.length)).toBe(historyLength)
   await expect(
@@ -94,7 +100,7 @@ test("media controls switch the real player from sample to NASA podcast", async 
     .locator("#home-podcast")
     .getByRole("button", { name: "شنیدن پادکست" })
     .click()
-  await expect(player).toContainText("Encore: A Year In Mars Dune Alpha")
+  await expect(player).toContainText("Reflections After Artemis II")
   await expect
     .poll(() =>
       page.evaluate(() => document.querySelector("audio")?.currentTime ?? 0)
@@ -125,7 +131,7 @@ test("flat poster fallback and phone layout survive unavailable WebGL", async ({
   )
   await expect(page.locator("[data-home-poster-fallback]")).toHaveAttribute(
     "src",
-    "/home-media/nasa-rocket-provided.webp"
+    "/home-media/apollo-unframed.webp"
   )
   await expect(
     page

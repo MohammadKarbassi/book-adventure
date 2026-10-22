@@ -5,6 +5,7 @@ import {
   POSTER_HEIGHT,
   podcastReveal,
   settlePosterOpening,
+  posterPanelAngle,
 } from "@/components/home/home-media-math"
 
 describe("home poster folding", () => {
@@ -52,6 +53,20 @@ describe("home poster folding", () => {
       expect(Math.abs(a.y - b.y)).toBeLessThan(0.001)
       expect(Math.abs(a.z - b.z)).toBeLessThan(0.001)
     }
+  })
+  it("reveals four distinct alternating hinges with staggered panel opening", () => {
+    const angles = Array.from({ length: 5 }, (_, i) => posterPanelAngle(i, 0.5))
+    for (let i = 1; i < 5; i++) {
+      expect(angles[i] * angles[i - 1]).toBeLessThan(0)
+      expect(Math.abs(angles[i] - angles[i - 1])).toBeGreaterThan(1.1)
+    }
+    expect(Math.abs(angles[4])).toBeGreaterThan(Math.abs(angles[0]) + 0.1)
+    expect(posterPanelAngle(4, 1)).toBe(0)
+  })
+  it("preserves paper length inside each folded panel", () => {
+    const a = foldPosterPoint(0.3, -0.64, 0.4)
+    const b = foldPosterPoint(0.3, -0.54, 0.4)
+    expect(Math.hypot(b.y - a.y, b.z - a.z)).toBeCloseTo(0.1, 5)
   })
   it("splits the same viewport between poster and podcast scenes", () => {
     expect(podcastReveal(900, 900)).toEqual({ pixels: 0, progress: 0 })

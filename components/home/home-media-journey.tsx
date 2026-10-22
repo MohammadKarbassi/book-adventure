@@ -26,22 +26,19 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
             data-home-poster-anchor=""
             data-poster-ready="false"
             data-poster-opening="1"
-            className="relative aspect-[11/15] h-[min(88svh,116vw)] overflow-hidden font-heading md:h-[96svh]"
+            className="relative h-[min(88svh,116vw)] overflow-hidden font-heading md:h-[96svh]"
+            style={{
+              aspectRatio: `${HOME_POSTER.width} / ${HOME_POSTER.height}`,
+            }}
           >
             <Image
               data-home-poster-fallback=""
               src={HOME_POSTER.src}
               alt="پوستر ارسالی موشک آپولو با نوشتهٔ NASA"
-              width={HOME_POSTER.sourceSize}
-              height={HOME_POSTER.sourceSize}
+              width={HOME_POSTER.width}
+              height={HOME_POSTER.height}
               sizes="(min-width:768px) 40vw,70vw"
-              className="absolute max-w-none"
-              style={{
-                width: `${(HOME_POSTER.sourceSize / HOME_POSTER.crop.width) * 100}%`,
-                height: `${(HOME_POSTER.sourceSize / HOME_POSTER.crop.height) * 100}%`,
-                left: `${(-HOME_POSTER.crop.x / HOME_POSTER.crop.width) * 100}%`,
-                top: `${(-HOME_POSTER.crop.y / HOME_POSTER.crop.height) * 100}%`,
-              }}
+              className="h-full w-full object-contain"
             />
           </div>
           <div className="relative z-20 flex max-w-xl flex-col items-center gap-3 text-center">
@@ -74,7 +71,7 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
           className="pointer-events-none sticky top-16 h-[calc(100svh-4rem)] overflow-hidden"
         >
           <Image
-            src="/home-media/jupiter-provided.webp"
+            src="/home-media/earth-horizon.webp"
             alt=""
             fill
             sizes="100vw"
@@ -90,15 +87,15 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
         >
           <div
             data-home-podcast-anchor=""
-            className="relative size-[clamp(7rem,20svh,12rem)]"
+            className="relative size-[clamp(10rem,28svh,17rem)]"
           >
             <Image
               data-home-podcast-cover=""
               src={podcast.artwork}
-              alt="کاور رسمی NASA’s Curious Universe"
-              width={144}
-              height={144}
-              sizes="144px"
+              alt="کاور Houston We Have a Podcast با تصویر فضانورد"
+              width={272}
+              height={272}
+              sizes="(min-width:768px) 272px, 240px"
               className="h-full w-full rounded-md shadow-xl"
             />
           </div>
@@ -109,7 +106,7 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
             کنجکاوی، آن سوی صفحه‌ها
           </h2>
           <p dir="ltr" className="max-w-lg text-base">
-            NASA’s Curious Universe
+            Houston We Have a Podcast
             <br />
             <span className="text-sm text-foreground/85">{podcast.title}</span>
           </p>
@@ -123,7 +120,7 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
             منبع رسمی: ناسا · پادکست انگلیسی
           </a>
           <p className="max-w-lg text-xs leading-loose text-foreground/75">
-            صدا و کاور: ناسا · تصویر فضایی ارسالی شما، مستقل از موضوع این قسمت
+            صدا و کاور: ناسا · پس‌زمینه: تصویر ارسالی افق زمین
           </p>
         </section>
         <section

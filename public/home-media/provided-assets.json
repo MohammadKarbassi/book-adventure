@@ -8,6 +8,25 @@
   "endorsement": false,
   "additionalUserAssets": [
     {
+      "file": "apollo-unframed.webp",
+      "source": "/Users/mohammad/Downloads/il_1588xN.6880311392_oxdq.jpg",
+      "processing": "WebP encoding only. Complete unframed978x1386 artwork; no CSS or UV crop.",
+      "credit": "User-provided Apollo illustration; artist/license unverified, bootcamp demonstration only."
+    },
+    {
+      "file": "earth-horizon.webp",
+      "source": "/Users/mohammad/Downloads/iss074e0521637orig.jpg",
+      "processing": "Resized to2400x1600 and encoded as WebP; no retouching or content changes.",
+      "credit": "User-provided Earth-horizon photograph. Source/license not independently verified. Atmospheric background, not episode-specific evidence."
+    },
+    {
+      "file": "houston-podcast.webp",
+      "source": "/Users/mohammad/Downloads/hwhap-logo-2024-4k.webp",
+      "processing": "Resized to1200x1200 WebP. Artwork unchanged.",
+      "credit": "Houston We Have a Podcast cover supplied by user; matched to an official episode of the same program.",
+      "sourcePage": "https://www.nasa.gov/podcasts/houston-we-have-a-podcast/reflections-after-artemis-ii/"
+    },
+    {
       "file": "nasa-rocket-provided.webp",
       "source": "/Users/mohammad/Downloads/il_1588xN.6880311392_oxdq.webp",
       "processing": "Unchanged original file. Frame/white margins excluded only through matching CSS view window and texture UV crop, not an edited raster.",

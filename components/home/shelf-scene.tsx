@@ -35,6 +35,7 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
         renderer.autoClear = false
         const scene = new THREE.Scene()
         const camera = new THREE.PerspectiveCamera(45, 1, 1, 10000)
+        camera.layers.enable(1)
         scene.add(new THREE.HemisphereLight(0xfff4dd, 0x344559, 2.2))
         const key = new THREE.DirectionalLight(0xfff5e5, 2.8)
         key.position.set(-600, 900, 1400)
