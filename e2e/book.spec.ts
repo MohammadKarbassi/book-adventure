@@ -63,18 +63,70 @@ test("buying a book unlocks it and survives a reload", async ({ page }) => {
 
 test("favorite toggles and persists", async ({ page }) => {
   await openBook(page, EBOOK.id)
-  const favorite = page.getByRole("button", {
-    name: "افزودن به علاقه‌مندی‌ها",
-  })
-  await expect(favorite).toHaveAttribute("aria-pressed", "false")
-  await favorite.click()
-  await expect(favorite).toHaveAttribute("aria-pressed", "true")
+  const add = page.getByRole("button", { name: "افزودن به علاقه‌مندی‌ها" })
+  // The name follows the state, so screen readers hear what a click does.
+  const remove = page.getByRole("button", { name: "حذف از علاقه‌مندی‌ها" })
+  await expect(add).toHaveAttribute("aria-pressed", "false")
+  await add.click()
+  await expect(remove).toHaveAttribute("aria-pressed", "true")
+  await expect(add).toHaveCount(0)
 
   await page.reload()
   await waitForHydration(page)
-  await expect(favorite).toHaveAttribute("aria-pressed", "true")
-  await favorite.click()
-  await expect(favorite).toHaveAttribute("aria-pressed", "false")
+  await expect(remove).toHaveAttribute("aria-pressed", "true")
+  await remove.click()
+  await expect(add).toHaveAttribute("aria-pressed", "false")
+})
+
+/** Makes every localStorage write throw, as when storage is full or blocked. */
+async function breakStorageWrites(page: Page) {
+  // Registered after the fixture's script, so the intro is still skipped.
+  await page.addInitScript(() => {
+    const original = Storage.prototype.setItem
+    Storage.prototype.setItem = function (key: string, value: string) {
+      if (this === window.localStorage) {
+        throw new DOMException("Quota exceeded", "QuotaExceededError")
+      }
+      return original.call(this, key, value)
+    }
+  })
+  await page.reload()
+  await waitForHydration(page)
+}
+
+test("a purchase that can't be saved shows an error, not success", async ({
+  page,
+}) => {
+  await openBook(page, EBOOK.id)
+  await breakStorageWrites(page)
+
+  await page.getByRole("button", { name: "خرید کتاب" }).click()
+  const dialog = page.getByRole("dialog")
+  const pay = dialog.getByRole("button", { name: "پرداخت و خرید" })
+  await pay.click()
+
+  await expect(page.getByText("خرید ذخیره نشد")).toBeVisible()
+  // Still on the confirm step, ready to retry.
+  await expect(pay).toBeEnabled()
+  await expect(
+    dialog.getByRole("heading", { name: "کتاب خریداری شد" })
+  ).toHaveCount(0)
+  await expect(page.getByText("کتاب خریداری شد")).toHaveCount(0)
+})
+
+test("a review that can't be saved keeps the form filled", async ({ page }) => {
+  await openBook(page, EBOOK.id)
+  await breakStorageWrites(page)
+  await page.getByRole("tab", { name: /نظرات/ }).click()
+
+  const text = "روایت چندصدایی کتاب تا صفحهٔ آخر رهایم نکرد."
+  await page.getByRole("button", { name: /۴ ستاره/ }).click()
+  await page.getByLabel("متن نظر").fill(text)
+  await page.getByRole("button", { name: "ثبت نظر" }).click()
+
+  await expect(page.getByText("نظر شما ذخیره نشد")).toBeVisible()
+  await expect(page.getByText("نظر شما ثبت شد")).toHaveCount(0)
+  await expect(page.getByLabel("متن نظر")).toHaveValue(text)
 })
 
 test("review form validates, adds the review and keeps it", async ({

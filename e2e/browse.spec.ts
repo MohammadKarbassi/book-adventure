@@ -82,6 +82,31 @@ test.describe("category page", () => {
     await expectEveryCard(page, "اشتراکی")
   })
 
+  test("paginates 12 books per page with working back navigation", async ({
+    page,
+  }) => {
+    // روانشناسی has 17 books: 12 on page 1, 5 on page 2.
+    const pagination = page.getByRole("navigation", { name: "صفحه‌بندی" })
+    await expect(pagination).toBeVisible()
+    await expect(bookCards(page)).toHaveCount(12)
+    const firstPage = await bookCards(page).evaluateAll((links) =>
+      links.map((link) => link.getAttribute("href"))
+    )
+
+    await pagination.getByRole("link", { name: "صفحهٔ ۲" }).click()
+    await expect(page).toHaveURL(/[?&]page=2/)
+    await expect(bookCards(page)).toHaveCount(5)
+    const secondPage = await bookCards(page).evaluateAll((links) =>
+      links.map((link) => link.getAttribute("href"))
+    )
+    expect(secondPage.filter((href) => firstPage.includes(href))).toEqual([])
+
+    await page.goBack()
+    await expect(page).not.toHaveURL(/page=2/)
+    await expect(bookCards(page)).toHaveCount(12)
+    await expect(bookCards(page).first()).toHaveAttribute("href", firstPage[0]!)
+  })
+
   test("filters survive a reload and can be cleared", async ({ page }) => {
     await page.goto(
       "/category/psychology?type=audio&plus=1&sub=psychology-social-relations"

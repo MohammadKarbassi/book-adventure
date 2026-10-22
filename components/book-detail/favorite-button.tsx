@@ -3,6 +3,7 @@
 import { HeartIcon } from "lucide-react"
 import { toast } from "sonner"
 
+import { toastSaveError } from "@/components/site/save-error"
 import { Toggle } from "@/components/ui/toggle"
 import {
   Tooltip,
@@ -28,9 +29,14 @@ export function FavoriteButton({
 }: FavoriteButtonProps) {
   const { isFavorite, toggleFavorite } = useFavorites()
   const active = isFavorite(bookId)
+  const label = active ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"
 
   function handleChange() {
     const added = toggleFavorite(bookId)
+    if (added === null) {
+      toastSaveError("علاقه‌مندی‌ها به‌روز نشد")
+      return
+    }
     onToggle?.(added)
     if (added) {
       toast.success("به علاقه‌مندی‌ها اضافه شد", { description: title })
@@ -48,7 +54,7 @@ export function FavoriteButton({
             size="lg"
             pressed={active}
             onPressedChange={handleChange}
-            aria-label="افزودن به علاقه‌مندی‌ها"
+            aria-label={label}
             className={cn("size-10", className)}
           />
         }
@@ -60,9 +66,7 @@ export function FavoriteButton({
           )}
         />
       </TooltipTrigger>
-      <TooltipContent>
-        {active ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
-      </TooltipContent>
+      <TooltipContent>{label}</TooltipContent>
     </Tooltip>
   )
 }

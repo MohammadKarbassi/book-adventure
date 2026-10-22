@@ -83,11 +83,10 @@ test.describe("foreign books", () => {
     await expect(olLink).toHaveAttribute("rel", /noopener/)
 
     // Favorite.
-    const favorite = page.getByRole("button", {
-      name: "افزودن به علاقه‌مندی‌ها",
-    })
-    await favorite.click()
-    await expect(favorite).toHaveAttribute("aria-pressed", "true")
+    await page.getByRole("button", { name: "افزودن به علاقه‌مندی‌ها" }).click()
+    await expect(
+      page.getByRole("button", { name: "حذف از علاقه‌مندی‌ها" })
+    ).toHaveAttribute("aria-pressed", "true")
 
     const stored = await page.evaluate(
       (prefix) => window.localStorage.getItem(`${prefix}foreignBooks`),

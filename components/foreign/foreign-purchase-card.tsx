@@ -15,6 +15,7 @@ import {
   type PurchaseBook,
 } from "@/components/book-detail/purchase-dialog"
 import { ShareButton } from "@/components/book-detail/share-button"
+import { toastSaveError } from "@/components/site/save-error"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardFooter } from "@/components/ui/card"
@@ -73,7 +74,11 @@ export function ForeignPurchaseCard({
 }) {
   const hydrated = useHydrated()
   const { isPurchased } = usePurchases()
-  const { remember } = useForeignBooks()
+  const { remember: rememberBook } = useForeignBooks()
+  // The library needs these details to list the book; say so if they're lost.
+  const remember = (item: ForeignBook) => {
+    if (!rememberBook(item)) toastSaveError("مشخصات کتاب ذخیره نشد")
+  }
   const [dialogOpen, setDialogOpen] = useState(false)
   const actionsRef = useRef<HTMLDivElement>(null)
   const purchased = hydrated && isPurchased(book.id)

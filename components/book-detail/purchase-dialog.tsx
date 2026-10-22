@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { BookCover } from "@/components/book/book-cover"
 import { PlayButton } from "@/components/player/play-button"
 import type { Track } from "@/components/player/types"
+import { toastSaveError } from "@/components/site/save-error"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
@@ -73,7 +74,12 @@ export function PurchaseDialog({
   function handleConfirm() {
     setStep("paying")
     timer.current = setTimeout(() => {
-      purchase(book.id)
+      if (!purchase(book.id)) {
+        // Nothing was stored: stay on the confirm step so the user can retry.
+        setStep("confirm")
+        toastSaveError("خرید ذخیره نشد")
+        return
+      }
       onPurchased?.()
       setStep("done")
       toast.success("کتاب خریداری شد", {

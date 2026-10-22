@@ -82,6 +82,9 @@ function paginate(
   return limitPages(buildPages(book, metricsFor(layout, step)), canRead)
 }
 
+// Sample mode: page turns stay in local state only.
+function keepUnsaved() {}
+
 export function Reader({ book }: { book: ReaderBook }) {
   const sampleOnly = useSearchParams().get("sample") === "1"
   const access = useBookAccess(book)
@@ -101,9 +104,18 @@ export function Reader({ book }: { book: ReaderBook }) {
   const limited = pages.at(-1)?.kind === "locked"
 
   // The stored page until the reader turns one; later turns and font changes
-  // are kept locally too, so a re-render never shows a stale spread.
-  const { page: storedPage, setPage: storePage } = useReaderProgress(book.id)
+  // are kept locally too, so a re-render never shows a stale spread. A sample
+  // always starts at the first page and never touches the full book's place.
+  const progress = useReaderProgress(book.id)
+  const storedPage = sampleOnly ? 0 : progress.page
+  const storePage = sampleOnly ? keepUnsaved : progress.setPage
   const [localPage, setLocalPage] = useState<number | null>(null)
+  const [shownSample, setShownSample] = useState(sampleOnly)
+  if (shownSample !== sampleOnly) {
+    // Switching between sample and full book: start from that mode's page.
+    setShownSample(sampleOnly)
+    setLocalPage(null)
+  }
   const page = clampPage(localPage ?? storedPage, pages.length)
   const spread = spreadOfPage(page, layout)
   const spreads = spreadCount(pages.length, layout)

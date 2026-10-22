@@ -42,7 +42,7 @@ test.describe("cinematic intro", () => {
 
     await page.reload()
     await expect(
-      page.getByRole("heading", { level: 1, name: "ماجراجویی با کتاب" })
+      page.getByRole("heading", { level: 1, name: "سفر ماجراجویی شما" })
     ).toBeVisible()
     await expect(intro(page)).toBeHidden()
   })
@@ -55,6 +55,19 @@ test.describe("cinematic intro", () => {
     await expect(intro(page)).toHaveCount(0)
     expect(await storedSeen(page)).toBe("true")
   })
+
+  for (const key of ["ArrowLeft", "a"]) {
+    test(`any key ends it («${key}»)`, async ({ page }) => {
+      await page.goto("/", { timeout: 120_000 })
+      await expect(intro(page).getByText("هر کتاب")).toBeVisible()
+      // A modifier on its own doesn't count.
+      await page.keyboard.press("Shift")
+      await expect(intro(page)).toBeVisible()
+      await page.keyboard.press(key)
+      await expect(intro(page)).toHaveCount(0)
+      expect(await storedSeen(page)).toBe("true")
+    })
+  }
 
   test("ends by itself after about five seconds", async ({ page }) => {
     await page.goto("/", { timeout: 120_000 })
@@ -74,7 +87,7 @@ test.describe("cinematic intro", () => {
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.goto("/", { timeout: 120_000 })
     await expect(
-      page.getByRole("heading", { level: 1, name: "ماجراجویی با کتاب" })
+      page.getByRole("heading", { level: 1, name: "سفر ماجراجویی شما" })
     ).toBeVisible()
     await expect(intro(page)).toBeHidden()
     await expect(page.locator("[data-intro-overlay]")).toHaveCount(0)

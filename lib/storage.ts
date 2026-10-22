@@ -79,14 +79,18 @@ export function createStorage(
     return ok
   }
 
-  function remove(name: string): void {
+  /** Returns false when storage is missing or throws; the value stays. */
+  function remove(name: string): boolean {
     try {
-      getStorage()?.removeItem(storageKey(name))
+      const storage = getStorage()
+      if (!storage) return false
+      storage.removeItem(storageKey(name))
     } catch {
-      return
+      return false
     }
     cache.delete(name)
     notify(name)
+    return true
   }
 
   /** Calls back on writes to `name` in this tab and in other tabs. */

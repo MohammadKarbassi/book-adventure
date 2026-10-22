@@ -4,6 +4,7 @@ import { useId, useState } from "react"
 import { SendIcon } from "lucide-react"
 import { toast } from "sonner"
 
+import { toastSaveError } from "@/components/site/save-error"
 import { Button } from "@/components/ui/button"
 import {
   Field,
@@ -28,7 +29,8 @@ import {
 import { StarRatingInput } from "./star-rating-input"
 
 type ReviewFormProps = {
-  onSubmit: (input: UserReviewInput) => UserReview
+  /** Returns null when the review couldn't be saved; the form keeps its text. */
+  onSubmit: (input: UserReviewInput) => UserReview | null
 }
 
 export function ReviewForm({ onSubmit }: ReviewFormProps) {
@@ -51,7 +53,10 @@ export function ReviewForm({ onSubmit }: ReviewFormProps) {
       focusable?.focus()
       return
     }
-    onSubmit({ name, rating, text })
+    if (!onSubmit({ name, rating, text })) {
+      toastSaveError("نظر شما ذخیره نشد")
+      return
+    }
     toast.success("نظر شما ثبت شد", {
       description: "از اینکه تجربه‌تان را با دیگران در میان گذاشتید، ممنونیم.",
     })

@@ -62,6 +62,8 @@ function usePrefersReducedMotion(): boolean {
   )
 }
 
+const MODIFIER_KEYS = new Set(["Shift", "Control", "Alt", "Meta"])
+
 function markIntroSeenInDom() {
   document.documentElement.dataset.intro = INTRO_SEEN_ATTR
 }
@@ -105,7 +107,6 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
   // The line on screen when the exit began (a skip keeps the current line).
   const [line, setLine] = useState<Exclude<IntroStep, "exit">>("discover")
   const dialogRef = useRef<HTMLDivElement>(null)
-  const skipRef = useRef<HTMLButtonElement>(null)
   const exiting = step === "exit"
 
   const skip = useCallback(() => setStep("exit"), [])
@@ -137,20 +138,19 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
     }
   }, [playing])
 
-  // Escape, Enter or Space ends it; Tab stays on the skip button.
+  // Any key ends it, except a modifier pressed on its own or a key that is
+  // part of an IME composition.
   useEffect(() => {
     if (!playing || exiting) return
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Tab") {
-        event.preventDefault()
-        skipRef.current?.focus()
-        return
-      }
-      if (["Escape", "Enter", " "].includes(event.key)) {
+      if (MODIFIER_KEYS.has(event.key)) return
+      if (event.isComposing || event.keyCode === 229) return
+      // Leave browser shortcuts (Ctrl/Cmd/Alt + key) working.
+      if (!event.ctrlKey && !event.metaKey && !event.altKey) {
         event.preventDefault()
         event.stopPropagation()
-        skip()
       }
+      skip()
     }
     window.addEventListener("keydown", onKeyDown, true)
     return () => window.removeEventListener("keydown", onKeyDown, true)
@@ -207,7 +207,6 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
         </div>
 
         <Button
-          ref={skipRef}
           type="button"
           variant="ghost"
           aria-keyshortcuts="Escape"

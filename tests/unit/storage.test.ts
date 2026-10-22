@@ -80,13 +80,14 @@ describe("createStorage", () => {
     }))
     expect(store.read("favorites", 1)).toBe(1)
     expect(store.write("favorites", [1])).toBe(false)
-    expect(() => store.remove("favorites")).not.toThrow()
+    expect(store.remove("favorites")).toBe(false)
   })
 
   it("defaults to no storage in Node (SSR)", () => {
     const store = createStorage()
     expect(store.read("favorites", "ssr")).toBe("ssr")
     expect(store.write("favorites", 1)).toBe(false)
+    expect(store.remove("favorites")).toBe(false)
   })
 
   it("keeps snapshots referentially stable until the raw value changes", () => {
@@ -106,7 +107,7 @@ describe("createStorage", () => {
   it("removes a key", () => {
     const { fake, store } = setup()
     store.write("subscription", { planId: "monthly" })
-    store.remove("subscription")
+    expect(store.remove("subscription")).toBe(true)
     expect(fake.data.size).toBe(0)
     expect(store.read("subscription", null)).toBeNull()
   })

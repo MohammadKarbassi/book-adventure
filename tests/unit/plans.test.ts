@@ -45,6 +45,26 @@ describe("plans", () => {
     }
   })
 
+  it("promises only what works without accounts or a server", () => {
+    const features = SUBSCRIPTION_PLANS.flatMap((plan) => plan.features)
+    for (const feature of features) {
+      expect(feature).not.toMatch(/دستگاه|زودهنگام|همگام/)
+    }
+    expect(getPlan("monthly").features).toEqual([
+      "دسترسی به همهٔ کتاب‌های اشتراکی",
+      "شنیدن کتاب‌های صوتی اشتراکی",
+      "ذخیرهٔ جای خواندن و شنیدن در همین مرورگر",
+      "لغو در هر زمان",
+    ])
+    expect(getPlan("quarterly").features).toContain("سه ماه دسترسی پیوسته")
+    expect(getPlan("yearly").features).toEqual(
+      expect.arrayContaining([
+        "دوازده ماه دسترسی پیوسته",
+        "کم‌ترین هزینهٔ ماهانه",
+      ])
+    )
+  })
+
   it("longer plans are cheaper per month", () => {
     const perMonth = SUBSCRIPTION_PLANS.map((plan) => plan.price / plan.months)
     expect([...perMonth].sort((a, b) => b - a)).toEqual(perMonth)

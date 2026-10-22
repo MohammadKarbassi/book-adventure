@@ -29,6 +29,8 @@ export const metadata: Metadata = {
 }
 
 const LATEST_COUNT = 8
+/** Podcast artworks in the first screen; the rest load lazily. */
+const EAGER_ARTWORKS = 2
 
 export default function PodcastsPage() {
   const podcasts = getPodcasts()
@@ -65,11 +67,11 @@ export default function PodcastsPage() {
             description="روی هر پادکست بزنید تا قسمت‌هایش را ببینید و گوش بدهید"
           />
           <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-5">
-            {podcasts.map((podcast) => (
+            {podcasts.map((podcast, index) => (
               <li key={podcast.id} className="flex">
                 <PodcastCard
-                  // All ten fit in the first screens; lazy loading delays the LCP.
-                  priority
+                  // Only the first artworks sit above the fold; the rest load lazily.
+                  priority={index < EAGER_ARTWORKS}
                   podcast={{
                     id: podcast.id,
                     title: podcast.title,

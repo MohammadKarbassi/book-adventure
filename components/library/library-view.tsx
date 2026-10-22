@@ -17,6 +17,7 @@ import {
   type LibraryBookRef,
   type LibraryItem,
 } from "@/components/library/library-grid"
+import { toastSaveError } from "@/components/site/save-error"
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -111,13 +112,18 @@ export function LibraryView({ books }: { books: BookSummary[] }) {
 
   const removeFavorite = useCallback(
     (book: LibraryBookRef) => {
-      toggleFavorite(book.id)
+      if (toggleFavorite(book.id) === null) {
+        toastSaveError("علاقه‌مندی‌ها به‌روز نشد")
+        return
+      }
       toast(`«${book.title}» از علاقه‌مندی‌ها حذف شد`, {
         action: {
           label: "بازگرداندن",
           // Toggle again only if it is still missing (it may have been re-added elsewhere).
           onClick: () => {
-            if (!toggleFavorite(book.id)) toggleFavorite(book.id)
+            let added = toggleFavorite(book.id)
+            if (added === false) added = toggleFavorite(book.id)
+            if (added === null) toastSaveError("علاقه‌مندی‌ها به‌روز نشد")
           },
         },
       })

@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "motion/react"
 import { CrownIcon, RefreshCwIcon, XIcon } from "lucide-react"
 import { toast } from "sonner"
 
+import { toastSaveError } from "@/components/site/save-error"
 import {
   remainingDays,
   remainingPercent,
@@ -66,7 +67,10 @@ export function SubscriptionStatus() {
   const percent = remainingPercent(subscription, now)
 
   function handleCancel() {
-    cancel()
+    if (!cancel()) {
+      toastSaveError("اشتراک لغو نشد")
+      return
+    }
     setConfirmOpen(false)
     toast("اشتراک شما لغو شد", {
       description: "کتاب‌های خریده‌شده همچنان در کتابخانهٔ شما می‌مانند.",

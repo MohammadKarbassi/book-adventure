@@ -104,6 +104,40 @@ test("a purchase unlocks the rest of the book", async ({ page }) => {
   await expect(page.getByText("نمونه", { exact: true })).toHaveCount(0)
 })
 
+test("reading the sample keeps the full book's place", async ({ page }) => {
+  const progressKey = `${STORAGE_PREFIX}readerProgress`
+  const saved = JSON.stringify({ [PAID_EBOOK]: 6 })
+  await page.evaluate(
+    ({ progressKey, purchasesKey, saved, bookId }) => {
+      localStorage.setItem(progressKey, saved)
+      localStorage.setItem(
+        purchasesKey,
+        JSON.stringify([{ bookId, purchasedAt: new Date().toISOString() }])
+      )
+    },
+    {
+      progressKey,
+      purchasesKey: `${STORAGE_PREFIX}purchases`,
+      saved,
+      bookId: PAID_EBOOK,
+    }
+  )
+  const readStored = () =>
+    page.evaluate((key) => localStorage.getItem(key), progressKey)
+
+  const indicator = await openReader(page, `/read/${PAID_EBOOK}?sample=1`)
+  await expect(indicator).toHaveText(/^صفحهٔ ۱ /)
+  await page.getByRole("button", { name: "صفحهٔ بعد" }).click()
+  await expect
+    .poll(async () => (await readIndicator(indicator)).first)
+    .toBeGreaterThan(1)
+  expect(await readStored()).toBe(saved)
+
+  await openReader(page, `/read/${PAID_EBOOK}`)
+  await expect(indicator).toHaveText(/^صفحهٔ ۷ /)
+  expect(await readStored()).toBe(saved)
+})
+
 test("audiobooks have no reader", async ({ page }) => {
   await page.goto(`/read/${AUDIOBOOK}`, { timeout: 120_000 })
   await expect(

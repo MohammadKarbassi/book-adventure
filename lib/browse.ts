@@ -27,7 +27,7 @@ export const sortOptions: { value: SortKey; label: string }[] = [
   { value: "discount", label: "بیشترین تخفیف" },
 ]
 
-export const PAGE_SIZE = 24
+export const PAGE_SIZE = 12
 
 export type BrowseState = {
   type: TypeFilter

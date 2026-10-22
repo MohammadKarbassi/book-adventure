@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "cn"
 
-import { Button } from "@/components/ui/button"
+import { buttonVariants, type Button } from "@/components/ui/button"
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -48,20 +48,20 @@ function PaginationLink({
   size = "icon",
   ...props
 }: PaginationLinkProps) {
+  // A plain <a> styled as a button: Base UI's Button would add
+  // role="button" and hide that these are links. Without href (a disabled
+  // previous/next) it keeps the link role so aria-disabled is announced.
   return (
-    <Button
-      variant={isActive ? "outline" : "ghost"}
-      size={size}
-      className={cn(className)}
-      nativeButton={false}
-      render={
-        <a
-          aria-current={isActive ? "page" : undefined}
-          data-slot="pagination-link"
-          data-active={isActive}
-          {...props}
-        />
-      }
+    <a
+      role={props.href ? undefined : "link"}
+      aria-current={isActive ? "page" : undefined}
+      data-slot="pagination-link"
+      data-active={isActive}
+      className={cn(
+        buttonVariants({ variant: isActive ? "outline" : "ghost", size }),
+        className
+      )}
+      {...props}
     />
   )
 }

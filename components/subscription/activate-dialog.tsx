@@ -10,6 +10,7 @@ import {
   PLUS_BOOKS_SECTION_ID,
   scrollToSection,
 } from "@/components/subscription/scroll-to-section"
+import { toastSaveError } from "@/components/site/save-error"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Dialog,
@@ -36,6 +37,10 @@ export function ActivateDialog({ plan }: { plan: SubscriptionPlan }) {
 
   function activate() {
     const next = subscribe(plan.id)
+    if (!next) {
+      toastSaveError("اشتراک فعال نشد")
+      return
+    }
     setActivated(next)
     toast.success(`اشتراک ${plan.title} فعال شد`)
   }

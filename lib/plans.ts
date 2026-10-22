@@ -1,4 +1,5 @@
-// Subscription plans («اشتراک»). Prices in Toman.
+// Subscription plans («اشتراک»). Prices in Toman. Features must be true for
+// this site: no accounts or server, so nothing that needs them (sync, etc.).
 
 export type PlanId = "monthly" | "quarterly" | "yearly"
 
@@ -16,7 +17,7 @@ export type SubscriptionPlan = {
 const baseFeatures = [
   "دسترسی به همهٔ کتاب‌های اشتراکی",
   "شنیدن کتاب‌های صوتی اشتراکی",
-  "بدون تبلیغ",
+  "ذخیرهٔ جای خواندن و شنیدن در همین مرورگر",
 ]
 
 export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
@@ -35,7 +36,7 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     price: 249000,
     badge: "محبوب‌ترین",
     description: "یک فصل کامل کتاب‌خوانی، ارزان‌تر از اشتراک ماهانه.",
-    features: [...baseFeatures, "ادامهٔ خواندن روی همهٔ دستگاه‌ها"],
+    features: [...baseFeatures, "سه ماه دسترسی پیوسته"],
   },
   {
     id: "yearly",
@@ -46,8 +47,8 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     description: "یک سال ماجراجویی بی‌وقفه با کم‌ترین هزینهٔ ماهانه.",
     features: [
       ...baseFeatures,
-      "ادامهٔ خواندن روی همهٔ دستگاه‌ها",
-      "دسترسی زودهنگام به کتاب‌های تازه",
+      "دوازده ماه دسترسی پیوسته",
+      "کم‌ترین هزینهٔ ماهانه",
     ],
   },
 ]

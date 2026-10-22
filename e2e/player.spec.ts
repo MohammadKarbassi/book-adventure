@@ -153,6 +153,18 @@ test("lists the ten podcasts", async ({ page }) => {
     shows.first().getByRole("link", { name: new RegExp(podcast.title) })
   ).toHaveAttribute("href", `/podcasts/${podcast.id}`)
 
+  // Only the first artworks load eagerly; the rest wait until scrolled to.
+  const loading = await shows
+    .locator("img")
+    .evaluateAll((images) =>
+      images.map((image) => image.getAttribute("loading"))
+    )
+  expect(loading).toEqual([
+    "eager",
+    "eager",
+    ...Array.from({ length: 8 }, () => "lazy"),
+  ])
+
   const latest = page
     .getByRole("region", { name: "تازه‌ترین قسمت‌ها" })
     .getByRole("listitem")

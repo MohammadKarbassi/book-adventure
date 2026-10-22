@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import {
+  PAGE_SIZE,
   defaultBrowseState,
   filterBooks,
   getPageNumbers,
@@ -156,10 +157,12 @@ describe("paginate", () => {
   const items = Array.from({ length: 50 }, (_, index) => index)
 
   it("slices pages and clamps out-of-range pages", () => {
-    expect(paginate(items, 1)).toMatchObject({ page: 1, pageCount: 3 })
-    expect(paginate(items, 1).items).toHaveLength(24)
-    expect(paginate(items, 3).items).toEqual([48, 49])
-    expect(paginate(items, 99).page).toBe(3)
+    expect(PAGE_SIZE).toBe(12)
+    expect(paginate(items, 1)).toMatchObject({ page: 1, pageCount: 5 })
+    expect(paginate(items, 1).items).toHaveLength(12)
+    expect(paginate(items, 2).items[0]).toBe(12)
+    expect(paginate(items, 5).items).toEqual([48, 49])
+    expect(paginate(items, 99).page).toBe(5)
     expect(paginate(items, 0).page).toBe(1)
     expect(paginate([], 2)).toEqual({
       items: [],

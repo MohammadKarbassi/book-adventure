@@ -11,12 +11,16 @@ import type { ForeignBook } from "@/lib/foreign"
 import type { PlanId } from "@/lib/plans"
 import { storage, type Validator } from "@/lib/storage"
 import {
+  addReviewIn,
+  cancelSubscriptionIn,
+  purchaseIn,
+  rememberForeignBookIn,
+  subscribeIn,
+  toggleFavoriteIn,
+} from "@/lib/store-actions"
+import {
   STORE_KEYS,
-  addPurchase,
-  addUserReview,
   createId,
-  createSubscription,
-  createUserReview,
   hasPurchase,
   isBoolean,
   isForeignBookRecord,
@@ -26,11 +30,9 @@ import {
   isSubscription,
   isSubscriptionActive,
   isUserReviewList,
-  rememberForeignBook,
   reviewsForBook,
   setRecordValue,
   toProgress,
-  toggleId,
   type Purchase,
   type Subscription,
   type UserReview,
@@ -59,15 +61,8 @@ function useStored<T>(name: string, fallback: T, validate: Validator<T>): T {
   )
 }
 
-const readFavorites = () => storage.read(STORE_KEYS.favorites, NO_IDS, isIdList)
-const readPurchases = () =>
-  storage.read(STORE_KEYS.purchases, NO_PURCHASES, isPurchaseList)
-const readReviews = () =>
-  storage.read(STORE_KEYS.reviews, NO_REVIEWS, isUserReviewList)
 const readProgress = (name: string) =>
   storage.read(name, NO_PROGRESS, isNumberRecord)
-const readForeignBooks = () =>
-  storage.read(STORE_KEYS.foreignBooks, NO_FOREIGN_BOOKS, isForeignBookRecord)
 
 const noopSubscribe = () => () => {}
 
@@ -95,25 +90,26 @@ function useNow(): number {
 export function useFavorites(): {
   favorites: number[]
   isFavorite: (bookId: number) => boolean
-  toggleFavorite: (bookId: number) => boolean
+  /** New state (true = added), or null when it couldn't be saved. */
+  toggleFavorite: (bookId: number) => boolean | null
 } {
   const favorites = useStored(STORE_KEYS.favorites, NO_IDS, isIdList)
   const isFavorite = useCallback(
     (bookId: number) => favorites.includes(bookId),
     [favorites]
   )
-  const toggleFavorite = useCallback((bookId: number) => {
-    const next = toggleId(readFavorites(), bookId)
-    storage.write(STORE_KEYS.favorites, next)
-    return next.includes(bookId)
-  }, [])
+  const toggleFavorite = useCallback(
+    (bookId: number) => toggleFavoriteIn(storage, bookId),
+    []
+  )
   return { favorites, isFavorite, toggleFavorite }
 }
 
 export function usePurchases(): {
   purchases: Purchase[]
   isPurchased: (bookId: number) => boolean
-  purchase: (bookId: number) => void
+  /** false when the purchase couldn't be saved. */
+  purchase: (bookId: number) => boolean
 } {
   const purchases = useStored(
     STORE_KEYS.purchases,
@@ -124,19 +120,20 @@ export function usePurchases(): {
     (bookId: number) => hasPurchase(purchases, bookId),
     [purchases]
   )
-  const purchase = useCallback((bookId: number) => {
-    const current = readPurchases()
-    const next = addPurchase(current, bookId, new Date())
-    if (next !== current) storage.write(STORE_KEYS.purchases, next)
-  }, [])
+  const purchase = useCallback(
+    (bookId: number) => purchaseIn(storage, bookId, new Date()),
+    []
+  )
   return { purchases, isPurchased, purchase }
 }
 
 export function useSubscription(): {
   subscription: Subscription | null
   isActive: boolean
-  subscribe: (planId: PlanId) => Subscription
-  cancel: () => void
+  /** null when the subscription couldn't be saved. */
+  subscribe: (planId: PlanId) => Subscription | null
+  /** false when the subscription couldn't be removed. */
+  cancel: () => boolean
 } {
   const subscription = useStored<Subscription | null>(
     STORE_KEYS.subscription,
@@ -145,27 +142,24 @@ export function useSubscription(): {
   )
   const now = useNow()
   const isActive = now > 0 && isSubscriptionActive(subscription, now)
-  const subscribe = useCallback((planId: PlanId) => {
-    const next = createSubscription(planId, new Date())
-    storage.write(STORE_KEYS.subscription, next)
-    return next
-  }, [])
-  const cancel = useCallback(() => storage.remove(STORE_KEYS.subscription), [])
+  const subscribe = useCallback(
+    (planId: PlanId) => subscribeIn(storage, planId, new Date()),
+    []
+  )
+  const cancel = useCallback(() => cancelSubscriptionIn(storage), [])
   return { subscription, isActive, subscribe, cancel }
 }
 
 export function useUserReviews(bookId: number): {
   reviews: UserReview[]
-  addReview: (input: UserReviewInput) => UserReview
+  /** null when the review couldn't be saved. */
+  addReview: (input: UserReviewInput) => UserReview | null
 } {
   const all = useStored(STORE_KEYS.reviews, NO_REVIEWS, isUserReviewList)
   const reviews = useMemo(() => reviewsForBook(all, bookId), [all, bookId])
   const addReview = useCallback(
-    (input: UserReviewInput) => {
-      const review = createUserReview(bookId, input, new Date(), createId())
-      storage.write(STORE_KEYS.reviews, addUserReview(readReviews(), review))
-      return review
-    },
+    (input: UserReviewInput) =>
+      addReviewIn(storage, bookId, input, new Date(), createId()),
     [bookId]
   )
   return { reviews, addReview }
@@ -212,18 +206,18 @@ export function useAudioProgress(key: string): {
  */
 export function useForeignBooks(): {
   books: Record<string, ForeignBook>
-  remember: (book: ForeignBook) => void
+  /** false when the metadata couldn't be saved. */
+  remember: (book: ForeignBook) => boolean
 } {
   const books = useStored(
     STORE_KEYS.foreignBooks,
     NO_FOREIGN_BOOKS,
     isForeignBookRecord
   )
-  const remember = useCallback((book: ForeignBook) => {
-    const current = readForeignBooks()
-    const next = rememberForeignBook(current, book)
-    if (next !== current) storage.write(STORE_KEYS.foreignBooks, next)
-  }, [])
+  const remember = useCallback(
+    (book: ForeignBook) => rememberForeignBookIn(storage, book),
+    []
+  )
   return { books, remember }
 }
 
