@@ -25,6 +25,10 @@ typography:
     fontFamily: "Markazi Text, serif"
     fontSize: "1.5rem"
     lineHeight: 1.7
+  narrative-desktop:
+    fontFamily: "Markazi Text, serif"
+    fontSize: "1.75rem"
+    lineHeight: 1.7
   title:
     fontFamily: "Markazi Text, serif"
     fontSize: "1.875rem"

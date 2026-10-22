@@ -196,6 +196,10 @@
         "displayName": "Editorial narrative",
         "purpose": "Reading copy, increasing to 1.75rem at 640px."
       },
+      "narrative-desktop": {
+        "displayName": "Wide editorial narrative",
+        "purpose": "Existing 28px reading copy from the 640px breakpoint."
+      },
       "title": {
         "displayName": "Ending content title",
         "purpose": "Audio and podcast group headings."

@@ -287,7 +287,7 @@ export function AdventureSection({
               {adventure.gear.map((item, gearIndex) => (
                 <li
                   key={gearIndex}
-                  className="flex gap-3 text-[0.95rem] leading-loose text-pretty"
+                  className="flex gap-3 text-base leading-loose text-pretty"
                 >
                   <span
                     aria-hidden="true"

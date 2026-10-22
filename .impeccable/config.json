@@ -1,0 +1,80 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-color",
+        "value": "rgb(0 0 0 / 0.15)",
+        "files": [
+          "components/home/shelf-book.tsx"
+        ],
+        "createdAt": "2026-10-22T15:59:27.313Z",
+        "reason": "Agent review: neutral underside lighting on a physical book; project AGENTS.md explicitly permits black/white lighting overlays, not a brand palette addition."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgb(0 0 0 / 0.08)",
+        "files": [
+          "components/adventures/adventure-book-3d.tsx"
+        ],
+        "createdAt": "2026-10-22T15:59:27.396Z",
+        "reason": "Agent review: subtle neutral paper-edge shading in CSS 3D fallback; AGENTS.md allows neutral lighting overlays."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgb(0 0 0 / 0.3)",
+        "files": [
+          "components/adventures/adventure-book-3d.tsx"
+        ],
+        "createdAt": "2026-10-22T15:59:27.479Z",
+        "reason": "Agent review: cover crease shadow in CSS 3D fallback, not semantic interface color; neutral material lighting permitted by AGENTS.md."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgb(255 255 255 / 0.16)",
+        "files": [
+          "components/adventures/adventure-book-3d.tsx"
+        ],
+        "createdAt": "2026-10-22T15:59:27.570Z",
+        "reason": "Agent review: cover sheen highlight in CSS 3D fallback, not interface palette drift; neutral material lighting permitted by AGENTS.md."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgb(0 0 0 / 0.14)",
+        "files": [
+          "components/adventures/adventure-book-3d.tsx"
+        ],
+        "createdAt": "2026-10-22T15:59:27.656Z",
+        "reason": "Agent review: neutral page-block shadow in physical book fallback; black/white lighting overlays permitted by AGENTS.md."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgb(0 0 0 / 0.32)",
+        "files": [
+          "components/book/book-spine.tsx"
+        ],
+        "createdAt": "2026-10-22T15:59:27.746Z",
+        "reason": "Agent review: curvature shadow at the spine ends, a physical material light response rather than a brand color; permitted neutral lighting in AGENTS.md."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgb(255 255 255 / 0.26)",
+        "files": [
+          "components/book/book-spine.tsx"
+        ],
+        "createdAt": "2026-10-22T15:59:27.828Z",
+        "reason": "Agent review: neutral light on curved upper spine; project AGENTS.md allows black/white material lighting."
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "0.6rem",
+        "files": [
+          "components/adventures/adventure-book-3d.tsx"
+        ],
+        "createdAt": "2026-10-22T15:59:27.910Z",
+        "reason": "Agent review: miniature print rendered on the back of a 3D book, not UI body text; stage has its own accessible label and readable DOM content exists outside the model."
+      }
+    ]
+  }
+}
