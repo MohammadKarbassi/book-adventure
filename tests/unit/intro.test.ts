@@ -70,11 +70,13 @@ describe("pre-paint script", () => {
       },
     }
     const matchMedia = () => ({ matches: reduced })
-    new Function("document", "sessionStorage", "matchMedia", INTRO_HEAD_SCRIPT)(
-      document,
-      localStorage,
-      matchMedia
-    )
+    new Function(
+      "document",
+      "sessionStorage",
+      "matchMedia",
+      "performance",
+      INTRO_HEAD_SCRIPT
+    )(document, localStorage, matchMedia, { timeOrigin: 12345 })
     return dataset.intro
   }
 
@@ -83,7 +85,12 @@ describe("pre-paint script", () => {
   })
 
   it("marks returning visitors", () => {
-    expect(run({ stored: "true" })).toBe("seen")
+    expect(run({ stored: "12345" })).toBe("seen")
+  })
+
+  it("replays after a reload or a previous session", () => {
+    expect(run({ stored: "12344" })).toBeUndefined()
+    expect(run({ stored: "true" })).toBeUndefined()
   })
 
   it("lets first-time visitors see the intro", () => {

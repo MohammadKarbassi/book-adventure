@@ -52,8 +52,8 @@ export const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)"
 
 /**
  * Runs in <head> before the first paint. The intro plays once per visit
- * (per tab session): a page that already showed it in this session, and
+ * (per document load): a page that already showed it in this document, and
  * reduced motion users, get `data-intro="seen"`, which hides the
  * server-rendered overlay in CSS, so it never flashes.
  */
-export const INTRO_HEAD_SCRIPT = `(function(){var d=document.documentElement;try{if(matchMedia(${JSON.stringify(REDUCED_MOTION_QUERY)}).matches)d.dataset.intro=${JSON.stringify(INTRO_SEEN_ATTR)}}catch(e){}try{if(JSON.parse(sessionStorage.getItem(${JSON.stringify(INTRO_STORAGE_KEY)}))===true)d.dataset.intro=${JSON.stringify(INTRO_SEEN_ATTR)}}catch(e){}})()`
+export const INTRO_HEAD_SCRIPT = `(function(){var d=document.documentElement;try{if(matchMedia(${JSON.stringify(REDUCED_MOTION_QUERY)}).matches)d.dataset.intro=${JSON.stringify(INTRO_SEEN_ATTR)}}catch(e){}try{if(sessionStorage.getItem(${JSON.stringify(INTRO_STORAGE_KEY)})===String(performance.timeOrigin))d.dataset.intro=${JSON.stringify(INTRO_SEEN_ATTR)}}catch(e){}})()`

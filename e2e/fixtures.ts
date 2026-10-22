@@ -24,7 +24,7 @@ export const test = base.extend({
     await page.addInitScript((key) => {
       try {
         // The intro plays once per tab session; mark it seen for this tab.
-        window.sessionStorage.setItem(key, "true")
+        window.sessionStorage.setItem(key, String(performance.timeOrigin))
       } catch {
         // Storage unavailable (e.g. about:blank); nothing to skip then.
       }

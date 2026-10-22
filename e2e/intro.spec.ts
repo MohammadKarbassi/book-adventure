@@ -22,10 +22,51 @@ const intro = (page: Page) =>
   page.getByRole("dialog", { name: "معرفی ماجراجویی با کتاب" })
 
 const storedSeen = (page: Page) =>
-  page.evaluate((key) => window.sessionStorage.getItem(key), INTRO_SEEN_KEY)
+  page.evaluate(
+    (key) =>
+      window.sessionStorage.getItem(key) === String(performance.timeOrigin),
+    INTRO_SEEN_KEY
+  )
 
 test.describe("cinematic intro", () => {
-  test("shows on the first visit and «رد شدن» skips it for good", async ({
+  test("music control does not skip the intro and audio closes on exit", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      const contexts: AudioContext[] = []
+      const NativeAudioContext = window.AudioContext
+      window.AudioContext = class extends NativeAudioContext {
+        constructor() {
+          super()
+          contexts.push(this)
+        }
+      }
+      Object.assign(window, { introAudioContexts: contexts })
+    })
+    await page.goto("/", { timeout: 120_000 })
+    await expect(intro(page).getByText("هر کتاب")).toBeVisible()
+    const sound = intro(page).locator("[data-intro-sound]")
+    if ((await sound.getAttribute("aria-pressed")) === "true")
+      await sound.click()
+    await sound.click()
+    await expect(sound).toHaveAttribute("aria-pressed", "true")
+    await expect(intro(page)).toBeVisible()
+    await intro(page).getByRole("button", { name: "رد شدن" }).click()
+    await expect(intro(page)).toHaveCount(0)
+    expect(
+      await page.evaluate(() => {
+        const contexts = (
+          window as unknown as Window & { introAudioContexts: AudioContext[] }
+        ).introAudioContexts
+        return (
+          contexts.length > 0 &&
+          contexts.every((context) => context.state === "closed")
+        )
+      })
+    ).toBe(true)
+  })
+
+  test("shows again after reload, while skip ends the current intro", async ({
     page,
   }) => {
     // The first dev-server compile of "/" can be slow.
@@ -37,14 +78,14 @@ test.describe("cinematic intro", () => {
 
     await skip.click()
     await expect(intro(page)).toHaveCount(0)
-    expect(await storedSeen(page)).toBe("true")
+    expect(await storedSeen(page)).toBe(true)
     expect(await page.evaluate(() => document.body.style.overflow)).toBe("")
 
     await page.reload()
     await expect(
       page.getByRole("heading", { level: 1, name: "سفر ماجراجویی شما" })
     ).toBeVisible()
-    await expect(intro(page)).toBeHidden()
+    await expect(intro(page)).toBeVisible()
   })
 
   test("plays again on every new visit (new tab)", async ({
@@ -67,7 +108,7 @@ test.describe("cinematic intro", () => {
     await expect(intro(page).getByText("هر کتاب")).toBeVisible()
     await page.keyboard.press("Escape")
     await expect(intro(page)).toHaveCount(0)
-    expect(await storedSeen(page)).toBe("true")
+    expect(await storedSeen(page)).toBe(true)
   })
 
   for (const key of ["ArrowLeft", "a"]) {
@@ -79,7 +120,7 @@ test.describe("cinematic intro", () => {
       await expect(intro(page)).toBeVisible()
       await page.keyboard.press(key)
       await expect(intro(page)).toHaveCount(0)
-      expect(await storedSeen(page)).toBe("true")
+      expect(await storedSeen(page)).toBe(true)
     })
   }
 
@@ -87,14 +128,14 @@ test.describe("cinematic intro", () => {
     await page.goto("/", { timeout: 120_000 })
     await expect(intro(page).getByText("هر کتاب")).toBeVisible()
     await expect(intro(page)).toHaveCount(0, { timeout: 7_000 })
-    expect(await storedSeen(page)).toBe("true")
+    expect(await storedSeen(page)).toBe(true)
   })
 
   test("never shows on other pages", async ({ page }) => {
     await page.goto("/book/6673", { timeout: 120_000 })
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
     await expect(page.locator("[data-intro-overlay]")).toHaveCount(0)
-    expect(await storedSeen(page)).toBeNull()
+    expect(await storedSeen(page)).toBe(false)
   })
 
   test("is skipped entirely with reduced motion", async ({ page }) => {

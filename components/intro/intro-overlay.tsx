@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button"
 import { Kbd } from "@/components/ui/kbd"
 import { useHydrated } from "@/lib/store"
 import { cn } from "@/lib/utils"
+import { createIntroScore } from "@/components/intro/intro-score"
 
 const EASE_OUT: Transition["ease"] = [0.22, 1, 0.36, 1]
 const EASE_IN_OUT: Transition["ease"] = [0.65, 0, 0.35, 1]
@@ -70,7 +71,7 @@ function markIntroSeenInDom() {
 }
 
 /**
- * «ورودی سینمایی»: plays once, on the first visit to the home page, over the
+ * «ورودی سینمایی»: plays once per document load on the home page, over the
  * already rendered page. The server always renders it; the pre-paint script
  * in the root layout hides it for returning and reduced-motion visitors.
  */
@@ -78,15 +79,18 @@ const noopSubscribe = () => () => {}
 
 function readSessionSeen(): boolean {
   try {
-    return JSON.parse(sessionStorage.getItem(INTRO_STORAGE_KEY) ?? "") === true
+    return (
+      sessionStorage.getItem(INTRO_STORAGE_KEY) ===
+      String(performance.timeOrigin)
+    )
   } catch {
     return false
   }
 }
 
 /**
- * The intro plays on every visit: "seen" lives in sessionStorage, so it only
- * stays seen while moving between pages in the same tab.
+ * The marker matches only this document's timeOrigin. Reloading creates a
+ * fresh visit; client navigation within this document keeps it dismissed.
  */
 function useSessionIntroSeen() {
   const stored = useSyncExternalStore(
@@ -97,7 +101,7 @@ function useSessionIntroSeen() {
   const [markedNow, setMarkedNow] = useState(false)
   const markSeen = useCallback(() => {
     try {
-      sessionStorage.setItem(INTRO_STORAGE_KEY, "true")
+      sessionStorage.setItem(INTRO_STORAGE_KEY, String(performance.timeOrigin))
     } catch {
       // Storage blocked: the intro simply plays again next time.
     }
@@ -141,6 +145,23 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
   const [line, setLine] = useState<Exclude<IntroStep, "exit">>("discover")
   const dialogRef = useRef<HTMLDivElement>(null)
   const exiting = step === "exit"
+  const scoreRef = useRef<ReturnType<typeof createIntroScore> | null>(null)
+  const [soundOn, setSoundOn] = useState(false)
+
+  useEffect(() => {
+    if (!playing) return
+    const score = createIntroScore()
+    scoreRef.current = score
+    void score.start().then(setSoundOn)
+    return () => {
+      score.stop()
+      scoreRef.current = null
+    }
+  }, [playing])
+
+  useEffect(() => {
+    if (exiting) scoreRef.current?.stop()
+  }, [exiting])
 
   const skip = useCallback(() => setStep("exit"), [])
 
@@ -176,7 +197,12 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
   useEffect(() => {
     if (!playing || exiting) return
     function onKeyDown(event: KeyboardEvent) {
-      if (MODIFIER_KEYS.has(event.key)) return
+      if (MODIFIER_KEYS.has(event.key) || event.key === "Tab") return
+      if (
+        event.target instanceof HTMLElement &&
+        event.target.closest("[data-intro-sound]")
+      )
+        return
       if (event.isComposing || event.keyCode === 229) return
       // Leave browser shortcuts (Ctrl/Cmd/Alt + key) working.
       if (!event.ctrlKey && !event.metaKey && !event.altKey) {
@@ -239,6 +265,26 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
           )}
         </div>
 
+        <Button
+          data-intro-sound=""
+          type="button"
+          variant="ghost"
+          aria-pressed={soundOn}
+          onClick={(event) => {
+            event.stopPropagation()
+            const score = scoreRef.current
+            if (!score) return
+            if (soundOn) {
+              score.mute()
+              setSoundOn(false)
+            } else {
+              void score.start().then(setSoundOn)
+            }
+          }}
+          className="absolute start-4 bottom-4 h-9 px-3 text-muted-foreground sm:start-8 sm:bottom-8"
+        >
+          {soundOn ? "قطع موسیقی" : "پخش موسیقی"}
+        </Button>
         <Button
           type="button"
           variant="ghost"
