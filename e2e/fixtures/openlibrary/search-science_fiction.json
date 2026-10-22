@@ -1,0 +1,69 @@
+{
+  "numFound": 91829,
+  "docs": [
+    {
+      "author_name": ["刘慈欣"],
+      "cover_i": 7893958,
+      "first_publish_year": 2010,
+      "key": "/works/OL17610507W",
+      "number_of_pages_median": 724,
+      "title": "Death's End (The Three-Body Problem Series Book 3)",
+      "ratings_average": 4.3271027,
+      "ratings_count": 107
+    },
+    {
+      "author_name": ["Isaac Asimov"],
+      "cover_i": 13790511,
+      "first_publish_year": 1953,
+      "key": "/works/OL46401W",
+      "number_of_pages_median": 246,
+      "title": "The Caves of Steel",
+      "ratings_average": 4.3448277,
+      "ratings_count": 29
+    },
+    {
+      "author_name": ["Dan Simmons"],
+      "cover_i": 484900,
+      "first_publish_year": 1990,
+      "key": "/works/OL1963251W",
+      "number_of_pages_median": 561,
+      "title": "The Fall of Hyperion",
+      "ratings_average": 4.05,
+      "ratings_count": 60
+    },
+    {
+      "author_name": ["H. G. Wells"],
+      "cover_i": 6419199,
+      "first_publish_year": 0,
+      "key": "/works/OL52266W",
+      "number_of_pages_median": 170,
+      "title": "The Invisible Man",
+      "ratings_average": 3.7837837,
+      "ratings_count": 111
+    },
+    {
+      "author_name": ["Isaac Asimov"],
+      "cover_i": 6542967,
+      "first_publish_year": 1954,
+      "key": "/works/OL46398W",
+      "number_of_pages_median": 226,
+      "title": "The Naked Sun",
+      "ratings_average": 4.04,
+      "ratings_count": 25
+    },
+    {
+      "author_name": [
+        "Аркадий Стругацкий",
+        "Борис Стругацкий",
+        "Arkady and Boris Strugatsky"
+      ],
+      "cover_i": 6752719,
+      "first_publish_year": 1978,
+      "key": "/works/OL7967812W",
+      "number_of_pages_median": 170,
+      "title": "Roadside Picnic",
+      "ratings_average": 4.3150687,
+      "ratings_count": 73
+    }
+  ]
+}

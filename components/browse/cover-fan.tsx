@@ -1,10 +1,13 @@
 import { BookCover } from "@/components/book/book-cover"
-import type { BookSummary } from "@/lib/catalog"
+import type { BookColor, BookSummary } from "@/lib/catalog"
 import { cn } from "@/lib/utils"
 
 type CoverFanProps = {
   /** Up to three books; the first one sits in front, in the middle. */
-  books: Pick<BookSummary, "id" | "title" | "image" | "color">[]
+  books: (Pick<BookSummary, "id" | "title"> & {
+    image: string | null
+    color?: BookColor
+  })[]
   /** Fan out further while this group is hovered (set `group/fan` on it). */
   className?: string
   priority?: boolean

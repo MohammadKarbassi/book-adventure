@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { BookIcon } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import type { BookColor } from "@/lib/catalog"
@@ -31,7 +32,8 @@ const imageSizes = {
 } as const
 
 type BookCoverProps = VariantProps<typeof bookCoverVariants> & {
-  book: { title: string; image: string; color?: BookColor }
+  /** `image: null` (some Open Library works) shows a plain titled cover. */
+  book: { title: string; image: string | null; color?: BookColor }
   /** Load eagerly with high priority (above-the-fold covers). */
   priority?: boolean
   /** Overrides the `sizes` attribute when the cover is sized by its parent. */
@@ -52,15 +54,34 @@ export function BookCover({
       className={cn(bookCoverVariants({ size }), className)}
       style={book.color ? { backgroundColor: book.color.dominant } : undefined}
     >
-      <Image
-        src={book.image}
-        alt={book.title}
-        fill
-        sizes={sizes ?? imageSizes[size ?? "md"]}
-        loading={priority ? "eager" : "lazy"}
-        fetchPriority={priority ? "high" : "auto"}
-        className="object-cover"
-      />
+      {book.image ? (
+        <Image
+          src={book.image}
+          alt={book.title}
+          fill
+          sizes={sizes ?? imageSizes[size ?? "md"]}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          className="object-cover"
+        />
+      ) : (
+        <div
+          role="img"
+          aria-label={book.title}
+          className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-secondary p-3 text-center text-secondary-foreground"
+        >
+          <BookIcon aria-hidden="true" className="size-1/4 opacity-60" />
+          {size === "sm" ? null : (
+            <span
+              aria-hidden="true"
+              dir="auto"
+              className="line-clamp-4 text-xs font-medium break-words"
+            >
+              {book.title}
+            </span>
+          )}
+        </div>
+      )}
       {/* Spine shading: a crease along the binding, then a soft falloff. */}
       <span
         aria-hidden="true"

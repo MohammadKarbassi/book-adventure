@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
 import { Spinner } from "@/components/ui/spinner"
-import type { BookSummary } from "@/lib/catalog"
+import type { BookColor, BookSummary } from "@/lib/catalog"
 import { formatNumber, formatPrice } from "@/lib/format"
 import { usePurchases } from "@/lib/store"
 
@@ -30,16 +30,12 @@ import { discountAmount } from "./book-detail-utils"
 
 export type PurchaseBook = Pick<
   BookSummary,
-  | "id"
-  | "title"
-  | "type"
-  | "authors"
-  | "image"
-  | "color"
-  | "finalPrice"
-  | "price"
-  | "discountPct"
->
+  "id" | "title" | "type" | "authors" | "finalPrice" | "price" | "discountPct"
+> & {
+  /** null for foreign books without a cover. */
+  image: string | null
+  color?: BookColor
+}
 
 type PurchaseDialogProps = {
   book: PurchaseBook
@@ -48,6 +44,10 @@ type PurchaseDialogProps = {
   onOpenChange: (open: boolean) => void
   /** Where focus goes after closing (the buy button may be gone by then). */
   finalFocus?: () => HTMLElement | null
+  /** Runs right after the purchase is stored. */
+  onPurchased?: () => void
+  /** Replaces the read/listen button on the success step. */
+  successAction?: React.ReactNode
 }
 
 type Step = "confirm" | "paying" | "done"
@@ -61,6 +61,8 @@ export function PurchaseDialog({
   open,
   onOpenChange,
   finalFocus,
+  onPurchased,
+  successAction,
 }: PurchaseDialogProps) {
   const { purchase } = usePurchases()
   const [step, setStep] = useState<Step>("confirm")
@@ -72,6 +74,7 @@ export function PurchaseDialog({
     setStep("paying")
     timer.current = setTimeout(() => {
       purchase(book.id)
+      onPurchased?.()
       setStep("done")
       toast.success("کتاب خریداری شد", {
         description: `«${book.title}» به کتابخانهٔ شما اضافه شد.`,
@@ -100,6 +103,7 @@ export function PurchaseDialog({
           <PurchaseSuccess
             book={book}
             track={track}
+            action={successAction}
             onClose={() => onOpenChange(false)}
           />
         ) : (
@@ -196,10 +200,12 @@ function PurchaseConfirm({
 function PurchaseSuccess({
   book,
   track,
+  action,
   onClose,
 }: {
   book: PurchaseBook
   track?: Track
+  action?: React.ReactNode
   onClose: () => void
 }) {
   return (
@@ -217,7 +223,9 @@ function PurchaseSuccess({
         <DialogClose render={<Button variant="outline" size="lg" />}>
           بستن
         </DialogClose>
-        {book.type === "audiobook" && track ? (
+        {action ? (
+          action
+        ) : book.type === "audiobook" && track ? (
           // Start listening and get the dialog out of the way.
           <div className="contents" onClick={onClose}>
             <PlayButton track={track} label="گوش دادن" size="lg" />

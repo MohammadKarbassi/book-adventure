@@ -1,0 +1,65 @@
+{
+  "numFound": 119734,
+  "docs": [
+    {
+      "author_name": ["Joe Abercrombie"],
+      "cover_i": 14543422,
+      "first_publish_year": 2001,
+      "key": "/works/OL8400950W",
+      "number_of_pages_median": 531,
+      "title": "The Blade Itself",
+      "ratings_average": 4.096774,
+      "ratings_count": 93
+    },
+    {
+      "author_name": ["Brandon Sanderson"],
+      "cover_i": 14658094,
+      "first_publish_year": 2008,
+      "key": "/works/OL5738154W",
+      "number_of_pages_median": 760,
+      "title": "The Hero of Ages",
+      "ratings_average": 4.576,
+      "ratings_count": 125
+    },
+    {
+      "author_name": ["Scott Lynch"],
+      "cover_i": 6307636,
+      "first_publish_year": 2001,
+      "key": "/works/OL8369445W",
+      "number_of_pages_median": 544,
+      "title": "The Lies of Locke Lamora",
+      "ratings_average": 4.1294117,
+      "ratings_count": 85
+    },
+    {
+      "author_name": ["Sarah J. Maas"],
+      "cover_i": 7794980,
+      "first_publish_year": 2014,
+      "key": "/works/OL17546674W",
+      "number_of_pages_median": 462,
+      "title": "The Assassin’s Blade",
+      "ratings_average": 4.388889,
+      "ratings_count": 18
+    },
+    {
+      "author_name": ["Terry Goodkind"],
+      "cover_i": 1005963,
+      "first_publish_year": 1994,
+      "key": "/works/OL2010436W",
+      "number_of_pages_median": 595,
+      "title": "Wizard's First Rule",
+      "ratings_average": 4.19403,
+      "ratings_count": 67
+    },
+    {
+      "author_name": ["Andrzej Sapkowski"],
+      "cover_i": 8457619,
+      "first_publish_year": 1994,
+      "key": "/works/OL2577486W",
+      "number_of_pages_median": 379,
+      "title": "Krew elfów",
+      "ratings_average": 3.7763157,
+      "ratings_count": 76
+    }
+  ]
+}

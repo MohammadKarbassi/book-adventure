@@ -1,0 +1,65 @@
+{
+  "numFound": 40688,
+  "docs": [
+    {
+      "author_name": ["Marcus Aurelius"],
+      "cover_i": 13202688,
+      "first_publish_year": 2006,
+      "key": "/works/OL28521353W",
+      "number_of_pages_median": 189,
+      "title": "Meditations",
+      "ratings_average": 3.2727273,
+      "ratings_count": 11
+    },
+    {
+      "author_name": ["Franz Kafka"],
+      "cover_i": 12605605,
+      "first_publish_year": 1926,
+      "key": "/works/OL498434W",
+      "number_of_pages_median": 384,
+      "title": "Das Schloß",
+      "ratings_average": 4.357143,
+      "ratings_count": 28
+    },
+    {
+      "author_name": ["Stephen Fry"],
+      "cover_i": 8238803,
+      "first_publish_year": 2017,
+      "key": "/works/OL17916664W",
+      "number_of_pages_median": 441,
+      "title": "Mythos",
+      "ratings_average": 4.366667,
+      "ratings_count": 30
+    },
+    {
+      "author_name": ["Marcus Aurelius"],
+      "cover_i": 211529,
+      "first_publish_year": 1626,
+      "key": "/works/OL1317211W",
+      "number_of_pages_median": 203,
+      "title": "Meditations",
+      "ratings_average": 4.0958905,
+      "ratings_count": 146
+    },
+    {
+      "author_name": ["Tom Glazer"],
+      "cover_i": 411242,
+      "first_publish_year": 1982,
+      "key": "/works/OL6091375W",
+      "number_of_pages_median": 20,
+      "title": "On top of spaghetti",
+      "ratings_average": 4.15,
+      "ratings_count": 20
+    },
+    {
+      "author_name": ["Will Durant", "讀書新聞社"],
+      "cover_i": 405360,
+      "first_publish_year": 1926,
+      "key": "/works/OL1073898W",
+      "number_of_pages_median": 543,
+      "title": "The Story of Philosophy",
+      "ratings_average": 4.3333335,
+      "ratings_count": 24
+    }
+  ]
+}

@@ -7,6 +7,7 @@
 import { useCallback, useMemo, useSyncExternalStore } from "react"
 
 import { accessReason } from "@/lib/access"
+import type { ForeignBook } from "@/lib/foreign"
 import type { PlanId } from "@/lib/plans"
 import { storage, type Validator } from "@/lib/storage"
 import {
@@ -18,12 +19,14 @@ import {
   createUserReview,
   hasPurchase,
   isBoolean,
+  isForeignBookRecord,
   isIdList,
   isNumberRecord,
   isPurchaseList,
   isSubscription,
   isSubscriptionActive,
   isUserReviewList,
+  rememberForeignBook,
   reviewsForBook,
   setRecordValue,
   toProgress,
@@ -42,6 +45,7 @@ const NO_IDS: number[] = []
 const NO_PURCHASES: Purchase[] = []
 const NO_REVIEWS: UserReview[] = []
 const NO_PROGRESS: Record<string, number> = {}
+const NO_FOREIGN_BOOKS: Record<string, ForeignBook> = {}
 
 function useStored<T>(name: string, fallback: T, validate: Validator<T>): T {
   const subscribe = useCallback(
@@ -62,6 +66,8 @@ const readReviews = () =>
   storage.read(STORE_KEYS.reviews, NO_REVIEWS, isUserReviewList)
 const readProgress = (name: string) =>
   storage.read(name, NO_PROGRESS, isNumberRecord)
+const readForeignBooks = () =>
+  storage.read(STORE_KEYS.foreignBooks, NO_FOREIGN_BOOKS, isForeignBookRecord)
 
 const noopSubscribe = () => () => {}
 
@@ -198,6 +204,27 @@ export function useAudioProgress(key: string): {
 } {
   const [position, setPosition] = useProgress(STORE_KEYS.audioProgress, key)
   return { position, setPosition }
+}
+
+/**
+ * Metadata of foreign (Open Library) books the user bought or favorited,
+ * keyed by String(book.id), so the library can show them.
+ */
+export function useForeignBooks(): {
+  books: Record<string, ForeignBook>
+  remember: (book: ForeignBook) => void
+} {
+  const books = useStored(
+    STORE_KEYS.foreignBooks,
+    NO_FOREIGN_BOOKS,
+    isForeignBookRecord
+  )
+  const remember = useCallback((book: ForeignBook) => {
+    const current = readForeignBooks()
+    const next = rememberForeignBook(current, book)
+    if (next !== current) storage.write(STORE_KEYS.foreignBooks, next)
+  }, [])
+  return { books, remember }
 }
 
 /** `seen` is false on the server and during hydration. */

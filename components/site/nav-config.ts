@@ -11,6 +11,7 @@ import {
   GlobeIcon,
   HeadphonesIcon,
   LandmarkIcon,
+  LanguagesIcon,
   LightbulbIcon,
   LibraryBigIcon,
   PodcastIcon,
@@ -33,6 +34,7 @@ export type NavLink = {
 export const mainLinks: NavLink[] = [
   { href: "/audiobooks", label: "کتاب‌های صوتی", icon: HeadphonesIcon },
   { href: "/podcasts", label: "پادکست‌ها", icon: PodcastIcon },
+  { href: "/foreign", label: "کتاب‌های خارجی", icon: LanguagesIcon },
   { href: "/subscription", label: "اشتراک", icon: CrownIcon },
 ]
 

@@ -14,6 +14,7 @@ import { LibraryEmpty } from "@/components/library/library-empty"
 import {
   LibraryGrid,
   LibraryGridSkeleton,
+  type LibraryBookRef,
   type LibraryItem,
 } from "@/components/library/library-grid"
 import { Badge } from "@/components/ui/badge"
@@ -22,8 +23,10 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { BookSummary } from "@/lib/catalog"
 import { formatDate, formatNumber } from "@/lib/format"
+import type { ForeignBook } from "@/lib/foreign"
 import {
   useFavorites,
+  useForeignBooks,
   useHydrated,
   usePurchases,
   useSubscription,
@@ -60,6 +63,7 @@ export function LibraryView({ books }: { books: BookSummary[] }) {
   const { favorites, toggleFavorite } = useFavorites()
   const { purchases } = usePurchases()
   const { subscription, isActive } = useSubscription()
+  const { books: foreignBooks } = useForeignBooks()
   const tab = useSyncExternalStore(
     subscribeHash,
     readHashTab,
@@ -71,29 +75,42 @@ export function LibraryView({ books }: { books: BookSummary[] }) {
     [books]
   )
   const plusItems = useMemo<LibraryItem[]>(
-    () => books.filter((book) => book.inPlus).map((book) => ({ book })),
+    () =>
+      books
+        .filter((book) => book.inPlus)
+        .map((book) => ({ kind: "catalog", book })),
     [books]
   )
-  // Stored ids without a catalog entry are skipped, so counts match the grid.
+  // Catalog books first, then foreign books remembered in storage. Ids
+  // with neither are skipped, so counts match the grid.
+  const findItem = useCallback(
+    (id: number): LibraryItem | null => {
+      const book = byId.get(id)
+      if (book) return { kind: "catalog", book }
+      const foreign: ForeignBook | undefined = foreignBooks[String(id)]
+      return foreign ? { kind: "foreign", book: foreign } : null
+    },
+    [byId, foreignBooks]
+  )
   const purchasedItems = useMemo<LibraryItem[]>(
     () =>
       purchases.flatMap(({ bookId, purchasedAt }) => {
-        const book = byId.get(bookId)
-        return book ? [{ book, purchasedAt }] : []
+        const item = findItem(bookId)
+        return item ? [{ ...item, purchasedAt }] : []
       }),
-    [purchases, byId]
+    [purchases, findItem]
   )
   const favoriteItems = useMemo<LibraryItem[]>(
     () =>
       favorites.flatMap((id) => {
-        const book = byId.get(id)
-        return book ? [{ book }] : []
+        const item = findItem(id)
+        return item ? [item] : []
       }),
-    [favorites, byId]
+    [favorites, findItem]
   )
 
   const removeFavorite = useCallback(
-    (book: BookSummary) => {
+    (book: LibraryBookRef) => {
       toggleFavorite(book.id)
       toast(`«${book.title}» از علاقه‌مندی‌ها حذف شد`, {
         action: {

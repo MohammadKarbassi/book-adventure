@@ -2,9 +2,15 @@
 
 import Link from "next/link"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import { BookOpenIcon, HeadphonesIcon, HeartOffIcon } from "lucide-react"
+import {
+  BookOpenIcon,
+  ExternalLinkIcon,
+  HeadphonesIcon,
+  HeartOffIcon,
+} from "lucide-react"
 
 import { BookCard } from "@/components/book/book-card"
+import { ForeignBookCard } from "@/components/foreign/foreign-book-card"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
@@ -13,22 +19,28 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import type { BookSummary } from "@/lib/catalog"
+import { openLibraryUrl, type ForeignBook } from "@/lib/foreign"
 import { formatDate } from "@/lib/format"
 
 const gridClass =
   "grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
 const cardSizes = "(min-width: 1280px) 190px, (min-width: 768px) 22vw, 45vw"
 
-export type LibraryItem = {
-  book: BookSummary
+/** A catalog book, or a foreign (Open Library) one remembered in storage. */
+export type LibraryItem = (
+  | { kind: "catalog"; book: BookSummary }
+  | { kind: "foreign"; book: ForeignBook }
+) & {
   /** ISO date, purchased items only. */
   purchasedAt?: string
 }
 
+export type LibraryBookRef = { id: number; title: string }
+
 type LibraryGridProps = {
   label: string
   items: LibraryItem[]
-  onRemove?: (book: BookSummary) => void
+  onRemove?: (book: LibraryBookRef) => void
 }
 
 export function LibraryGrid({ label, items, onRemove }: LibraryGridProps) {
@@ -37,18 +49,42 @@ export function LibraryGrid({ label, items, onRemove }: LibraryGridProps) {
   return (
     <ul aria-label={label} className={gridClass}>
       <AnimatePresence initial={false} mode="popLayout">
-        {items.map(({ book, purchasedAt }, index) => (
+        {items.map((item, index) => (
           <motion.li
-            key={book.id}
+            key={item.book.id}
             layout={!reduce}
             exit={reduce ? undefined : { opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
             className="relative flex flex-col gap-3"
           >
-            <BookCard book={book} sizes={cardSizes} priority={index < 6} />
-            {onRemove ? <RemoveButton book={book} onRemove={onRemove} /> : null}
-            {purchasedAt ? (
-              <PurchasedFooter book={book} purchasedAt={purchasedAt} />
+            {item.kind === "foreign" ? (
+              <ForeignBookCard
+                book={item.book}
+                sizes={cardSizes}
+                priority={index < 6}
+              />
+            ) : (
+              <BookCard
+                book={item.book}
+                sizes={cardSizes}
+                priority={index < 6}
+              />
+            )}
+            {onRemove ? (
+              <RemoveButton book={item.book} onRemove={onRemove} />
+            ) : null}
+            {item.purchasedAt ? (
+              item.kind === "foreign" ? (
+                <ForeignPurchasedFooter
+                  book={item.book}
+                  purchasedAt={item.purchasedAt}
+                />
+              ) : (
+                <PurchasedFooter
+                  book={item.book}
+                  purchasedAt={item.purchasedAt}
+                />
+              )
             ) : null}
           </motion.li>
         ))}
@@ -61,8 +97,8 @@ function RemoveButton({
   book,
   onRemove,
 }: {
-  book: BookSummary
-  onRemove: (book: BookSummary) => void
+  book: LibraryBookRef
+  onRemove: (book: LibraryBookRef) => void
 }) {
   return (
     <Tooltip>
@@ -110,6 +146,33 @@ function PurchasedFooter({
         )}
         {label}
       </Link>
+    </div>
+  )
+}
+
+// Foreign books have no reader here; reading happens on Open Library.
+function ForeignPurchasedFooter({
+  book,
+  purchasedAt,
+}: {
+  book: ForeignBook
+  purchasedAt: string
+}) {
+  return (
+    <div className="mt-auto flex flex-col gap-2 px-0.5">
+      <p className="text-xs text-muted-foreground">
+        {`خریداری‌شده در ${formatDate(purchasedAt)}`}
+      </p>
+      <a
+        href={openLibraryUrl(book.workId)}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`خواندن ${book.title} در Open Library (در پنجرهٔ تازه)`}
+        className={buttonVariants({ size: "sm" })}
+      >
+        <ExternalLinkIcon data-icon="inline-start" />
+        در Open Library
+      </a>
     </div>
   )
 }

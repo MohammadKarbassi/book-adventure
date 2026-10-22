@@ -1,0 +1,15 @@
+{
+  "numFound": 1,
+  "docs": [
+    {
+      "author_name": ["Agatha Christie"],
+      "cover_i": 12996556,
+      "first_publish_year": 1932,
+      "key": "/works/OL472165W",
+      "number_of_pages_median": 223,
+      "title": "Peril at End House",
+      "ratings_average": 4.2173915,
+      "ratings_count": 23
+    }
+  ]
+}

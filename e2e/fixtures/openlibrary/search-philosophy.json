@@ -1,0 +1,65 @@
+{
+  "numFound": 339917,
+  "docs": [
+    {
+      "author_name": ["Friedrich Nietzsche"],
+      "cover_i": 8245356,
+      "first_publish_year": 1885,
+      "key": "/works/OL98174W",
+      "number_of_pages_median": 178,
+      "title": "Jenseits von Gut und Böse",
+      "ratings_average": 4.36,
+      "ratings_count": 25
+    },
+    {
+      "author_name": ["Will Durant", "讀書新聞社"],
+      "cover_i": 405360,
+      "first_publish_year": 1926,
+      "key": "/works/OL1073898W",
+      "number_of_pages_median": 543,
+      "title": "The Story of Philosophy",
+      "ratings_average": 4.3333335,
+      "ratings_count": 24
+    },
+    {
+      "author_name": ["Marcus Aurelius"],
+      "cover_i": 211529,
+      "first_publish_year": 1626,
+      "key": "/works/OL1317211W",
+      "number_of_pages_median": 203,
+      "title": "Meditations",
+      "ratings_average": 4.0958905,
+      "ratings_count": 146
+    },
+    {
+      "author_name": ["老子", "Yang Peng", "Jordi Fibla", "James Legge"],
+      "cover_i": 662232,
+      "first_publish_year": 1842,
+      "key": "/works/OL45499W",
+      "number_of_pages_median": 120,
+      "title": "Tao te Ching",
+      "ratings_average": 4.266667,
+      "ratings_count": 60
+    },
+    {
+      "author_name": ["Albert Camus"],
+      "cover_i": 1014395,
+      "first_publish_year": 1941,
+      "key": "/works/OL1230601W",
+      "number_of_pages_median": 169,
+      "title": "Le mythe de Sisyphe",
+      "ratings_average": 4.15625,
+      "ratings_count": 32
+    },
+    {
+      "author_name": ["Albert Camus"],
+      "cover_i": 12726570,
+      "first_publish_year": 1955,
+      "key": "/works/OL1230690W",
+      "number_of_pages_median": 212,
+      "title": "The Myth of Sisyphus and Other Essays",
+      "ratings_average": 4.3,
+      "ratings_count": 10
+    }
+  ]
+}

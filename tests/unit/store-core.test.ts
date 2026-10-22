@@ -8,19 +8,23 @@ import {
   createId,
   createSubscription,
   createUserReview,
+  STORE_KEYS,
   hasPurchase,
+  isForeignBookRecord,
   isIdList,
   isNumberRecord,
   isPurchaseList,
   isSubscription,
   isUserReviewList,
   isSubscriptionActive,
+  rememberForeignBook,
   reviewsForBook,
   setRecordValue,
   toProgress,
   toggleId,
   type Purchase,
 } from "@/lib/store-core"
+import { toForeignBook, type ForeignBook } from "@/lib/foreign"
 
 const now = new Date("2026-10-22T10:00:00.000Z")
 
@@ -212,5 +216,51 @@ describe("validators", () => {
     expect(isNumberRecord({ a: "1" })).toBe(false)
     expect(isNumberRecord([1])).toBe(false)
     expect(isNumberRecord(null)).toBe(false)
+  })
+})
+
+describe("foreign books", () => {
+  const book = toForeignBook({
+    key: "/works/OL46401W",
+    title: "The Caves of Steel",
+    author_name: ["Isaac Asimov"],
+    cover_i: 13790511,
+    first_publish_year: 1953,
+  }) as ForeignBook
+
+  it("has its own storage key", () => {
+    expect(STORE_KEYS.foreignBooks).toBe("foreignBooks")
+  })
+
+  it("remembers a book under String(id)", () => {
+    const record = rememberForeignBook({}, book)
+    expect(record).toEqual({ [String(book.id)]: book })
+    expect(isForeignBookRecord(record)).toBe(true)
+  })
+
+  it("returns the same record when nothing changes", () => {
+    const record = rememberForeignBook({}, book)
+    expect(rememberForeignBook(record, { ...book })).toBe(record)
+    // A stored (JSON round-tripped) copy counts as unchanged too.
+    const stored = JSON.parse(JSON.stringify(record)) as typeof record
+    expect(rememberForeignBook(stored, book)).toBe(stored)
+  })
+
+  it("updates changed metadata without mutating the input", () => {
+    const record = rememberForeignBook({}, book)
+    const next = rememberForeignBook(record, { ...book, pages: 270 })
+    expect(next).not.toBe(record)
+    expect(next[String(book.id)].pages).toBe(270)
+    expect(record[String(book.id)].pages).toBeUndefined()
+  })
+
+  it("validates the stored record", () => {
+    expect(isForeignBookRecord({})).toBe(true)
+    expect(isForeignBookRecord({ "1": book })).toBe(false)
+    expect(isForeignBookRecord({ [String(book.id)]: { title: "x" } })).toBe(
+      false
+    )
+    expect(isForeignBookRecord([book])).toBe(false)
+    expect(isForeignBookRecord(null)).toBe(false)
   })
 })

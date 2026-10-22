@@ -1,0 +1,15 @@
+{
+  "numFound": 1,
+  "docs": [
+    {
+      "author_name": ["Joe Abercrombie"],
+      "cover_i": 14543422,
+      "first_publish_year": 2001,
+      "key": "/works/OL8400950W",
+      "number_of_pages_median": 531,
+      "title": "The Blade Itself",
+      "ratings_average": 4.096774,
+      "ratings_count": 93
+    }
+  ]
+}

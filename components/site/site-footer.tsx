@@ -20,10 +20,11 @@ export function SiteFooter() {
       })),
     },
     {
-      title: "کتاب صوتی و پادکست",
+      title: "قفسه‌های دیگر",
       links: [
         { href: "/audiobooks", label: "کتاب‌های صوتی" },
         { href: "/podcasts", label: "پادکست‌ها" },
+        { href: "/foreign", label: "کتاب‌های خارجی" },
       ],
     },
     {
@@ -75,8 +76,9 @@ export function SiteFooter() {
         </div>
         <Separator />
         <p className="text-xs/relaxed text-muted-foreground">
-          داده‌های کتاب از فیدیبو · پادکست‌ها از فیدهای عمومی RSS · صداهای نمونه
-          از Internet Archive با مجوز آزاد · پروژهٔ آموزشی بوت‌کمپ
+          داده‌های کتاب از فیدیبو · کتاب‌های خارجی از Open Library · پادکست‌ها
+          از فیدهای عمومی RSS · صداهای نمونه از Internet Archive با مجوز آزاد ·
+          پروژهٔ آموزشی بوت‌کمپ
         </p>
       </Container>
     </footer>

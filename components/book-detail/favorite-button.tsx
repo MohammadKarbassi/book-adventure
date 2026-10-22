@@ -15,12 +15,15 @@ import { cn } from "@/lib/utils"
 type FavoriteButtonProps = {
   bookId: number
   title: string
+  /** Runs after a toggle with the new state (true = added). */
+  onToggle?: (added: boolean) => void
   className?: string
 }
 
 export function FavoriteButton({
   bookId,
   title,
+  onToggle,
   className,
 }: FavoriteButtonProps) {
   const { isFavorite, toggleFavorite } = useFavorites()
@@ -28,6 +31,7 @@ export function FavoriteButton({
 
   function handleChange() {
     const added = toggleFavorite(bookId)
+    onToggle?.(added)
     if (added) {
       toast.success("به علاقه‌مندی‌ها اضافه شد", { description: title })
     } else {

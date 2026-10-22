@@ -3,7 +3,8 @@ import { defineConfig, devices } from "@playwright/test"
 const PORT = 3100
 
 // E2E_BASE_URL runs the specs against an already running server (e.g. the
-// dev server) instead of building and starting a production one.
+// dev server) instead of building and starting a production one. That server
+// talks to the real Open Library API unless it sets OPENLIBRARY_FIXTURES.
 const externalBaseURL = process.env.E2E_BASE_URL
 const baseURL = externalBaseURL ?? `http://localhost:${PORT}`
 
@@ -39,6 +40,8 @@ export default defineConfig({
     : {
         command: `npm run build && npm run start -- -p ${PORT}`,
         url: baseURL,
+        // Open Library answers from recorded JSON, not the network.
+        env: { OPENLIBRARY_FIXTURES: "e2e/fixtures/openlibrary" },
         reuseExistingServer: !process.env.CI,
         timeout: 180_000,
       },

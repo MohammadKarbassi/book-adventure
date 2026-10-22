@@ -1,6 +1,7 @@
 // Pure state transitions and validators for the user's localStorage data.
 // No React here: lib/store.ts wires these into hooks, tests call them directly.
 
+import { isForeignBook, type ForeignBook } from "@/lib/foreign"
 import { getPlan, isPlanId, type PlanId } from "@/lib/plans"
 
 export type Purchase = { bookId: number; purchasedAt: string } // ISO
@@ -28,6 +29,7 @@ export const STORE_KEYS = {
   readerProgress: "readerProgress",
   audioProgress: "audioProgress",
   introSeen: "introSeen",
+  foreignBooks: "foreignBooks",
 } as const
 
 export const DEFAULT_REVIEW_NAME = "کاربر مهمان"
@@ -97,6 +99,18 @@ export function isBoolean(value: unknown): value is boolean {
   return typeof value === "boolean"
 }
 
+/** Foreign book metadata by String(book.id), each entry under its own id. */
+export function isForeignBookRecord(
+  value: unknown
+): value is Record<string, ForeignBook> {
+  return (
+    isRecord(value) &&
+    Object.entries(value).every(
+      ([key, book]) => isForeignBook(book) && key === String(book.id)
+    )
+  )
+}
+
 // Favorites
 
 /** Removes `id` if present, otherwise adds it to the front (newest first). */
@@ -118,6 +132,22 @@ export function addPurchase(
 
 export function hasPurchase(list: Purchase[], bookId: number): boolean {
   return list.some((item) => item.bookId === bookId)
+}
+
+// Foreign books: Open Library data isn't in the catalog, so the library
+// keeps what it needs to show purchased and favorite foreign books.
+
+/** Returns the same record when the stored copy is already identical. */
+export function rememberForeignBook(
+  record: Record<string, ForeignBook>,
+  book: ForeignBook
+): Record<string, ForeignBook> {
+  const key = String(book.id)
+  const current = record[key]
+  if (current && JSON.stringify(current) === JSON.stringify(book)) {
+    return record
+  }
+  return { ...record, [key]: book }
 }
 
 // Subscription
