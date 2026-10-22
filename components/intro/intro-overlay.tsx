@@ -15,6 +15,7 @@ import {
   DISCOVER_DOTS,
   INTRO_LINES,
   INTRO_SEEN_ATTR,
+  INTRO_STORAGE_KEY,
   REDUCED_MOTION_QUERY,
   STEP_MS,
   nextStep,
@@ -23,7 +24,7 @@ import {
 } from "@/components/intro/intro-timeline"
 import { Button } from "@/components/ui/button"
 import { Kbd } from "@/components/ui/kbd"
-import { useHydrated, useIntroSeen } from "@/lib/store"
+import { useHydrated } from "@/lib/store"
 import { cn } from "@/lib/utils"
 
 const EASE_OUT: Transition["ease"] = [0.22, 1, 0.36, 1]
@@ -73,9 +74,41 @@ function markIntroSeenInDom() {
  * already rendered page. The server always renders it; the pre-paint script
  * in the root layout hides it for returning and reduced-motion visitors.
  */
+const noopSubscribe = () => () => {}
+
+function readSessionSeen(): boolean {
+  try {
+    return JSON.parse(sessionStorage.getItem(INTRO_STORAGE_KEY) ?? "") === true
+  } catch {
+    return false
+  }
+}
+
+/**
+ * The intro plays on every visit: "seen" lives in sessionStorage, so it only
+ * stays seen while moving between pages in the same tab.
+ */
+function useSessionIntroSeen() {
+  const stored = useSyncExternalStore(
+    noopSubscribe,
+    readSessionSeen,
+    () => false
+  )
+  const [markedNow, setMarkedNow] = useState(false)
+  const markSeen = useCallback(() => {
+    try {
+      sessionStorage.setItem(INTRO_STORAGE_KEY, "true")
+    } catch {
+      // Storage blocked: the intro simply plays again next time.
+    }
+    setMarkedNow(true)
+  }, [])
+  return { seen: stored || markedNow, markSeen }
+}
+
 export function IntroOverlay() {
   const hydrated = useHydrated()
-  const { seen, markSeen } = useIntroSeen()
+  const { seen, markSeen } = useSessionIntroSeen()
   const reducedMotion = usePrefersReducedMotion()
   const [done, setDone] = useState(false)
 

@@ -70,7 +70,7 @@ describe("pre-paint script", () => {
       },
     }
     const matchMedia = () => ({ matches: reduced })
-    new Function("document", "localStorage", "matchMedia", INTRO_HEAD_SCRIPT)(
+    new Function("document", "sessionStorage", "matchMedia", INTRO_HEAD_SCRIPT)(
       document,
       localStorage,
       matchMedia

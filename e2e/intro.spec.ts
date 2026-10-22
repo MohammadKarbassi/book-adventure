@@ -22,7 +22,7 @@ const intro = (page: Page) =>
   page.getByRole("dialog", { name: "معرفی ماجراجویی با کتاب" })
 
 const storedSeen = (page: Page) =>
-  page.evaluate((key) => window.localStorage.getItem(key), INTRO_SEEN_KEY)
+  page.evaluate((key) => window.sessionStorage.getItem(key), INTRO_SEEN_KEY)
 
 test.describe("cinematic intro", () => {
   test("shows on the first visit and «رد شدن» skips it for good", async ({
@@ -45,6 +45,20 @@ test.describe("cinematic intro", () => {
       page.getByRole("heading", { level: 1, name: "سفر ماجراجویی شما" })
     ).toBeVisible()
     await expect(intro(page)).toBeHidden()
+  })
+
+  test("plays again on every new visit (new tab)", async ({
+    page,
+    context,
+  }) => {
+    await page.goto("/", { timeout: 120_000 })
+    await intro(page).getByRole("button", { name: "رد شدن" }).click()
+    await expect(intro(page)).toHaveCount(0)
+
+    const again = await context.newPage()
+    await again.goto("/")
+    await expect(intro(again)).toBeVisible()
+    await again.close()
   })
 
   test("Escape skips it", async ({ page }) => {

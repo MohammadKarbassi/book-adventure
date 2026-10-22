@@ -23,7 +23,8 @@ export const test = base.extend({
     )
     await page.addInitScript((key) => {
       try {
-        window.localStorage.setItem(key, "true")
+        // The intro plays once per tab session; mark it seen for this tab.
+        window.sessionStorage.setItem(key, "true")
       } catch {
         // Storage unavailable (e.g. about:blank); nothing to skip then.
       }
