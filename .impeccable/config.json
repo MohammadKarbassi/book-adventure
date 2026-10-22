@@ -75,6 +75,15 @@
         ],
         "createdAt": "2026-10-22T15:59:27.910Z",
         "reason": "Agent review: miniature print rendered on the back of a 3D book, not UI body text; stage has its own accessible label and readable DOM content exists outside the model."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgb(255 255 255 / 0.22)",
+        "files": [
+          "components/book-detail/book-cover-3d.tsx"
+        ],
+        "createdAt": "2026-10-22T23:45:18.088Z",
+        "reason": "Existing physical cover glare: neutral reflected light, not a UI palette color; preserved while sharing the cover with foreign books."
       }
     ]
   }

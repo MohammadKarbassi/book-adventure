@@ -28,13 +28,13 @@ export function BookCard({ book, priority, sizes, className }: BookCardProps) {
     <BookTravelLink
       href={`/book/${book.id}`}
       className={cn(
-        "group/book-card flex flex-col gap-3 rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        "group/book-card flex h-full flex-col gap-3 rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
         className
       )}
     >
       <div
         data-book-card-object=""
-        className="relative origin-right transition-transform duration-300 ease-out group-hover/book-card:[transform:perspective(900px)_rotateY(-9deg)_translateY(-6px)] group-focus-visible/book-card:[transform:perspective(900px)_rotateY(-9deg)_translateY(-6px)] motion-reduce:group-hover/book-card:transform-none motion-reduce:group-focus-visible/book-card:transform-none motion-reduce:transform-none motion-reduce:transition-none"
+        className="relative origin-right transition-transform duration-300 ease-out group-hover/book-card:[transform:perspective(900px)_rotateY(-9deg)_translateY(-6px)] group-focus-visible/book-card:[transform:perspective(900px)_rotateY(-9deg)_translateY(-6px)] motion-reduce:transform-none motion-reduce:transition-none motion-reduce:group-hover/book-card:transform-none motion-reduce:group-focus-visible/book-card:transform-none"
       >
         <BookCover
           book={book}
@@ -70,14 +70,14 @@ export function BookCard({ book, priority, sizes, className }: BookCardProps) {
           </div>
         ) : null}
       </div>
-      <div className="flex flex-col gap-0.5 px-0.5">
-        <h3 className="line-clamp-1 text-sm font-medium group-hover/book-card:text-accent-foreground">
+      <div className="flex flex-1 flex-col gap-1 px-0.5">
+        <h3 className="line-clamp-2 min-h-10 text-sm leading-5 font-medium group-hover/book-card:text-accent-foreground group-focus-visible/book-card:text-accent-foreground">
           {book.title}
         </h3>
         <p className="line-clamp-1 text-xs text-muted-foreground">
           {book.authors.join("، ")}
         </p>
-        <div className="mt-1.5 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-2 gap-y-1 pt-1.5">
           <RatingStars rating={book.rating} />
           <PriceTag book={book} />
         </div>

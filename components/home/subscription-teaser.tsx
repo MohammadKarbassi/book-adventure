@@ -43,7 +43,9 @@ export function SubscriptionTeaser({ covers }: { covers: BookSummary[] }) {
             <CrownIcon className="size-5" />
           </span>
           <CardTitle className="mt-2 text-3xl font-bold md:text-4xl">
-            <h2 id="subscription-heading">با اشتراک، بی‌حساب بخوانید</h2>
+            <h2 id="subscription-heading">
+              ماجراجویی پلاس: یک اشتراک برای ماجراجویی بدون مرز
+            </h2>
           </CardTitle>
           <CardDescription className="max-w-md text-base">
             صدها کتاب و کتاب صوتی اشتراکی، از ماهی {formatPrice(fromPerMonth)}.

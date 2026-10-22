@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { BookTravelLink } from "@/components/book/book-travel-link"
 
 import { BookCover } from "@/components/book/book-cover"
 import { PriceTag } from "@/components/book/price-tag"
@@ -37,14 +37,18 @@ export function ForeignBookCard({
   const authors = book.authors.join(", ")
 
   return (
-    <Link
+    <BookTravelLink
       href={foreignBookHref(book.workId)}
+      binding="end"
       className={cn(
-        "group/book-card flex flex-col gap-3 rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        "group/book-card flex h-full flex-col gap-3 rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
         className
       )}
     >
-      <div className="relative transition-transform duration-300 ease-out group-hover/book-card:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover/book-card:translate-y-0">
+      <div
+        data-book-card-object=""
+        className="relative origin-left transition-transform duration-300 ease-out group-hover/book-card:[transform:perspective(900px)_rotateY(9deg)_translateY(-6px)] group-focus-visible/book-card:[transform:perspective(900px)_rotateY(9deg)_translateY(-6px)] motion-reduce:transform-none motion-reduce:transition-none motion-reduce:group-hover/book-card:transform-none motion-reduce:group-focus-visible/book-card:transform-none"
+      >
         {/* English books bind on the left: flip the spine shading. */}
         <div dir="ltr">
           <BookCover
@@ -61,11 +65,11 @@ export function ForeignBookCard({
           انگلیسی
         </Badge>
       </div>
-      <div className="flex flex-col gap-0.5 px-0.5">
+      <div className="flex flex-1 flex-col gap-1 px-0.5">
         <h3
           dir={latinDir(book.title)}
           className={cn(
-            "line-clamp-1 text-sm font-medium group-hover/book-card:text-accent-foreground",
+            "line-clamp-2 min-h-10 text-sm leading-5 font-medium group-hover/book-card:text-accent-foreground group-focus-visible/book-card:text-accent-foreground",
             latinLineClass
           )}
         >
@@ -80,7 +84,7 @@ export function ForeignBookCard({
         >
           {authors || "نویسندهٔ نامشخص"}
         </p>
-        <div className="mt-1.5 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-2 gap-y-1 pt-1.5">
           {book.rating ? (
             <RatingStars rating={book.rating} />
           ) : book.year ? (
@@ -93,6 +97,6 @@ export function ForeignBookCard({
           <PriceTag book={{ finalPrice: book.price, free: false }} />
         </div>
       </div>
-    </Link>
+    </BookTravelLink>
   )
 }

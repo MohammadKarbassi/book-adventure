@@ -15,7 +15,8 @@ import type { BookColor } from "@/lib/catalog"
 import { cn } from "@/lib/utils"
 
 type BookCover3DProps = {
-  book: { title: string; image: string; color: BookColor }
+  book: { title: string; image: string | null; color?: BookColor }
+  binding?: "start" | "end"
   className?: string
 }
 
@@ -26,13 +27,18 @@ const REST_X = 2
 const TILT = 9
 const spring = { stiffness: 160, damping: 18, mass: 0.6 }
 
-export function BookCover3D({ book, className }: BookCover3DProps) {
+export function BookCover3D({
+  book,
+  className,
+  binding = "start",
+}: BookCover3DProps) {
   const reduceMotion = useReducedMotion()
   // Pointer position over the cover, -0.5 … 0.5 on each axis.
   const px = useMotionValue(0)
   const py = useMotionValue(0)
+  const restY = binding === "end" ? -REST_Y : REST_Y
   const rotateY = useSpring(
-    useTransform(px, [-0.5, 0.5], [REST_Y - TILT, REST_Y + TILT]),
+    useTransform(px, [-0.5, 0.5], [restY - TILT, restY + TILT]),
     spring
   )
   const rotateX = useSpring(
@@ -61,6 +67,8 @@ export function BookCover3D({ book, className }: BookCover3DProps) {
   return (
     <MotionConfig reducedMotion="user">
       <div
+        data-book-detail-object=""
+        dir={binding === "end" ? "ltr" : undefined}
         className={cn("relative perspective-[1400px]", className)}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}

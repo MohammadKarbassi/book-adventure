@@ -96,11 +96,12 @@ export function ForeignTeaser() {
             <li key={book.workId} className="min-w-0">
               <BookTravelLink
                 href={`/foreign/${book.workId}`}
+                binding="end"
                 className="group/preview flex flex-col gap-3 rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
               >
                 <div
                   dir="ltr"
-                  className="origin-left transition-transform duration-300 ease-out group-hover/preview:[transform:perspective(900px)_rotateY(9deg)_translateY(-6px)] motion-reduce:transition-none motion-reduce:group-hover/preview:transform-none"
+                  className="origin-left transition-transform duration-300 ease-out group-hover/preview:[transform:perspective(900px)_rotateY(9deg)_translateY(-6px)] group-focus-visible/preview:[transform:perspective(900px)_rotateY(9deg)_translateY(-6px)] motion-reduce:transition-none motion-reduce:group-hover/preview:transform-none motion-reduce:group-focus-visible/preview:transform-none"
                 >
                   <BookCover
                     book={{

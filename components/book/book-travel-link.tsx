@@ -9,10 +9,13 @@ export function BookTravelLink({
   href,
   className,
   children,
+  binding = "start",
 }: {
   href: string
   className?: string
   children: ReactNode
+  /** Logical binding in the RTL shop: Persian=start, English=end. */
+  binding?: "start" | "end"
 }) {
   const router = useRouter()
   const anchor = useRef<HTMLAnchorElement>(null)
@@ -32,6 +35,7 @@ export function BookTravelLink({
       href={href}
       className={className}
       data-book-card=""
+      data-book-binding={binding}
       onNavigate={(event) => {
         if (matchMedia("(prefers-reduced-motion: reduce)").matches) return
         const cover = anchor.current?.querySelector<HTMLElement>(
@@ -55,19 +59,18 @@ export function BookTravelLink({
           margin: "0",
           zIndex: "500",
           pointerEvents: "none",
-          transformOrigin: "right center",
+          transformOrigin: binding === "end" ? "left center" : "right center",
         })
         document.body.append(clone)
         flight.current = clone
         const animation = clone.animate(
           [
             {
-              transform: "perspective(900px) rotateY(-8deg) translateY(-4px)",
+              transform: `perspective(900px) rotateY(${binding === "end" ? 8 : -8}deg) translateY(-4px)`,
               opacity: 1,
             },
             {
-              transform:
-                "perspective(900px) rotateY(-18deg) translate3d(-20px,-24px,60px) scale(1.06)",
+              transform: `perspective(900px) rotateY(${binding === "end" ? 18 : -18}deg) translate3d(${binding === "end" ? 20 : -20}px,-24px,60px) scale(1.06)`,
               opacity: 0.85,
             },
           ],

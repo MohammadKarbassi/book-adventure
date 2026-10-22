@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { GlobeIcon } from "lucide-react"
 
-import { BookCover } from "@/components/book/book-cover"
+import { BookCover3D } from "@/components/book-detail/book-cover-3d"
 import { RatingStars } from "@/components/book/rating-stars"
 import { excerpt } from "@/components/book-detail/book-detail-utils"
 import { BookFacts, type BookFact } from "@/components/book-detail/book-facts"
@@ -125,16 +125,10 @@ export default async function ForeignBookPage({
 
         <div className="mt-8 grid gap-10 lg:mt-12 lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-16 xl:grid-cols-[20rem_minmax(0,1fr)] xl:gap-20">
           <div className="flex justify-center lg:sticky lg:top-28 lg:self-start lg:pt-2">
-            {/* English books bind on the left: flip the spine shading. */}
-            <div dir="ltr" className="w-56 sm:w-64 lg:w-full">
-              <BookCover
-                book={{ title: book.title, image: book.cover }}
-                size="xl"
-                priority
-                sizes="(min-width: 1280px) 320px, (min-width: 1024px) 288px, 256px"
-                className="w-full"
-              />
-            </div>
+            <BookCover3D
+              book={{ title: book.title, image: book.cover }}
+              binding="end"
+            />
           </div>
 
           <div className="flex min-w-0 flex-col gap-10">
