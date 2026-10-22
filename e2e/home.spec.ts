@@ -27,7 +27,7 @@ test.describe("home page", () => {
     )
     await expect(links.nth(1)).toHaveAccessibleName(/^ماجراجویی ۲: /)
     await expect(
-      page.getByRole("heading", { level: 1, name: "سفر ماجراجویی شما" })
+      page.getByRole("heading", { level: 2, name: "سفر ماجراجویی شما" })
     ).toBeVisible()
     await expect(
       page.getByText("کتاب‌های انتخاب شده برای سفرتان")
@@ -40,6 +40,7 @@ test.describe("home page", () => {
     page,
   }) => {
     const viewport = page.viewportSize()!
+    await page.getByRole("link", { name: "سفرتان را انتخاب کنید" }).click()
     const first = (await shelf(page)
       .getByRole("listitem")
       .first()
@@ -93,6 +94,7 @@ test.describe("home page", () => {
   test("hovering any book tips it forward to show its cover", async ({
     page,
   }) => {
+    await page.getByRole("link", { name: "سفرتان را انتخاب کنید" }).click()
     // The first book sits above the middle of the screen: its scroll tilt
     // shows its underside until it is hovered.
     const book = shelf(page).getByRole("link").first()
@@ -130,6 +132,7 @@ test.describe("home page", () => {
   })
 
   test("the scroll cue jumps to the store", async ({ page }) => {
+    await page.getByRole("link", { name: "سفرتان را انتخاب کنید" }).click()
     await page.getByRole("link", { name: "به فروشگاه بروید" }).click()
     await expect(
       page.getByRole("heading", { name: "دسته‌بندی‌ها" })

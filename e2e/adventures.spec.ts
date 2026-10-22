@@ -139,7 +139,7 @@ test.describe("adventure journey", () => {
     await page.goBack()
     await expect(page).toHaveURL(/\/$/)
     await expect(
-      page.getByRole("heading", { level: 1, name: "سفر ماجراجویی شما" })
+      page.getByRole("heading", { level: 2, name: "سفر ماجراجویی شما" })
     ).toBeVisible()
     await page.goForward()
     await expect(page).toHaveURL(new RegExp(`/adventures/${ids[1]}$`))
@@ -244,7 +244,7 @@ test.describe("adventure journey", () => {
     await rail(page).getByRole("link", { name: "بازگشت به قفسه" }).click()
     await expect(page).toHaveURL(/\/$/)
     await expect(
-      page.getByRole("heading", { level: 1, name: "سفر ماجراجویی شما" })
+      page.getByRole("heading", { level: 2, name: "سفر ماجراجویی شما" })
     ).toBeVisible()
   })
 

@@ -195,6 +195,9 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
           if (!live) return
           frame = requestAnimationFrame(tick)
           if (lost || document.hidden || !root) return
+          // A fixed canvas must not paint the arriving books over the hero.
+          const shelfBounds = root.getBoundingClientRect()
+          canvas.style.clipPath = `inset(${Math.max(0, shelfBounds.top)}px 0 ${Math.max(0, innerHeight - shelfBounds.bottom)}px)`
           if (width !== innerWidth || height !== innerHeight) {
             width = innerWidth
             height = innerHeight

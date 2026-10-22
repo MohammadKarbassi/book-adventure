@@ -52,7 +52,7 @@ export function BookShelf({
     categoryOf
   )
   const listRef = useRef<HTMLOListElement>(null)
-  const [shelfInView, setShelfInView] = useState(true)
+  const [shelfInView, setShelfInView] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   // useReducedMotion reads matchMedia on the client only; wait for hydration
   // so the first client render matches the server.
@@ -63,7 +63,15 @@ export function BookShelf({
   const { scrollY } = useScroll()
   const updateActive = useCallback(() => {
     const store = document.getElementById(storeId)
-    if (store) setShelfInView(store.getBoundingClientRect().top > 81)
+    const shelfTop = listRef.current
+      ?.closest("section")
+      ?.getBoundingClientRect().top
+    if (store)
+      setShelfInView(
+        shelfTop !== undefined &&
+          shelfTop < window.innerHeight / 2 &&
+          store.getBoundingClientRect().top > 81
+      )
     const items = listRef.current?.children
     if (!items?.length) return
     const middle = window.innerHeight / 2
@@ -109,10 +117,11 @@ export function BookShelf({
 
   return (
     <section
+      id="adventure-shelf"
       aria-labelledby="shelf-heading"
       data-press-shelf=""
       data-shelf-in-view={shelfInView ? "true" : "false"}
-      className="dark relative isolate min-h-svh overflow-x-clip bg-background text-foreground"
+      className="relative isolate min-h-svh overflow-x-clip bg-background text-foreground"
     >
       <ShelfScene books={books} />
       <Container className="relative max-w-none pt-8 pb-24 md:pt-0">
@@ -187,12 +196,12 @@ export function BookShelf({
             </p>
             <JourneyNote show={personalized} />
           </div>
-          <h1
+          <h2
             id="shelf-heading"
             className="font-heading text-4xl leading-tight font-bold text-balance md:text-3xl"
           >
             سفر ماجراجویی شما
-          </h1>
+          </h2>
           <p className="max-w-xs text-xs leading-relaxed text-muted-foreground md:sr-only">
             {`${formatNumber(books.length)} ماجراجویی، هر کدام با یک کتاب یا کتاب صوتی؛ نشانگر را روی هر جلد ببرید تا از قفسه بیرون بیاید و با یک کلیک سفرش را شروع کنید.`}
           </p>
@@ -225,7 +234,12 @@ export function BookShelf({
       </Container>
 
       {/* Scroll cue, pinned to the bottom of the screen while the shelf shows. */}
-      <div className="pointer-events-none sticky bottom-5 z-[300] -mt-16 flex justify-center pb-5">
+      <div
+        className={cn(
+          "pointer-events-none sticky bottom-5 z-[300] -mt-16 flex justify-center pb-5",
+          !shelfInView && "invisible"
+        )}
+      >
         <a
           href={`#${storeId}`}
           onClick={goToStore}

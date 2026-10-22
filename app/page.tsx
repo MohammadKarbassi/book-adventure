@@ -1,5 +1,6 @@
 import { BookRow } from "@/components/book/book-row"
 import { BookShelf } from "@/components/home/book-shelf"
+import { JourneyHero } from "@/components/home/journey-hero"
 import { CategoryStrip } from "@/components/home/category-strip"
 import { ForeignTeaser } from "@/components/home/foreign-teaser"
 import { PodcastsTeaser } from "@/components/home/podcasts-teaser"
@@ -74,6 +75,7 @@ export default function Page() {
   return (
     <>
       <IntroOverlay />
+      <JourneyHero />
       <BookShelf
         books={shelf}
         categoryOf={getCategoryMap()}

@@ -1,0 +1,33 @@
+{
+  "asset": "book-journey.webp",
+  "purpose": "Original Book Adventure hero illustration",
+  "generation": {
+    "tool": "built-in image_gen",
+    "original": true,
+    "generations": 1,
+    "referenceImages": [],
+    "source": "/Users/mohammad/.codex/generated_images/01a1645f-9bab-72f2-b3a2-a1e278abfb17/exec-ad8a555c-39e9-4cda-b02d-c0455ba22c2a.png",
+    "prompt": "book-journey.prompt.txt",
+    "embeddedPromptSidecar": "book-journey.webp.json"
+  },
+  "output": {
+    "width": 1536,
+    "height": 1024,
+    "bytes": 322316,
+    "format": "webp",
+    "quality": 84,
+    "alphaQuality": 100,
+    "sha256": "7b5edc66eca320246a19d81a20ea9c370d631fda019cd8e157780bbaf8ca766e"
+  },
+  "verification": {
+    "nativeAlphaPreserved": true,
+    "sourceAlphaRange": [0, 254],
+    "transparentPixels": 639150,
+    "partialAlphaPixels": 933714,
+    "lightCompositeInspected": true,
+    "darkCompositeInspected": true,
+    "visualStatus": "accepted",
+    "gateScore": "unscored"
+  },
+  "assumptions": ["Parent explicitly approved code-first asset production without a measured comp-spec."]
+}

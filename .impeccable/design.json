@@ -227,6 +227,11 @@
     ],
     "motion": [
       {
+        "name": "shop-book-pull-out",
+        "value": "240ms cubic-bezier(0.22,1,0.36,1)",
+        "purpose": "Brief physical cover lift before native router push; bypassed for reduced motion and modified clicks."
+      },
+      {
         "name": "shelf-tilt",
         "value": "spring(stiffness:140,damping:26,mass:0.5)",
         "purpose": "Scroll/hover tilt; static base tilt under reduced motion."
@@ -334,7 +339,7 @@
   ],
   "narrative": {
     "northStar": "Paper and Lantern",
-    "overview": "This is a source-grounded snapshot of the completed book-material and adventure-interior refinement on 2026-10-22. The existing theme names paper, navy ink, saffron and turquoise; Persian editorial type and physically lit books carry that identity. The material/ending review covers those surfaces only and does not establish whole-page approval.\n\nPRODUCT.md records the user's newer warm, imaginary paper-and-amber illustration direction. That hero and the broader shop hover redesign are pending implementation. The current dark shelf opening and sparse title block are observed state, not approved global composition rules. The shop header remains available on the shelf. Keep this snapshot as evidence while that redesign proceeds; do not treat future imagery as shipped.",
+    "overview": "This is a source-grounded snapshot of the completed book-material and adventure-interior refinement on 2026-10-22. The existing theme names paper, navy ink, saffron and turquoise; Persian editorial type and physically lit books carry that identity. The material/ending review covers those surfaces only and does not establish whole-page approval.\n\nThe home now implements the user's warm paper-and-amber direction: an original illustrated book opens into a mountain path beside the project title. The shelf inherits the paper theme rather than forcing dark mode, and the shop header stays available. Shared shop cards tilt around their binding edge and briefly pull outward before navigation. These are project-specific design choices, not claims about Stripe's implementation.",
     "keyCharacteristics": [
       "Persian RTL reading and native interactive DOM.",
       "Editorial headings beside legible sans-serif utility text.",
@@ -372,8 +377,8 @@
     "donts": [
       "**Don't** copy Stripe artwork, text, fonts or material maps.",
       "**Don't** present generated backs, spines or relief as authentic per-book scans.",
-      "**Don't** apply the current dark shelf or sparse hero composition as an approved system-wide template.",
-      "**Don't** describe the pending illustrated hero or shop redesign as implemented."
+      "**Don't** force the home shelf into dark mode independently of the site's theme.",
+      "**Don't** animate book navigation when reduced motion is requested."
     ]
   }
 }

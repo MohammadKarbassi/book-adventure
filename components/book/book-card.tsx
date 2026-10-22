@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { BookTravelLink } from "@/components/book/book-travel-link"
 import { HeadphonesIcon } from "lucide-react"
 
 import { BookCover } from "@/components/book/book-cover"
@@ -25,14 +25,17 @@ export function BookCard({ book, priority, sizes, className }: BookCardProps) {
   const hasDiscount = !book.free && (book.discountPct ?? 0) > 0
 
   return (
-    <Link
+    <BookTravelLink
       href={`/book/${book.id}`}
       className={cn(
         "group/book-card flex flex-col gap-3 rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
         className
       )}
     >
-      <div className="relative transition-transform duration-300 ease-out group-hover/book-card:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover/book-card:translate-y-0">
+      <div
+        data-book-card-object=""
+        className="relative origin-right transition-transform duration-300 ease-out group-hover/book-card:[transform:perspective(900px)_rotateY(-9deg)_translateY(-6px)] group-focus-visible/book-card:[transform:perspective(900px)_rotateY(-9deg)_translateY(-6px)] motion-reduce:group-hover/book-card:transform-none motion-reduce:group-focus-visible/book-card:transform-none motion-reduce:transform-none motion-reduce:transition-none"
+      >
         <BookCover
           book={book}
           priority={priority}
@@ -79,6 +82,6 @@ export function BookCard({ book, priority, sizes, className }: BookCardProps) {
           <PriceTag book={book} />
         </div>
       </div>
-    </Link>
+    </BookTravelLink>
   )
 }

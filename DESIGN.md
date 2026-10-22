@@ -1,6 +1,6 @@
 ---
 name: Book Adventure
-description: Current book-material and adventure-interior snapshot; hero and shop redesign pending.
+description: Warm illustrated book journey, physical shop motion and continuous adventure interiors.
 colors:
   primary: "oklch(0.79 0.15 72)"
   primary-foreground: "oklch(0.22 0.03 258)"
@@ -101,7 +101,7 @@ components:
 
 This is a source-grounded snapshot of the completed book-material and adventure-interior refinement on 2026-10-22. The existing theme names paper, navy ink, saffron and turquoise; Persian editorial type and physically lit books carry that identity. The material/ending review covers those surfaces only and does not establish whole-page approval.
 
-PRODUCT.md records the user's newer warm, imaginary paper-and-amber illustration direction. That hero and the broader shop hover redesign are pending implementation. The current dark shelf opening and sparse title block are observed state, not approved global composition rules. The shop header remains available on the shelf. Keep this snapshot as evidence while that redesign proceeds; do not treat future imagery as shipped.
+The home now implements the user's warm paper-and-amber direction: an original illustrated book opens into a mountain path beside the project title. The shelf inherits the paper theme rather than forcing dark mode, and the shop header stays available. Shared shop cards tilt around their binding edge and briefly pull outward before navigation. These are project-specific design choices, not claims about Stripe's implementation.
 
 **Key Characteristics:**
 
@@ -160,7 +160,7 @@ Adventure interiors switch at 900px to a centered container capped at min(84vw, 
 
 The ending uses a minimum viewport-height region, 80rem maximum width, 1.75rem inline and 6rem block padding; desktop inline padding becomes 7rem. Its two media groups stack before becoming two columns at 900px.
 
-Observed shelf geometry is 82% width on small screens, 52% from 768px, capped at 52rem; gaps are clamp(2.5rem,7svh,5rem). This records book spacing only. The surrounding hero, empty space and navigation composition remain subject to the pending redesign.
+Observed shelf geometry is 82% width on small screens, 52% from 768px, capped at 52rem; gaps are clamp(2.5rem,7svh,5rem). The preceding hero uses a 42/58 text/illustration split from 768px and stacks text before imagery on mobile. Its brand heading uses 60/72/96px steps; the shelf title is a subordinate h2.
 
 **The Native Reading Rule.** Keep text, purchase controls, links and drag anchors in DOM and preserve native scrolling while the canvas provides book imagery.
 
@@ -202,6 +202,8 @@ The shop header is sticky, 64px tall, with a paper background at 80% opacity and
 
 ### Physical books and journey ending
 
+The illustrated hero responds only to mouse movement, with bounded 3° horizontal and 2° vertical depth and a damped return. Shared shop covers tilt 9° and lift 6px on hover/focus; navigation uses a 240ms pull-out with cubic-bezier(0.22,1,0.36,1). Reduced motion disables these effects and navigates immediately; modified clicks retain native link behavior. The illustration is a local original asset with provenance in public/hero/manifest.json.
+
 A fixed Three.js canvas renders shelf books; another fixed scene serves the adventure route on desktop and mobile. CSS 3D remains the no-WebGL fallback, with native links, focus and drag anchors. Shelf hover/focus reveals a cover band, lifts toward the viewer and reveals a price chip. Tilt and lift use distinct springs recorded in the sidecar; reduced-motion handling remains in the source.
 
 The interior keeps neighboring models in the same scene. Book activation follows the 25% desktop / 30% mobile viewport trigger and keeps route, palette, rail and active model aligned. The ending progressively clips the canvas over one viewport as real audio/podcast DOM content and footer enter; scrolling back reverses the reveal. This is the project's own content adaptation, not an identity rule for unrelated screens.
@@ -219,9 +221,9 @@ The interior keeps neighboring models in the same scene. Book activation follows
 
 - **Don't** copy Stripe artwork, text, fonts or material maps.
 - **Don't** present generated backs, spines or relief as authentic per-book scans.
-- **Don't** apply the current dark shelf or sparse hero composition as an approved system-wide template.
-- **Don't** describe the pending illustrated hero or shop redesign as implemented.
+- **Don't** force the home shelf into dark mode independently of the site's theme.
+- **Don't** animate book navigation when reduced motion is requested.
 
-Not canonized or repaired: the existing shelf eyebrow is a craft-floor defect, not a reusable label style; the current hero identity/composition and broader shop motion await the user's separate redesign. This documentation pass does not change those surfaces.
+The shelf's introductory line preserves the user's specified content; it is not a generic label style for unrelated sections.
 
 Source evidence: app/globals.css; app/layout.tsx; components/ui/{button,input,badge,card}.tsx; components/site/{container,site-header,main-nav}.tsx; components/home/{book-shelf,shelf-book,shelf-scene}.tsx; components/book/book-materials.ts; components/adventures/{adventure-section,adventure-scene,journey-ending}.tsx. Context: PRODUCT.md and docs/stripe-press-design-basis.md.

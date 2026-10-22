@@ -106,7 +106,7 @@ test.describe("cinematic intro", () => {
 
     await page.reload()
     await expect(
-      page.getByRole("heading", { level: 1, name: "سفر ماجراجویی شما" })
+      page.getByRole("heading", { level: 1, name: /ماجراجویی.*با کتاب/ })
     ).toBeVisible()
     await expect(intro(page)).toBeVisible()
   })
@@ -165,7 +165,7 @@ test.describe("cinematic intro", () => {
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.goto("/", { timeout: 120_000 })
     await expect(
-      page.getByRole("heading", { level: 1, name: "سفر ماجراجویی شما" })
+      page.getByRole("heading", { level: 1, name: /ماجراجویی.*با کتاب/ })
     ).toBeVisible()
     await expect(intro(page)).toBeHidden()
     await expect(page.locator("[data-intro-overlay]")).toHaveCount(0)
