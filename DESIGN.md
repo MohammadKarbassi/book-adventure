@@ -219,6 +219,7 @@ After the last shelf books, the surface gradually moves into the semantic `--hom
 
 ### Do:
 
+- **Do** keep the homepage store on a full-width native opaque themed surface above the fixed canvas; its boundary must remain clean even when canvas clipping lags behind scrolling.
 - **Do** preserve semantic theme variables and readable surface/foreground pairs.
 - **Do** keep Persian RTL reading, logical inline spacing and native interactive DOM.
 - **Do** preserve cover proportions and separate color, height and roughness maps.

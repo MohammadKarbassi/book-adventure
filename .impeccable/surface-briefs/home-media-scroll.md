@@ -12,6 +12,8 @@ FINISH: Native reversible scroll, one focal folding sequence, no time-based deco
 
 Audio follow-up: poster's «شنیدن نمونهٔ رایگان» deliberately plays an English NASA Curious Universe sample, not a Persian catalog recording. Keep its visible disclosure and attribution distinct from the lower Houston episode and cover. Interior journey samples are outside this change.
 
+Store boundary: all shop sections sit on a native full-bleed opaque `bg-background` surface above the shelf stacking context. Do not move this background onto the max-width Container or rely solely on the canvas's RAF-driven clip: compositor scrolling may expose stale dark paint in the gutters/boundary. Preserve forward/reverse media entry and theme colors.
+
 Quality bar: continuous creases, stable portrait proportions, readable native Persian copy, real audio controls, distinct podcast stage, correct stage indicator, single-canvas disposal/context-loss behavior, no overflow or hidden content without JS.
 Budget: 24×100 plane segments, five horizontal folds plus a center crease, vertex/normal update only on changed opening, render only when view signature changes, lazy media textures. No second WebGL context or new dependency.
 User refinement: poster is96svh desktop, width-bounded on phones, preserving the new978x1386 unframed image's full ratio. Five individually phased panel slopes form four visible hinges, integrating constant paper length; isolated grazing light avoids changing the shelf books' lighting. Folding spans140% viewport with220ms exponential settling (no overshoot), slightly slower at the user's request. Cover is28svh bounded160–272px. All other content scrolls natively.

@@ -83,43 +83,47 @@ export default function Page() {
         storeId={STORE_ID}
         media={{ audio: HOME_NASA_SAMPLE, podcast: HOME_PODCAST }}
       />
-      <Container
-        id={STORE_ID}
-        className="flex flex-col gap-16 pt-12 pb-20 md:gap-20"
-      >
-        <Reveal>
-          <CategoryStrip categories={categories} />
-        </Reveal>
-        {rows.slice(0, 3).map((row) => (
-          <Reveal key={row.list}>
-            <BookRow
-              title={row.title}
-              description={row.description}
-              href={row.href}
-              books={getList(row.list).map(toSummary)}
-            />
+      {/* Native opaque paper covers the fixed canvas even when compositor
+          scrolling gets ahead of its RAF-driven clip. Keep this full bleed. */}
+      <div data-home-store-surface="" className="relative z-20 bg-background">
+        <Container
+          id={STORE_ID}
+          className="flex flex-col gap-16 pt-12 pb-20 md:gap-20"
+        >
+          <Reveal>
+            <CategoryStrip categories={categories} />
           </Reveal>
-        ))}
-        <Reveal>
-          <SubscriptionTeaser covers={plusBooks.slice(0, 4)} />
-        </Reveal>
-        {rows.slice(3).map((row) => (
-          <Reveal key={row.list}>
-            <BookRow
-              title={row.title}
-              description={row.description}
-              href={row.href}
-              books={getList(row.list).map(toSummary)}
-            />
+          {rows.slice(0, 3).map((row) => (
+            <Reveal key={row.list}>
+              <BookRow
+                title={row.title}
+                description={row.description}
+                href={row.href}
+                books={getList(row.list).map(toSummary)}
+              />
+            </Reveal>
+          ))}
+          <Reveal>
+            <SubscriptionTeaser covers={plusBooks.slice(0, 4)} />
           </Reveal>
-        ))}
-        <Reveal>
-          <PodcastsTeaser podcasts={podcasts} />
-        </Reveal>
-        <Reveal>
-          <ForeignTeaser />
-        </Reveal>
-      </Container>
+          {rows.slice(3).map((row) => (
+            <Reveal key={row.list}>
+              <BookRow
+                title={row.title}
+                description={row.description}
+                href={row.href}
+                books={getList(row.list).map(toSummary)}
+              />
+            </Reveal>
+          ))}
+          <Reveal>
+            <PodcastsTeaser podcasts={podcasts} />
+          </Reveal>
+          <Reveal>
+            <ForeignTeaser />
+          </Reveal>
+        </Container>
+      </div>
     </>
   )
 }
