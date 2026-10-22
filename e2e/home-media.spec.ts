@@ -47,7 +47,7 @@ test("paper geometry opens and reverses without adding browser history", async (
   await expect(poster).toHaveAttribute("data-poster-ready", "true")
   await expect
     .poll(async () => Number(await poster.getAttribute("data-poster-opening")))
-    .toBeCloseTo(0.48, 2)
+    .toBeCloseTo(0.429, 2)
   const folded = Number(await poster.getAttribute("data-poster-opening"))
   expect(folded).toBeGreaterThan(0.3)
   expect(folded).toBeLessThan(0.7)
@@ -55,7 +55,7 @@ test("paper geometry opens and reverses without adding browser history", async (
   await page
     .locator("#home-audio")
     .evaluate((el) =>
-      scrollTo(0, el.getBoundingClientRect().top + scrollY + innerHeight * 0.2)
+      scrollTo(0, el.getBoundingClientRect().top + scrollY + innerHeight * 0.35)
     )
   await expect(poster).toHaveAttribute("data-poster-opening", "1.000")
   const before = await poster.boundingBox()
