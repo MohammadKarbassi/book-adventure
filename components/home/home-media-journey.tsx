@@ -58,8 +58,7 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
               </Link>
             </div>
             <p className="max-w-lg text-xs leading-loose text-foreground/75">
-              نمونهٔ آزاد برای تجربهٔ پخش؛ لزوماً صدای نسخهٔ اصلی «{audio.title}
-              » نیست. منبع در پخش‌کننده آمده است.
+              نمونهٔ انگلیسی از پادکست ناسا؛ منبع رسمی در پخش‌کننده آمده است.
             </p>
           </div>
         </div>

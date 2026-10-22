@@ -96,6 +96,12 @@ test("media controls switch the real player from sample to NASA podcast", async 
   await audio.getByRole("button", { name: "شنیدن نمونهٔ رایگان" }).click()
   const player = page.getByRole("region", { name: "پخش‌کننده" })
   await expect(player).toBeVisible()
+  await expect(player).toContainText("Encore: A Year In Mars Dune Alpha")
+  await expect(player).toContainText("NASA’s Curious Universe")
+  await expect(page.locator("audio")).toHaveAttribute(
+    "src",
+    "https://www.nasa.gov/wp-content/uploads/2026/10/a-year-in-mars-dune-alpha-2026-encore-v1.mp3"
+  )
   await page
     .locator("#home-podcast")
     .getByRole("button", { name: "شنیدن پادکست" })

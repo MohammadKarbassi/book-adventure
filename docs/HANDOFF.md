@@ -6,6 +6,11 @@ Last updated: 2026-10-23 (۱ آبان ۱۴۰۵). Deadline: Friday 2026-10-23 (۱
 
 ## 1. Snapshot
 
+### Follow-up after session close
+
+- User requested an English NASA sample for «شنیدن نمونهٔ رایگان» beneath the unfolding HOME poster. `HOME_NASA_SAMPLE` in `data/home-podcast.ts` now supplies the official Curious Universe episode `Encore: A Year In Mars Dune Alpha`, with its own cover, stable track id, source and credit. `app/page.tsx` no longer builds that sample from the Persian audiobook bestseller; its nearby disclosure now explicitly identifies an English NASA podcast. The lower Houston stage remains unchanged and uses a separate track. Interior adventure samples remain unchanged.
+- Verification: lint/typecheck,227 unit tests,229-page webpack build,7 relevant production E2E tests passed. Strengthened player-switch test first failed on the old Persian sample, then passed with the NASA title/subtitle/source before switching to Houston. Actual unmocked poster-button playback reached7.11s, readyState4, no media error. Detector `[]`, no suppressions. No animations, routing, catalog audio or player implementation changed. Agent-owned3100 test server stopped after verification; user dev3000 remains untouched. Changes are committed locally, not pushed.
+
 ### Session close — 2026-10-23
 
 This is the authoritative continuation point; the chronological notes below include superseded designs and older verification counts.
