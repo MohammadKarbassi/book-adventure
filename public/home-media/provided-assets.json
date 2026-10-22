@@ -5,5 +5,19 @@
   "credit": "NASA's Curious Universe artwork, provided for this educational showcase",
   "sourcePage": "https://www.nasa.gov/podcasts/curious-universe/",
   "processing": "900x900 WebP encoding only; artwork not redrawn or relabeled",
-  "endorsement": false
+  "endorsement": false,
+  "additionalUserAssets": [
+    {
+      "file": "nasa-rocket-provided.webp",
+      "source": "/Users/mohammad/Downloads/il_1588xN.6880311392_oxdq.webp",
+      "processing": "Unchanged original file. Frame/white margins excluded only through matching CSS view window and texture UV crop, not an edited raster.",
+      "credit": "User-provided Apollo illustration; original artist/license not verified; bootcamp demonstration only, not claimed as official NASA artwork."
+    },
+    {
+      "file": "jupiter-provided.webp",
+      "source": "/Users/mohammad/Downloads/oFcqm34Hqghc66rcmHvLG6-1200-80.jpg.webp",
+      "processing": "Unchanged original file, cover-fit display in podcast background.",
+      "credit": "User-provided space image; source/license not verified. Atmospheric illustration, not imagery of the selected Mars episode."
+    }
+  ]
 }

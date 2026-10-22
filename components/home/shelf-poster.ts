@@ -3,7 +3,9 @@ import {
   foldPosterPoint,
   posterOpening,
   POSTER_HEIGHT,
+  settlePosterOpening,
 } from "@/components/home/home-media-math"
+import { HOME_POSTER } from "@/data/home-poster"
 
 /** A single segmented paper mesh in the shelf's existing renderer. */
 export function createShelfPoster(
@@ -26,6 +28,8 @@ export function createShelfPoster(
   let loaded = false
   let live = true
   let lastOpening = -1
+  let displayedOpening = -1
+  let previousTime = performance.now()
   let texture: Three.Texture | undefined
   const reduced = matchMedia("(prefers-reduced-motion: reduce)")
   const fallback = () =>
@@ -59,53 +63,27 @@ export function createShelfPoster(
       if (visible && !pending && !reduced.matches) {
         pending = true
         new THREE.TextureLoader().load(
-          "/home-media/listening-poster.webp",
+          HOME_POSTER.src,
           (map) => {
             if (!live) {
               map.dispose()
               return
             }
-            void document.fonts.ready.then(() => {
-              if (!live) {
-                map.dispose()
-                return
-              }
-              const paper = document.createElement("canvas")
-              paper.width = 1100
-              paper.height = 1500
-              const context = paper.getContext("2d")!
-              const source = map.image as HTMLImageElement
-              const cropHeight = source.width * POSTER_HEIGHT
-              context.drawImage(
-                source,
-                0,
-                (source.height - cropHeight) / 2,
-                source.width,
-                cropHeight,
-                0,
-                0,
-                1100,
-                1500
-              )
-              context.fillStyle = getComputedStyle(section).backgroundColor
-              context.globalAlpha = 0.82
-              context.fillRect(0, 1200, 1100, 300)
-              context.globalAlpha = 1
-              context.fillStyle = getComputedStyle(section).color
-              context.direction = "rtl"
-              context.textAlign = "center"
-              context.font = `600 78px ${getComputedStyle(anchor).fontFamily}`
-              context.fillText("هر قصه، یک صدای تازه", 550, 1320, 980)
-              context.font = `400 40px ${getComputedStyle(anchor).fontFamily}`
-              context.fillText("ماجراجویی با کتاب", 550, 1410)
-              texture = new THREE.CanvasTexture(paper)
-              texture.colorSpace = THREE.SRGBColorSpace
-              material.map = texture
-              material.needsUpdate = true
-              map.dispose()
-              loaded = true
-              invalidate()
-            })
+            const { crop, sourceSize } = HOME_POSTER
+            texture = map
+            texture.repeat.set(
+              crop.width / sourceSize,
+              crop.height / sourceSize
+            )
+            texture.offset.set(
+              crop.x / sourceSize,
+              1 - (crop.y + crop.height) / sourceSize
+            )
+            texture.colorSpace = THREE.SRGBColorSpace
+            material.map = texture
+            material.needsUpdate = true
+            loaded = true
+            invalidate()
           },
           undefined,
           () => {
@@ -114,7 +92,18 @@ export function createShelfPoster(
         )
       }
       mesh.visible = visible && loaded && !reduced.matches
-      const opening = posterOpening(bounds.top, height, reduced.matches)
+      const targetOpening = posterOpening(bounds.top, height, reduced.matches)
+      const now = performance.now()
+      displayedOpening =
+        displayedOpening < 0 || !visible || reduced.matches
+          ? targetOpening
+          : settlePosterOpening(
+              displayedOpening,
+              targetOpening,
+              Math.min(100, now - previousTime)
+            )
+      previousTime = now
+      const opening = displayedOpening
       anchor.dataset.posterOpening = opening.toFixed(3)
       if (!mesh.visible) {
         restore()

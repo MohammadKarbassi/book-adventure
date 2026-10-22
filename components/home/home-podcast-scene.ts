@@ -100,7 +100,7 @@ export function createHomePodcastScene(
               restore()
             }
           )
-        load("/home-media/podcast-world.webp", true)
+        load("/home-media/jupiter-provided.webp", true)
         load(image.currentSrc || image.src, false)
       }
       const ready = backgroundLoaded && coverLoaded && !reduced.matches

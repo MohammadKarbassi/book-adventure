@@ -4,7 +4,17 @@ export const POSTER_HEIGHT = 15 / 11
 /** Local responsive choreography, not Stripe's pixel coefficients. */
 export function posterOpening(top: number, viewport: number, reduced: boolean) {
   if (reduced || viewport <= 0) return 1
-  return clamp((viewport * 0.95 - top) / (viewport * 0.85))
+  return clamp((viewport * 1.05 - top) / (viewport * 1.25))
+}
+
+/** 180ms exponential settling; no overshoot or scroll interception. */
+export function settlePosterOpening(
+  current: number,
+  target: number,
+  dt: number
+) {
+  if (Math.abs(target - current) < 0.0005) return target
+  return current + (target - current) * (1 - Math.exp(-Math.max(0, dt) / 180))
 }
 
 /** Five connected leaves and a center crease; independently authored geometry. */

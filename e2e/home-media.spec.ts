@@ -39,6 +39,9 @@ test("paper geometry opens and reverses without adding browser history", async (
       scrollTo(0, el.getBoundingClientRect().top + scrollY - innerHeight * 0.45)
     )
   await expect(poster).toHaveAttribute("data-poster-ready", "true")
+  await expect
+    .poll(async () => Number(await poster.getAttribute("data-poster-opening")))
+    .toBeCloseTo(0.48, 2)
   const folded = Number(await poster.getAttribute("data-poster-opening"))
   expect(folded).toBeGreaterThan(0.3)
   expect(folded).toBeLessThan(0.7)
@@ -119,6 +122,10 @@ test("flat poster fallback and phone layout survive unavailable WebGL", async ({
   await expect(page.locator("[data-home-poster-fallback]")).toHaveCSS(
     "opacity",
     "1"
+  )
+  await expect(page.locator("[data-home-poster-fallback]")).toHaveAttribute(
+    "src",
+    "/home-media/nasa-rocket-provided.webp"
   )
   await expect(
     page

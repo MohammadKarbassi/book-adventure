@@ -4,12 +4,13 @@ import {
   posterOpening,
   POSTER_HEIGHT,
   podcastReveal,
+  settlePosterOpening,
 } from "@/components/home/home-media-math"
 
 describe("home poster folding", () => {
   it("opens with scroll and clamps both ends", () => {
-    expect(posterOpening(900, 900, false)).toBe(0)
-    expect(posterOpening(-100, 900, false)).toBe(1)
+    expect(posterOpening(1000, 900, false)).toBe(0)
+    expect(posterOpening(-200, 900, false)).toBe(1)
     expect(posterOpening(0, 900, true)).toBe(1)
     expect(posterOpening(0, 0, false)).toBe(1)
     expect(posterOpening(400, 900, false)).toBeLessThan(
@@ -23,6 +24,21 @@ describe("home poster folding", () => {
       expect(p.y).toBeCloseTo(y)
       expect(p.z).toBeCloseTo(0)
     }
+  })
+  it("spreads unfolding over 125 percent of a viewport", () => {
+    expect(posterOpening(900 * 1.05, 900, false)).toBeCloseTo(0)
+    expect(posterOpening(900 * 0.425, 900, false)).toBeCloseTo(0.5)
+    expect(posterOpening(-900 * 0.2, 900, false)).toBeCloseTo(1)
+    expect(posterOpening(90, 900, false)).toBeLessThan(0.8)
+  })
+  it("settles gently without overshoot and is frame-rate independent", () => {
+    const first = settlePosterOpening(0, 1, 16)
+    expect(first).toBeGreaterThan(0)
+    expect(first).toBeLessThan(0.12)
+    expect(settlePosterOpening(first, 1, 16)).toBeCloseTo(
+      settlePosterOpening(0, 1, 32)
+    )
+    expect(settlePosterOpening(0.5, 0, 32)).toBeLessThan(0.5)
   })
   it("has physical depth when folded and remains continuous across creases", () => {
     expect(Math.abs(foldPosterPoint(0, -0.75, 0).z)).toBeGreaterThan(0.05)

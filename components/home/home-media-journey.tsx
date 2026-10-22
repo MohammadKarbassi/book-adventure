@@ -4,6 +4,7 @@ import { ArrowDownIcon, ArrowLeftIcon } from "lucide-react"
 import { PlayButton } from "@/components/player/play-button"
 import type { Track } from "@/components/player/types"
 import { buttonVariants } from "@/components/ui/button"
+import { HOME_POSTER } from "@/data/home-poster"
 
 export type HomeMediaProps = { audio: Track; podcast: Track; storeId: string }
 
@@ -25,32 +26,31 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
             data-home-poster-anchor=""
             data-poster-ready="false"
             data-poster-opening="1"
-            className="relative aspect-[11/15] h-[min(72svh,106vw)] font-heading md:h-[80svh]"
+            className="relative aspect-[11/15] h-[min(88svh,116vw)] overflow-hidden font-heading md:h-[96svh]"
           >
             <Image
               data-home-poster-fallback=""
-              src="/home-media/listening-poster.webp"
-              alt="تصویرسازی اختصاصی مسیر طلایی در کوهستان، برای صحنهٔ کتاب صوتی"
-              fill
+              src={HOME_POSTER.src}
+              alt="پوستر ارسالی موشک آپولو با نوشتهٔ NASA"
+              width={HOME_POSTER.sourceSize}
+              height={HOME_POSTER.sourceSize}
               sizes="(min-width:768px) 40vw,70vw"
-              className="object-cover shadow-2xl"
+              className="absolute max-w-none"
+              style={{
+                width: `${(HOME_POSTER.sourceSize / HOME_POSTER.crop.width) * 100}%`,
+                height: `${(HOME_POSTER.sourceSize / HOME_POSTER.crop.height) * 100}%`,
+                left: `${(-HOME_POSTER.crop.x / HOME_POSTER.crop.width) * 100}%`,
+                top: `${(-HOME_POSTER.crop.y / HOME_POSTER.crop.height) * 100}%`,
+              }}
             />
-            <div
-              data-home-poster-print=""
-              className="absolute inset-x-0 bottom-0 flex h-1/5 flex-col items-center justify-center gap-2 bg-background/80 px-3 text-center"
-            >
-              <h2
-                id="home-audio-title"
-                className="font-heading text-2xl leading-tight md:text-4xl"
-              >
-                هر قصه، یک صدای تازه
-              </h2>
-              <p className="font-heading text-base md:text-xl">
-                ماجراجویی با کتاب
-              </p>
-            </div>
           </div>
           <div className="relative z-20 flex max-w-xl flex-col items-center gap-3 text-center">
+            <h2
+              id="home-audio-title"
+              className="font-heading text-2xl leading-tight md:text-4xl"
+            >
+              هر قصه، یک صدای تازه
+            </h2>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <PlayButton track={audio} label="شنیدن نمونهٔ رایگان" size="lg" />
               <Link
@@ -74,7 +74,7 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
           className="pointer-events-none sticky top-16 h-[calc(100svh-4rem)] overflow-hidden"
         >
           <Image
-            src="/home-media/podcast-world.webp"
+            src="/home-media/jupiter-provided.webp"
             alt=""
             fill
             sizes="100vw"
@@ -123,7 +123,7 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
             منبع رسمی: ناسا · پادکست انگلیسی
           </a>
           <p className="max-w-lg text-xs leading-loose text-foreground/75">
-            صدا و کاور: ناسا · تصویرسازی محیط: پروژه
+            صدا و کاور: ناسا · تصویر فضایی ارسالی شما، مستقل از موضوع این قسمت
           </p>
         </section>
         <section
