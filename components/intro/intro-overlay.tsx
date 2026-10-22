@@ -200,7 +200,7 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
       if (MODIFIER_KEYS.has(event.key) || event.key === "Tab") return
       if (
         event.target instanceof HTMLElement &&
-        event.target.closest("[data-intro-sound]")
+        event.target.closest("[data-intro-sound], [data-intro-credit]")
       )
         return
       if (event.isComposing || event.keyCode === 229) return
@@ -265,8 +265,33 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
           )}
         </div>
 
+        <div
+          data-intro-credit=""
+          onClick={(event) => event.stopPropagation()}
+          className="absolute start-4 bottom-16 text-xs text-muted-foreground sm:start-8 sm:bottom-20"
+        >
+          موسیقی:{" "}
+          <a
+            href="https://incompetech.com/music/royalty-free/index.html?isrc=USUAN2100029"
+            target="_blank"
+            rel="noreferrer"
+            className="underline underline-offset-4"
+          >
+            Kevin MacLeod
+          </a>
+          {" · "}
+          <a
+            href="https://creativecommons.org/licenses/by/4.0/"
+            target="_blank"
+            rel="noreferrer"
+            className="underline underline-offset-4"
+          >
+            CC BY 4.0
+          </a>
+        </div>
         <Button
           data-intro-sound=""
+          title="Adventures in Adventureland — Kevin MacLeod · CC BY 4.0"
           type="button"
           variant="ghost"
           aria-pressed={soundOn}

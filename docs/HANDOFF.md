@@ -6,6 +6,8 @@ Last updated: 2026-10-22 (۳۰ مهر ۱۴۰۵). Deadline: Friday 2026-10-23 (۱
 
 ## 1. Snapshot
 
+- Music revision (2026-10-22): replaced the synthesized oscillator sting with a locally hosted 4.7-second orchestral recording excerpt, “Adventures in Adventureland” by Kevin MacLeod, CC BY 4.0. Asset: `public/audio/adventure-intro.mp3` (~96 KB); source/edit/license details: `public/audio/README.md`. Visible attribution links are in the intro. Web Audio decodes the recording, and exit fades gain before closing the context. This supersedes the original synthesized score described below.
+
 - Intro update (2026-10-22): the session marker now stores `performance.timeOrigin`; reopening or reloading the home page replays the intro, while client navigation in the same document does not. An original local Web Audio adventure sting accompanies it, with a shadcn Button sound toggle. Autoplay is attempted; browsers that block it require pressing «پخش موسیقی». Exit/unmount closes the audio context; reduced motion skips both animation and music. Verified: lint, typecheck, 216 unit tests, production build with `next build --webpack`, and 9 intro Playwright tests. Default Turbopack build hit an environment port-binding restriction; Webpack succeeded.
 
 - Repo: https://github.com/MohammadKarbassi/book-adventure (public), branch `master`, remote `origin`.
