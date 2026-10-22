@@ -172,8 +172,9 @@ test("/categories links to a category page", async ({ page }) => {
   await page.goto("/categories", { timeout: 60_000 })
   await page.waitForLoadState("load")
   await page.getByRole("main").getByRole("link", { name: /تاریخ/ }).click()
-  await expect(page).toHaveURL(/\/category\/history$/)
+  // A server-rendered navigation; give it room when the suite runs in parallel.
+  await expect(page).toHaveURL(/\/category\/history$/, { timeout: 15_000 })
   await expect(
     page.getByRole("heading", { level: 1, name: "تاریخ" })
-  ).toBeVisible()
+  ).toBeVisible({ timeout: 15_000 })
 })
