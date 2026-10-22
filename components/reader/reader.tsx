@@ -195,7 +195,7 @@ export function Reader({ book }: { book: ReaderBook }) {
     <section
       aria-label="اتاق مطالعه"
       data-ready={access.hydrated || undefined}
-      className="relative flex h-[calc(100svh-4rem-1px)] min-h-[34rem] flex-col overflow-hidden bg-muted/60"
+      className="relative flex h-[calc(100svh-4rem-1px)] min-h-[34rem] flex-col overflow-hidden bg-muted/60 in-data-[player=open]:h-[calc(100svh-8rem-1px)] md:in-data-[player=open]:h-[calc(100svh-9.5rem-1px)]"
     >
       {/* Lantern light over the desk. */}
       <div
