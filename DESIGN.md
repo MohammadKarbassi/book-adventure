@@ -212,6 +212,10 @@ The ending's sample action uses the existing global player, without autoplay or 
 
 ## Do's and Don'ts
 
+### Homepage media continuation
+
+After the last shelf books, the surface gradually moves into the semantic `--home-media-night` stage; this is a bounded narrative transition, not a forced dark theme for the whole shelf. A native-flow portrait sheet unfolds through five horizontal creases and a center fold. The existing renderer then reveals an independent podcast camera/scene from the bottom using complementary scissors. The real attributed podcast cover remains distinct from the original illustrated environment. Opaque `--ending-paper` returns to shopping. Native DOM controls, no autoplay, reversible scroll, reduced-motion and no-WebGL images are mandatory. Source evidence and project-specific coefficients are separated in `docs/home-media-reference-findings.md`.
+
 ### Do:
 
 - **Do** preserve semantic theme variables and readable surface/foreground pairs.
@@ -223,7 +227,7 @@ The ending's sample action uses the existing global player, without autoplay or 
 
 - **Don't** copy Stripe artwork, text, fonts or material maps.
 - **Don't** present generated backs, spines or relief as authentic per-book scans.
-- **Don't** force the home shelf into dark mode independently of the site's theme.
+- **Don't** force the whole home shelf into dark mode independently of the site's theme; its bounded media ending may transition into night.
 - **Don't** animate book navigation when reduced motion is requested.
 
 The shelf's introductory line preserves the user's specified content; it is not a generic label style for unrelated sections.

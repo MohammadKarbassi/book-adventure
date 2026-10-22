@@ -1,0 +1,7 @@
+Use case: stylized-concept
+Asset type: original immersive artwork for the Book Adventure podcast discovery section.
+Primary request: Generate one opaque full-bleed LANDSCAPE artwork, 1536 x 1024 pixels, aspect ratio 3:2. Nested architectural PAPER arches recede into amber-lit distance, like a tunnel made of open book leaves. Rich deep teal shadows, warm ivory paper, and a central luminous golden doorway. Tactile carved layered paper forms create architectural depth.
+Style/medium: sophisticated adult editorial fine-art paper construction illustration, material-rich and handcrafted, fine visible paper fibres, warm literary identity.
+Composition/framing: straight-on immersive view into the tunnel. Strong luminous doorway at the center. The layered paper arches occupy the middle of the frame; surrounding navy negative area at the upper and lower edges provides breathing room so real webpage headings can be placed above and below. The image fills the entire rectangular canvas.
+Lighting/mood: warm amber depth light; deep teal and navy outer shadows; quiet sense of discovery.
+Constraints: Original project-specific sound journey scene. No lettering, no logos, no typography, no waveform, no record disc, no concentric circular ring design, no generic stars, no watermark, no UI, no catalog book cover. Arches must read as architectural archways constructed from book-page-like leaves, not circular vinyl grooves.

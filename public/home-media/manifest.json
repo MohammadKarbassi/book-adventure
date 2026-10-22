@@ -1,0 +1,38 @@
+{
+  "generated": "2026-10-22",
+  "tool": "built-in image_gen.imagegen",
+  "purpose": "Original project-specific literary sound journey scenes; not catalog artwork or book covers.",
+  "authority": "Parent-approved code-first asset packet, no comp/spec required.",
+  "styleReference": {
+    "path": "public/hero/book-journey.webp",
+    "usage": "Viewed for palette and tactile paper identity only. Not submitted as generation input, edited, or copied."
+  },
+  "assets": [
+    {
+      "file": "listening-poster.webp",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "background": "opaque",
+      "generationCount": 1,
+      "promptFile": "listening-poster.prompt.txt",
+      "prompt": "Use case: illustration-story\nAsset type: original artwork texture for a literary listening poster on the Book Adventure website.\nPrimary request: Generate one opaque full-bleed PORTRAIT artwork, 1024 x 1536 pixels, aspect ratio 2:3. A narrow golden river/path flows from the lower foreground through layered mountains and a deep teal cypress forest toward distant cream and ochre peaks. A small luminous lantern rests beside the path in the lower portion, above the bottom edge. Atmospheric deep navy night fills the upper portion.\nStyle/medium: adult editorial fine-art print, handcrafted tactile paper illustration, visible fine paper fibres and layered paper-like mountain contours, sophisticated and restrained.\nColor palette: warm ivory cream, ochre gold, deep teal, dark navy. Amber lantern illumination.\nComposition/framing: the artwork itself fills the whole rectangular canvas edge to edge as ONE coherent flat artwork viewed straight on. The path creates a continuous vertical journey. Keep the lantern in the lower third. No frame, no margin, no surface outside the artwork.\nConstraints: NO typography or letters, no logo, no film icons, no watermark, no book mockup, no visible open book, no photographed poster, no folds or creases or bent paper. The application will fold the flat artwork separately in WebGL. This is an original sound journey scene, not a catalog cover. Do not copy existing artwork.",
+      "source": "/Users/mohammad/.codex/generated_images/01a16538-0e97-7801-a2bd-e002210668cc/exec-df05d597-5dd8-41e2-acc1-d134a5f68044.png"
+    },
+    {
+      "file": "podcast-world.webp",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "background": "opaque",
+      "generationCount": 1,
+      "promptFile": "podcast-world.prompt.txt",
+      "prompt": "Use case: stylized-concept\nAsset type: original immersive artwork for the Book Adventure podcast discovery section.\nPrimary request: Generate one opaque full-bleed LANDSCAPE artwork, 1536 x 1024 pixels, aspect ratio 3:2. Nested architectural PAPER arches recede into amber-lit distance, like a tunnel made of open book leaves. Rich deep teal shadows, warm ivory paper, and a central luminous golden doorway. Tactile carved layered paper forms create architectural depth.\nStyle/medium: sophisticated adult editorial fine-art paper construction illustration, material-rich and handcrafted, fine visible paper fibres, warm literary identity.\nComposition/framing: straight-on immersive view into the tunnel. Strong luminous doorway at the center. The layered paper arches occupy the middle of the frame; surrounding navy negative area at the upper and lower edges provides breathing room so real webpage headings can be placed above and below. The image fills the entire rectangular canvas.\nLighting/mood: warm amber depth light; deep teal and navy outer shadows; quiet sense of discovery.\nConstraints: Original project-specific sound journey scene. No lettering, no logos, no typography, no waveform, no record disc, no concentric circular ring design, no generic stars, no watermark, no UI, no catalog book cover. Arches must read as architectural archways constructed from book-page-like leaves, not circular vinyl grooves.",
+      "source": "/Users/mohammad/.codex/generated_images/01a16538-0e97-7801-a2bd-e002210668cc/exec-978ee5e1-ea99-4ff3-9b2d-8edc5e4143e8.png"
+    }
+  ],
+  "processing": "WebP encoding with cwebp -q 84 -m 6; no crop or visual alterations.",
+  "inspection": "Both generated images visually inspected. No text, logos, UI, book cover claims, or disc/waveform graphics. Listening poster is a full flat artwork without folds; podcast world includes architectural book-leaf arches."
+}

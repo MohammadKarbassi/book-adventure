@@ -1,0 +1,7 @@
+Use case: illustration-story
+Asset type: original artwork texture for a literary listening poster on the Book Adventure website.
+Primary request: Generate one opaque full-bleed PORTRAIT artwork, 1024 x 1536 pixels, aspect ratio 2:3. A narrow golden river/path flows from the lower foreground through layered mountains and a deep teal cypress forest toward distant cream and ochre peaks. A small luminous lantern rests beside the path in the lower portion, above the bottom edge. Atmospheric deep navy night fills the upper portion.
+Style/medium: adult editorial fine-art print, handcrafted tactile paper illustration, visible fine paper fibres and layered paper-like mountain contours, sophisticated and restrained.
+Color palette: warm ivory cream, ochre gold, deep teal, dark navy. Amber lantern illumination.
+Composition/framing: the artwork itself fills the whole rectangular canvas edge to edge as ONE coherent flat artwork viewed straight on. The path creates a continuous vertical journey. Keep the lantern in the lower third. No frame, no margin, no surface outside the artwork.
+Constraints: NO typography or letters, no logo, no film icons, no watermark, no book mockup, no visible open book, no photographed poster, no folds or creases or bent paper. The application will fold the flat artwork separately in WebGL. This is an original sound journey scene, not a catalog cover. Do not copy existing artwork.

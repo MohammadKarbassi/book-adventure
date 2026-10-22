@@ -15,6 +15,10 @@ import type { CategoryMap } from "@/components/adventures/journey-order"
 import { useJourneyOrder } from "@/components/adventures/use-journey-order"
 import { ShelfBook } from "@/components/home/shelf-book"
 import { ShelfScene } from "@/components/home/shelf-scene"
+import {
+  HomeMediaJourney,
+  type HomeMediaProps,
+} from "@/components/home/home-media-journey"
 import type { ShelfBook as ShelfBookData } from "@/components/home/shelf-geometry"
 import { Container } from "@/components/site/container"
 import { buttonVariants } from "@/components/ui/button"
@@ -34,11 +38,22 @@ type BookShelfProps = {
   categoryOf: CategoryMap
   /** Id of the element the scroll cue jumps to. */
   storeId: string
+  media: Omit<HomeMediaProps, "storeId">
 }
 
 const railLinks = [
-  { href: "/audiobooks", label: "کتاب‌های صوتی", icon: HeadphonesIcon },
-  { href: "/podcasts", label: "پادکست‌ها", icon: PodcastIcon },
+  {
+    href: "#home-audio",
+    phase: "audio",
+    label: "رفتن به صحنهٔ کتاب صوتی",
+    icon: HeadphonesIcon,
+  },
+  {
+    href: "#home-podcast",
+    phase: "podcast",
+    label: "رفتن به صحنهٔ پادکست",
+    icon: PodcastIcon,
+  },
 ]
 
 /** «سفر ماجراجویی شما»: a scroll-tilted stack of the adventures. */
@@ -46,6 +61,7 @@ export function BookShelf({
   books: defaultBooks,
   categoryOf,
   storeId,
+  media,
 }: BookShelfProps) {
   const { items: books, personalized } = useJourneyOrder(
     defaultBooks,
@@ -54,6 +70,8 @@ export function BookShelf({
   const listRef = useRef<HTMLOListElement>(null)
   const [shelfInView, setShelfInView] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [phase, setPhase] = useState("books")
+  const [dimmed, setDimmed] = useState(false)
   // useReducedMotion reads matchMedia on the client only; wait for hydration
   // so the first client render matches the server.
   const prefersReduced = useReducedMotion()
@@ -62,6 +80,16 @@ export function BookShelf({
   // The book nearest the middle of the viewport is the "current" one.
   const { scrollY } = useScroll()
   const updateActive = useCallback(() => {
+    const mediaSections = document.querySelectorAll<HTMLElement>(
+      "[data-home-media-phase], [data-home-shop-entrance]"
+    )
+    let currentPhase = "books"
+    mediaSections.forEach((section) => {
+      const bounds = section.getBoundingClientRect()
+      if (bounds.top < innerHeight * 0.5 && bounds.bottom > innerHeight * 0.5)
+        currentPhase = section.dataset.homeMediaPhase ?? "paper"
+    })
+    setPhase(currentPhase)
     const store = document.getElementById(storeId)
     const shelfTop = listRef.current
       ?.closest("section")
@@ -74,6 +102,15 @@ export function BookShelf({
       )
     const items = listRef.current?.children
     if (!items?.length) return
+    const last = items[items.length - 1].getBoundingClientRect()
+    const dim = Math.max(
+      0,
+      Math.min(1, (innerHeight * 1.6 - last.top) / (innerHeight * 1.1))
+    )
+    listRef.current
+      ?.closest<HTMLElement>("[data-press-shelf]")
+      ?.style.setProperty("--shelf-dim", `${dim * 100}%`)
+    setDimmed(dim > 0.5)
     const middle = window.innerHeight / 2
     let nearest = 0
     let nearestDistance = Infinity
@@ -121,68 +158,80 @@ export function BookShelf({
       aria-labelledby="shelf-heading"
       data-press-shelf=""
       data-shelf-in-view={shelfInView ? "true" : "false"}
+      data-home-phase={phase}
+      style={{
+        backgroundColor:
+          "color-mix(in oklab, var(--background) calc(100% - var(--shelf-dim, 0%)), var(--home-media-night) var(--shelf-dim, 0%))",
+      }}
       className="relative isolate min-h-svh overflow-x-clip bg-background text-foreground"
     >
       <ShelfScene books={books} />
-      <Container className="relative max-w-none pt-8 pb-24 md:pt-0">
-        {/* Index rail at the binding (inline-start) edge. */}
-        <nav
-          aria-label="فهرست قفسه"
-          className="absolute inset-y-0 start-3 hidden w-10 md:block lg:start-6"
-        >
-          <div className="sticky top-16 flex h-[calc(100svh-4rem)] flex-col items-center justify-center gap-6">
-            <ol className="flex flex-col items-center">
-              {books.map((book, index) => {
-                const current = index === activeIndex
-                const label = `ماجراجویی ${formatNumber(index + 1)} · ${book.name}`
-                return (
-                  <li key={book.id}>
-                    <Tooltip>
-                      <TooltipTrigger
-                        aria-label={label}
-                        aria-current={current ? "true" : undefined}
-                        onClick={() => showBook(index)}
-                        className="group/tick flex h-4 w-10 items-center justify-start rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                      >
-                        <span
-                          className={cn(
-                            "h-0.5 rounded-full transition-all duration-300 motion-reduce:transition-none",
-                            current
-                              ? "w-7 bg-foreground"
-                              : "w-3.5 bg-foreground/25 group-hover/tick:w-5 group-hover/tick:bg-foreground/60"
-                          )}
-                        />
-                      </TooltipTrigger>
-                      <TooltipContent side="inline-end">{label}</TooltipContent>
-                    </Tooltip>
-                  </li>
-                )
-              })}
-            </ol>
-            <div className="flex flex-col items-center gap-1 border-t pt-4">
-              {railLinks.map(({ href, label, icon: Icon }) => (
-                <Tooltip key={href}>
-                  <TooltipTrigger
-                    render={
-                      <Link
-                        href={href}
-                        aria-label={label}
-                        className={buttonVariants({
-                          variant: "ghost",
-                          size: "icon",
-                        })}
+      {/* Index rail at the binding (inline-start) edge. */}
+      <nav
+        aria-label="فهرست قفسه"
+        className={cn(
+          "absolute inset-y-0 start-3 z-30 hidden w-10 text-foreground md:block lg:start-6",
+          (phase === "audio" ||
+            phase === "podcast" ||
+            (phase === "books" && dimmed)) &&
+            "dark"
+        )}
+      >
+        <div className="sticky top-16 flex h-[calc(100svh-4rem)] flex-col items-center justify-center gap-6">
+          <ol className="flex flex-col items-center">
+            {books.map((book, index) => {
+              const current = phase === "books" && index === activeIndex
+              const label = `ماجراجویی ${formatNumber(index + 1)} · ${book.name}`
+              return (
+                <li key={book.id}>
+                  <Tooltip>
+                    <TooltipTrigger
+                      aria-label={label}
+                      aria-current={current ? "true" : undefined}
+                      onClick={() => showBook(index)}
+                      className="group/tick flex h-4 w-10 items-center justify-start rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                    >
+                      <span
+                        className={cn(
+                          "h-0.5 rounded-full transition-all duration-300 motion-reduce:transition-none",
+                          current
+                            ? "w-7 bg-foreground"
+                            : "w-3.5 bg-foreground/25 group-hover/tick:w-5 group-hover/tick:bg-foreground/60"
+                        )}
                       />
-                    }
-                  >
-                    <Icon />
-                  </TooltipTrigger>
-                  <TooltipContent side="inline-end">{label}</TooltipContent>
-                </Tooltip>
-              ))}
-            </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="inline-end">{label}</TooltipContent>
+                  </Tooltip>
+                </li>
+              )
+            })}
+          </ol>
+          <div className="flex flex-col items-center gap-1 border-t pt-4">
+            {railLinks.map(({ href, label, phase: linkPhase, icon: Icon }) => (
+              <Tooltip key={href}>
+                <TooltipTrigger
+                  render={
+                    <Link
+                      href={href}
+                      aria-label={label}
+                      aria-current={phase === linkPhase ? "step" : undefined}
+                      className={buttonVariants({
+                        variant: "ghost",
+                        size: "icon",
+                      })}
+                    />
+                  }
+                >
+                  <Icon />
+                </TooltipTrigger>
+                <TooltipContent side="inline-end">{label}</TooltipContent>
+              </Tooltip>
+            ))}
           </div>
-        </nav>
+        </div>
+      </nav>
 
+      <Container className="relative max-w-none pt-8 pb-0 md:pt-0">
         {/* Editorial title block, top-start. */}
         <motion.header
           className="relative mx-auto flex max-w-sm flex-col gap-2 ps-4 md:absolute md:start-24 md:top-9 md:mx-0 md:max-w-64 md:ps-0"
@@ -218,7 +267,7 @@ export function BookShelf({
         <ol
           ref={listRef}
           aria-label="قفسهٔ منتخب"
-          className="mx-auto flex w-[82%] max-w-[52rem] flex-col gap-[clamp(2.5rem,7svh,5rem)] pt-[16svh] pb-[20svh] md:w-[52%] md:pt-[28svh]"
+          className="mx-auto flex w-[82%] max-w-[52rem] flex-col gap-[clamp(2.5rem,7svh,5rem)] pt-[16svh] pb-[10svh] md:w-[52%] md:pt-[28svh]"
         >
           {books.map((book, index) => (
             <ShelfBook
@@ -233,11 +282,13 @@ export function BookShelf({
         </ol>
       </Container>
 
+      <HomeMediaJourney {...media} storeId={storeId} />
+
       {/* Scroll cue, pinned to the bottom of the screen while the shelf shows. */}
       <div
         className={cn(
           "pointer-events-none sticky bottom-5 z-[300] -mt-16 flex justify-center pb-5",
-          !shelfInView && "invisible"
+          (!shelfInView || phase !== "books") && "invisible"
         )}
       >
         <a

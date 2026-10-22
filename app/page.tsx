@@ -19,6 +19,8 @@ import {
 import { getPodcasts } from "@/lib/podcasts"
 import { getAdventures } from "@/lib/adventures"
 import { getCategoryMap } from "@/components/adventures/adventure-views"
+import { buildBookTrack } from "@/components/book-detail/book-track"
+import { HOME_PODCAST } from "@/data/home-podcast"
 
 const STORE_ID = "store"
 
@@ -59,6 +61,7 @@ const rows: {
 
 export default function Page() {
   const shelf = getAdventures().map(toShelfBook)
+  const featuredAudio = getList("audioBestsellers")[0]
 
   const categories = getCategories().map((category) => ({
     slug: category.slug,
@@ -80,6 +83,7 @@ export default function Page() {
         books={shelf}
         categoryOf={getCategoryMap()}
         storeId={STORE_ID}
+        media={{ audio: buildBookTrack(featuredAudio), podcast: HOME_PODCAST }}
       />
       <Container
         id={STORE_ID}

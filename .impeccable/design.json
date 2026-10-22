@@ -382,7 +382,7 @@
     "donts": [
       "**Don't** copy Stripe artwork, text, fonts or material maps.",
       "**Don't** present generated backs, spines or relief as authentic per-book scans.",
-      "**Don't** force the home shelf into dark mode independently of the site's theme.",
+      "**Don't** force the whole home shelf into dark mode independently of the site's theme; its bounded media ending may transition into night.",
       "**Don't** animate book navigation when reduced motion is requested."
     ]
   }

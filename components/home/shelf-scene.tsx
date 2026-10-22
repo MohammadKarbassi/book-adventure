@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react"
 import type * as Three from "three"
 import { createBookSurfaceTextures } from "@/components/book/book-materials"
 import type { ShelfBook } from "@/components/home/shelf-geometry"
+import { createShelfPoster } from "@/components/home/shelf-poster"
+import { createHomePodcastScene } from "@/components/home/home-podcast-scene"
 
 /** One transparent, lit layer; native links and CSS remain the accessible fallback. */
 export function ShelfScene({ books }: { books: ShelfBook[] }) {
@@ -17,6 +19,7 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
         if (!live || !target) return
         const canvas: HTMLCanvasElement = target
         const root = canvas.closest("[data-press-shelf]")
+        if (!root) return
         let renderer: Three.WebGLRenderer
         try {
           renderer = new THREE.WebGLRenderer({
@@ -29,6 +32,7 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
         }
         renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75))
         renderer.outputColorSpace = THREE.SRGBColorSpace
+        renderer.autoClear = false
         const scene = new THREE.Scene()
         const camera = new THREE.PerspectiveCamera(45, 1, 1, 10000)
         scene.add(new THREE.HemisphereLight(0xfff4dd, 0x344559, 2.2))
@@ -58,11 +62,19 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
         let height = 0
         let lost = false
         let previousRender = ""
+        const poster = createShelfPoster(THREE, scene, root, () => {
+          previousRender = ""
+        })
+        const podcast = createHomePodcastScene(THREE, root, () => {
+          previousRender = ""
+        })
         const restoreDOM = () => {
           entries.forEach(({ body }) => {
             body.style.opacity = ""
           })
           canvas.dataset.ready = "false"
+          poster.restore()
+          podcast.restore()
         }
         function build(
           book: ShelfBook,
@@ -208,6 +220,9 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
             previousRender = ""
           }
           const signature: string[] = [String(scrollY), String(entries.size)]
+          signature.push(poster.update(width, height))
+          const podcastFrame = podcast.update(width, height)
+          signature.push(podcastFrame.signature)
           books.forEach((book, index) => {
             const item = root.querySelector<HTMLElement>(
               `[data-shelf-index="${index}"]`
@@ -262,7 +277,21 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
           })
           const nextRender = signature.join(";")
           if (nextRender !== previousRender) {
-            renderer.render(scene, camera)
+            renderer.setScissorTest(false)
+            renderer.clear()
+            renderer.setScissorTest(true)
+            renderer.setScissor(
+              0,
+              podcastFrame.pixels,
+              width,
+              height - podcastFrame.pixels
+            )
+            if (podcastFrame.pixels < height) renderer.render(scene, camera)
+            if (podcastFrame.ready && podcastFrame.pixels > 0) {
+              renderer.setScissor(0, 0, width, podcastFrame.pixels)
+              podcast.render(renderer)
+            }
+            renderer.setScissorTest(false)
             previousRender = nextRender
           }
         }
@@ -298,6 +327,8 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
           })
           materials.forEach((material) => material.dispose())
           surfaces.dispose()
+          poster.dispose()
+          podcast.dispose()
           renderer.dispose()
         }
       })
