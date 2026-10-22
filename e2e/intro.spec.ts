@@ -34,6 +34,7 @@ test.describe("cinematic intro", () => {
   }) => {
     await page.goto("/", { timeout: 120_000 })
     const sound = intro(page).locator("[data-intro-sound]")
+    await expect(sound).not.toHaveAttribute("data-audio-state", "pending")
     await expect(sound).toHaveAttribute("aria-pressed", "true")
     if ((await sound.textContent())?.includes("فعال‌کردن")) await sound.click()
     await expect(sound).toHaveText("قطع موسیقی")
@@ -63,6 +64,7 @@ test.describe("cinematic intro", () => {
     await page.goto("/", { timeout: 120_000 })
     await expect(intro(page).getByText("هر کتاب")).toBeVisible()
     const sound = intro(page).locator("[data-intro-sound]")
+    await expect(sound).not.toHaveAttribute("data-audio-state", "pending")
     if ((await sound.textContent())?.includes("فعال‌کردن")) await sound.click()
     await expect(sound).toHaveText("قطع موسیقی")
     await sound.click()
@@ -72,17 +74,19 @@ test.describe("cinematic intro", () => {
     await expect(intro(page)).toBeVisible()
     await intro(page).getByRole("button", { name: "رد شدن" }).click()
     await expect(intro(page)).toHaveCount(0)
-    expect(
-      await page.evaluate(() => {
-        const contexts = (
-          window as unknown as Window & { introAudioContexts: AudioContext[] }
-        ).introAudioContexts
-        return (
-          contexts.length > 0 &&
-          contexts.every((context) => context.state === "closed")
-        )
-      })
-    ).toBe(true)
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const contexts = (
+            window as unknown as Window & { introAudioContexts: AudioContext[] }
+          ).introAudioContexts
+          return (
+            contexts.length > 0 &&
+            contexts.every((context) => context.state === "closed")
+          )
+        })
+      )
+      .toBe(true)
   })
 
   test("shows again after reload, while skip ends the current intro", async ({

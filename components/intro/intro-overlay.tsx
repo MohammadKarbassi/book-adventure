@@ -144,6 +144,7 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
   const scoreRef = useRef<ReturnType<typeof createIntroScore> | null>(null)
   const [soundOn, setSoundOn] = useState(true)
   const [soundBlocked, setSoundBlocked] = useState(false)
+  const [audioReady, setAudioReady] = useState(false)
   const soundEnabledRef = useRef(true)
 
   useEffect(() => {
@@ -155,10 +156,14 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
       enabled = localStorage.getItem(MUSIC_MUTED_KEY) !== "true"
     } catch {}
     soundEnabledRef.current = enabled
-    void Promise.resolve().then(() => setSoundOn(enabled))
+    void Promise.resolve().then(() => {
+      setSoundOn(enabled)
+      if (!enabled) setAudioReady(true)
+    })
     if (enabled)
       void score.start().then((started) => {
         if (soundEnabledRef.current) setSoundBlocked(!started)
+        setAudioReady(true)
       })
     return () => {
       score.stop()
@@ -287,6 +292,9 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
         </div>
         <Button
           data-intro-sound=""
+          data-audio-state={
+            audioReady ? (soundBlocked ? "blocked" : "ready") : "pending"
+          }
           title="Adventures in Adventureland — Kevin MacLeod · CC BY 4.0"
           type="button"
           variant="ghost"

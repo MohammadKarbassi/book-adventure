@@ -6,13 +6,15 @@ export function createIntroScore(durationMs = 4700) {
   let source: AudioBufferSourceNode | null = null
   let buffer: Promise<AudioBuffer> | null = null
   let stopped = false
+  let muted = false
 
   return {
     async start(): Promise<boolean> {
       if (stopped) return false
+      muted = false
       try {
         context ??= new AudioContext()
-        void context.resume().catch(() => {})
+        const resumed = context.resume().catch(() => {})
         buffer ??= fetch("/audio/adventure-intro.mp3")
           .then((response) => {
             if (!response.ok) throw new Error("Intro music unavailable")
@@ -20,7 +22,11 @@ export function createIntroScore(durationMs = 4700) {
           })
           .then((bytes) => context!.decodeAudioData(bytes))
         const decoded = await buffer
-        if (stopped || context.state !== "running") return false
+        await Promise.race([
+          resumed,
+          new Promise((resolve) => window.setTimeout(resolve, 250)),
+        ])
+        if (stopped || muted || context.state !== "running") return false
         const elapsed = (performance.now() - startedAt) / 1000
         const remaining = durationMs / 1000 - elapsed
         if (remaining <= 0) return false
@@ -51,6 +57,7 @@ export function createIntroScore(durationMs = 4700) {
       }
     },
     mute() {
+      muted = true
       if (context && master) {
         master.gain.cancelScheduledValues(context.currentTime)
         master.gain.setTargetAtTime(0, context.currentTime, 0.04)
