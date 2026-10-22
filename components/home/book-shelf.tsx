@@ -231,43 +231,63 @@ export function BookShelf({
         </div>
       </nav>
 
-      <Container className="relative max-w-none pt-8 pb-0 md:pt-0">
-        {/* Editorial title block, top-start. */}
+      <Container className="relative max-w-none pt-10 pb-0 md:pt-16">
+        {/* The title and first spine share one editorial alignment. */}
         <motion.header
-          className="relative mx-auto flex max-w-sm flex-col gap-2 ps-4 md:absolute md:start-24 md:top-9 md:mx-0 md:max-w-64 md:ps-0"
-          initial={reduced ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="relative z-20 mx-auto flex w-[82%] max-w-[52rem] flex-col gap-4 md:w-[52%]"
+          initial={reduced ? false : "rest"}
+          whileInView="arrived"
+          viewport={{ once: true, amount: 0.7 }}
+          variants={{
+            rest: {},
+            arrived: { transition: { staggerChildren: reduced ? 0 : 0.08 } },
+          }}
         >
-          <div className="flex flex-col gap-1.5">
-            <p className="text-xs font-medium tracking-wide text-muted-foreground">
-              کتاب‌های انتخاب شده برای سفرتان
-            </p>
-            <JourneyNote show={personalized} />
-          </div>
           <h2
             id="shelf-heading"
-            className="font-heading text-4xl leading-tight font-bold text-balance md:text-3xl"
+            className="font-heading text-[clamp(2rem,10vw,3rem)] leading-[1.15] font-bold text-balance md:text-6xl lg:text-7xl"
           >
-            سفر ماجراجویی شما
+            {["سفر", "ماجراجویی", "شما"].map((word, index) => (
+              <span key={word}>
+                {index > 0 ? " " : null}
+                <motion.span
+                  className={cn(
+                    "inline-block motion-reduce:transform-none! motion-reduce:opacity-100!",
+                    index === 1 && "text-accent-foreground"
+                  )}
+                  variants={{
+                    rest: { opacity: 0.65, x: 10 },
+                    arrived: { opacity: 1, x: 0 },
+                  }}
+                  transition={{
+                    duration: reduced ? 0 : 0.4,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                >
+                  {word}
+                </motion.span>
+              </span>
+            ))}
           </h2>
+          <div className="flex flex-col gap-2">
+            <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
+              کتاب‌های انتخاب شده برای سفرتان
+            </p>
+            <JourneyNote
+              show={personalized}
+              className="text-muted-foreground"
+            />
+          </div>
           <p className="max-w-xs text-xs leading-relaxed text-muted-foreground md:sr-only">
             {`${formatNumber(books.length)} ماجراجویی، هر کدام با یک کتاب یا کتاب صوتی؛ نشانگر را روی هر جلد ببرید تا از قفسه بیرون بیاید و با یک کلیک سفرش را شروع کنید.`}
           </p>
-          <div className="mt-2 hidden items-center gap-2 text-xs text-muted-foreground">
-            <span className="font-heading text-2xl leading-none text-foreground tabular-nums">
-              {formatNumber(activeIndex + 1)}
-            </span>
-            <span>از {formatNumber(books.length)}</span>
-            <span className="h-px flex-1 bg-border" />
-          </div>
         </motion.header>
 
         {/* The stack. */}
         <ol
           ref={listRef}
           aria-label="قفسهٔ منتخب"
-          className="mx-auto flex w-[82%] max-w-[52rem] flex-col gap-[clamp(2.5rem,7svh,5rem)] pt-[16svh] pb-[10svh] md:w-[52%] md:pt-[28svh]"
+          className="mx-auto flex w-[82%] max-w-[52rem] flex-col gap-[clamp(2.5rem,7svh,5rem)] pt-[10svh] pb-[10svh] md:w-[52%] md:pt-[20svh]"
         >
           {books.map((book, index) => (
             <ShelfBook

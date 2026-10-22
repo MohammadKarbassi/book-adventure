@@ -144,6 +144,7 @@ The font pairing is loaded through next/font in app/layout.tsx. Markazi Text giv
 
 ### Hierarchy
 
+- **Shelf display:** «سفر ماجراجویی شما» uses fluid32–48px phone (10vw) /60px tablet /72px large desktop, Markazi700 with1.15 leading. Only «ماجراجویی» uses accent ink. Header and shelf share one centered width; supporting label14→16px follows the heading, with conditional personalization below. Whole-word RTL entrance runs once; reduced motion removes displacement.
 - **Headline:** frontmatter role is the mobile adventure title; it grows to 3rem from 640px, retaining 700 weight and 1.15 line-height.
 - **Narrative:** frontmatter role grows to 1.75rem from 640px, retaining 1.7 line-height. The source uses a prose-width text block.
 - **Title:** the listening epilogue heading uses 3.75rem, then 6rem at 900px; its paper closing heading uses 3rem, then 4.5rem. Both use 1.25 line-height.

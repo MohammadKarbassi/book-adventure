@@ -19,6 +19,27 @@ test.describe("home page", () => {
   const shelf = (page: import("@playwright/test").Page) =>
     page.getByRole("list", { name: "قفسهٔ منتخب" })
 
+  test("the journey title leads the shelf with a readable aligned display heading", async ({
+    page,
+  }) => {
+    const heading = page.locator("#shelf-heading")
+    await heading.scrollIntoViewIfNeeded()
+    const title = await heading.boundingBox()
+    const stack = await shelf(page).boundingBox()
+    expect(
+      Math.abs(title!.x + title!.width - stack!.x - stack!.width)
+    ).toBeLessThan(3)
+    expect(
+      await heading.evaluate((el) => parseFloat(getComputedStyle(el).fontSize))
+    ).toBeGreaterThanOrEqual(56)
+    const description = page.getByText("کتاب‌های انتخاب شده برای سفرتان", {
+      exact: true,
+    })
+    expect((await description.boundingBox())!.y).toBeGreaterThan(
+      title!.y + title!.height
+    )
+  })
+
   test("the shelf shows the numbered adventures", async ({ page }) => {
     const links = shelf(page).getByRole("link")
     expect(await links.count()).toBeGreaterThanOrEqual(10)
@@ -50,8 +71,9 @@ test.describe("home page", () => {
     expect(
       Math.abs(first.x + first.width / 2 - viewport.width / 2)
     ).toBeLessThan(30)
-    expect(first.y / viewport.height).toBeGreaterThan(0.28)
-    expect(first.y / viewport.height).toBeLessThan(0.4)
+    // The larger native-flow display title now leads the stack.
+    expect(first.y / viewport.height).toBeGreaterThan(0.4)
+    expect(first.y / viewport.height).toBeLessThan(0.56)
   })
 
   test("hovering a shelf book shows its price chip", async ({ page }) => {
@@ -95,9 +117,12 @@ test.describe("home page", () => {
     page,
   }) => {
     await page.getByRole("link", { name: "سفرتان را انتخاب کنید" }).click()
-    // The first book sits above the middle of the screen: its scroll tilt
-    // shows its underside until it is hovered.
+    // Place the first spine above eye level independently of title height:
+    // its scroll tilt shows the underside until hovered.
     const book = shelf(page).getByRole("link").first()
+    await book.evaluate((el) =>
+      scrollTo(0, el.getBoundingClientRect().top + scrollY - innerHeight * 0.25)
+    )
     const tilt = () =>
       book
         .locator("span[aria-hidden]")
