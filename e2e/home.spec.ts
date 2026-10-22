@@ -113,6 +113,21 @@ test.describe("home page", () => {
     await expect.poll(tilt).toBeGreaterThan(0)
   })
 
+  test("pulled books use the foreground pass for mouse and keyboard, then return", async ({
+    page,
+  }) => {
+    const book = shelf(page).getByRole("link").nth(3)
+    const canvas = page.locator("[data-shelf-canvas]")
+    await book.hover()
+    await expect(canvas).toHaveAttribute("data-foreground", "3")
+    await page.mouse.move(5, 5)
+    await expect(canvas).toHaveAttribute("data-foreground", "")
+    await book.focus()
+    await expect(canvas).toHaveAttribute("data-foreground", "3")
+    await book.blur()
+    await expect(canvas).toHaveAttribute("data-foreground", "")
+  })
+
   test("a rail tick brings its book into view", async ({ page }) => {
     const books = shelf(page).getByRole("listitem")
     const lastIndex = (await books.count()) - 1

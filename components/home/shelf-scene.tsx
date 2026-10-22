@@ -6,6 +6,10 @@ import { createBookSurfaceTextures } from "@/components/book/book-materials"
 import type { ShelfBook } from "@/components/home/shelf-geometry"
 import { createShelfPoster } from "@/components/home/shelf-poster"
 import { createHomePodcastScene } from "@/components/home/home-podcast-scene"
+import {
+  renderShelfLayers,
+  setShelfForeground,
+} from "@/components/home/shelf-render"
 
 /** One transparent, lit layer; native links and CSS remain the accessible fallback. */
 export function ShelfScene({ books }: { books: ShelfBook[] }) {
@@ -36,12 +40,16 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
         const scene = new THREE.Scene()
         const camera = new THREE.PerspectiveCamera(45, 1, 1, 10000)
         camera.layers.enable(1)
-        scene.add(new THREE.HemisphereLight(0xfff4dd, 0x344559, 2.2))
+        const ambient = new THREE.HemisphereLight(0xfff4dd, 0x344559, 2.2)
+        ambient.layers.enable(2)
+        scene.add(ambient)
         const key = new THREE.DirectionalLight(0xfff5e5, 2.8)
         key.position.set(-600, 900, 1400)
+        key.layers.enable(2)
         scene.add(key)
         const fill = new THREE.DirectionalLight(0xc7e4ff, 0.65)
         fill.position.set(900, -100, 800)
+        fill.layers.enable(2)
         scene.add(fill)
         const surfaces = createBookSurfaceTextures(THREE, () => {
           previousRender = ""
@@ -221,6 +229,7 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
             previousRender = ""
           }
           const signature: string[] = [String(scrollY), String(entries.size)]
+          const foreground: number[] = []
           signature.push(poster.update(width, height))
           const podcastFrame = podcast.update(width, height)
           signature.push(podcastFrame.signature)
@@ -266,6 +275,14 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
               `${matrix.m22},${matrix.m23},${matrix.m41},${matrix.m42},${matrix.m43},${rect.left},${rect.top},${rect.width}`
             )
             const thickness = body.offsetHeight
+            // Follow the actual spring, including its return: CSS z-index
+            // cannot sort meshes inside one canvas. Keep self-depth intact.
+            const pulled = matrix.m43 > 0.25
+            if (pulled) foreground.push(index)
+            if (entry.group.userData.foreground !== pulled) {
+              setShelfForeground(entry.group, pulled)
+              entry.group.userData.foreground = pulled
+            }
             entry.group.scale.set(body.offsetWidth, thickness, body.offsetWidth)
             entry.group.rotation.x = -Math.atan2(matrix.m23, matrix.m22)
             entry.group.position.set(
@@ -277,6 +294,7 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
             canvas.dataset.ready = "true"
           })
           const nextRender = signature.join(";")
+          canvas.dataset.foreground = foreground.join(",")
           if (nextRender !== previousRender) {
             renderer.setScissorTest(false)
             renderer.clear()
@@ -287,7 +305,8 @@ export function ShelfScene({ books }: { books: ShelfBook[] }) {
               width,
               height - podcastFrame.pixels
             )
-            if (podcastFrame.pixels < height) renderer.render(scene, camera)
+            if (podcastFrame.pixels < height)
+              renderShelfLayers(renderer, scene, camera, foreground.length > 0)
             if (podcastFrame.ready && podcastFrame.pixels > 0) {
               renderer.setScissor(0, 0, width, podcastFrame.pixels)
               podcast.render(renderer)
