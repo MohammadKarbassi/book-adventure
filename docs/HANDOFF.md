@@ -8,8 +8,8 @@ Last updated: 2026-10-22 (۳۰ مهر ۱۴۰۵). Deadline: Friday 2026-10-23 (۱
 
 - Repo: https://github.com/MohammadKarbassi/book-adventure (public), branch `master`, remote `origin`.
 - Vercel: the owner imports the repo in vercel.com; every push to `master` then deploys. Not confirmed yet whether the import was done.
-- Pushed: `origin/master` is at `b1f98ea` (README and demo script). Every later commit (adventures data, foreign books, Codex review fixes, the Open Library fixture-path fix, this handoff) is **committed locally but not pushed** on purpose: it is pushed together with the adventures redesign once the whole suite passes on a production build (see §4). `git log --oneline origin/master..HEAD` lists them.
-- Last full verification of the committed tree (temporary worktree, production build): lint, typecheck, 203 unit tests and `next build` green; Playwright 58/60. The 2 failures are in `e2e/intro.spec.ts`: they expect the new home heading «سفر ماجراجویی شما», which only exists in the uncommitted adventures work. They pass once that work is committed.
+- Pushed: everything is on `origin/master`, including the adventures redesign (`0c29f9c`).
+- Last full verification (2026-10-22, main checkout, production build): lint, typecheck, Prettier, 215 unit tests, `next build` (229 static pages, no warnings) and Playwright 72/72 (desktop + mobile), twice in a row.
 
 ## 2. What is built (all committed)
 
@@ -27,30 +27,20 @@ Last updated: 2026-10-22 (۳۰ مهر ۱۴۰۵). Deadline: Friday 2026-10-23 (۱
 
 Docs: `README.md` (Persian, for graders; does not yet mention the adventures page or foreign books in detail — update it), `docs/demo-script.md` (step-by-step script for the demo video; add the adventures page).
 
-## 3. In progress: «مسیر ماجراجویی» redesign (uncommitted)
+## 3. «مسیر ماجراجویی» (done, committed in `0c29f9c`)
 
-The owner wants the home shelf and the per-book inner pages to deliver the press.stripe.com experience. Spec: `AGENTS.md` → «نیازهای پروژه» item 2 (paragraphs «مسیر ماجراجویی» and the Stripe Press details). In short:
+The home shelf and the per-book inner pages reproduce the press.stripe.com experience the owner asked for. Spec: `AGENTS.md` → «نیازهای پروژه» item 2.
 
-- Shelf (`components/home/*`): 14 adventures from `lib/adventures.ts` (copy in `data/adventures.ts`, palettes in `data/palettes.json`, both committed). Spine shows the cover artwork wrapping around it with an embossed title, cloth texture and the site mark (`components/book/book-spine.tsx`). Hover/focus on ANY book (top or bottom) tilts it forward to reveal part of the cover. Heading «سفر ماجراجویی شما», eyebrow «کتاب‌های انتخاب شده برای سفرتان». Shelf books link to `/adventures/<bookId>`.
-- Personalized order: a pure helper (`components/adventures/journey-order.ts`) scores adventures by the categories of the user's favorites, purchases and reader-progress books; server renders the default order, the client reorders after hydration with a layout animation and shows «بر اساس علاقه‌مندی‌های شما» only when there are signals. Numbers «ماجراجویی n از ۱۴» follow the displayed order; routes use the stable book id.
-- `/adventures/[bookId]`: one continuous page with all adventures. Must match the Stripe Press recording the owner sent:
-  1. A draggable six-faced 3D book (front cover, back cover, spine on the RIGHT for Persian binding, page block, top/bottom edges) that spins 360° with pointer/touch drag, has inertia, and springs back to a 3/4 angle; keyboard arrows rotate it; reduced motion disables inertia.
-  2. Each adventure is a full-color "room" from its palette with a crisp horizontal seam to the next; ink color adapts per room (contrast-tested).
-  3. Immersive: site header/footer hidden; only the site mark, the side rail (back to shelf, one tick per adventure, audio/podcast icons) and a «؟» help popover.
-  4. The book is sticky within its section and is replaced by the next section's book.
-  5. Content: adventure name, «بر اساس …» line, short rule, story, route (three stops), trip facts, gear, a bordered purchase table with ↗ cells, and «همسفران» reviews styled like Stripe's "Praise" (3 columns).
-- Reference frames from the owner's recording (local machine only, not in the repo; Stripe's assets must not be copied into the project): `/private/tmp/claude-501/-Users-mohammad-Developer-AI-Engineering-Bootcamp-ebook-platform/b7b5f581-eacd-4d75-ac9e-0f04bec7d79c/scratchpad/rec/r_01.jpg` … `r_04.jpg`, and screenshots `…/images/1.webp` … `12.webp` in the same session folder.
-- Uncommitted files at handoff time: `app/adventures/**`, `components/adventures/**`, `components/book/book-spine.tsx`, `components/ui/popover.tsx` (added via shadcn), `components/home/{book-shelf,shelf-book,shelf-books,shelf-geometry}.tsx|ts`, `app/page.tsx`, `app/book/[id]/page.tsx` (small «ماجراجویی n» link), `app/globals.css`, `e2e/adventures.spec.ts`, `e2e/home.spec.ts`, `tests/unit/adventures.test.ts`, `tests/unit/home-shelf.test.ts`. A Claude coder agent was still working on them; check `git status` and the dev server before assuming anything is finished.
-
-Definition of done for this section: the owner's points above are visibly true in a real browser (drag the book, look at a seam between two rooms, light and dark site theme), no console/hydration errors, `e2e/adventures.spec.ts` + `e2e/home.spec.ts` + `e2e/intro.spec.ts` green, then one commit.
+- Shelf (`components/home/*`, `components/book/book-spine.tsx`): 14 adventures from `lib/adventures.ts` (copy `data/adventures.ts`, palettes `data/palettes.json`). Spines show the cover art wrapping around with an embossed title, cloth texture, «ماجراجویی n» and the site mark. Hover/focus on any book tips it forward to show the cover. Heading «سفر ماجراجویی شما», eyebrow «کتاب‌های انتخاب شده برای سفرتان». Links go to `/adventures/<bookId>`.
+- Personalized order (`components/adventures/journey-order.ts`, `use-journey-order.ts`): weights purchases 3, favorites 2, started books 1 by category; server renders the default order, the client reorders after hydration and shows «بر اساس علاقه‌مندی‌های شما» only when something matched. Numbers follow the displayed order.
+- `/adventures/[bookId]` (`components/adventures/*`): one continuous immersive page (site header/footer hidden by a CSS rule in `app/globals.css`); each adventure is a full-color room from its palette with a hard seam and its own ink (`room-colors.ts`, contrast unit-tested); draggable six-faced 3D book (`adventure-book-3d.tsx`) with inertia, spring-back and keyboard rotation; fixed rail with one tick per adventure and a «؟» popover; URL follows the active section via `history.replaceState`; «همسفران» reviews in a 3-column Praise-style grid.
+- Reference frames from the owner's Stripe recording (local only, not in the repo; do not copy Stripe assets): `/private/tmp/claude-501/-Users-mohammad-Developer-AI-Engineering-Bootcamp-ebook-platform/b7b5f581-eacd-4d75-ac9e-0f04bec7d79c/scratchpad/rec/r_01.jpg` … `r_04.jpg`.
 
 ## 4. Remaining work, in order
 
-1. Finish and verify the adventures redesign (§3), commit it.
-2. Full verification on a production build: `npm run lint && npm run typecheck && npm test && npm run build && npm run test:e2e` (desktop + mobile projects). Fix anything red.
-3. Push `master`. Ask the owner to confirm the Vercel import; open the live site and check that Fidibo covers, Open Library pages and audio samples load in production.
-4. Update `README.md` (adventures, foreign books, live link) and `docs/demo-script.md` (add the adventures page: drag the book, scroll across rooms, rail). Commit and push.
-5. Optional polish if time allows: persist the reader's theme/font size; a shared «ماجراجویی n» entry on book pages already exists for adventure books.
+1. Ask the owner whether the repo is imported in vercel.com; once live, open the production site and check that Fidibo covers, `/foreign` (live Open Library API), audio samples and podcast audio load, and that the adventures page drags smoothly.
+2. Update `README.md` (adventures page, foreign books, live link) and `docs/demo-script.md` (add: shelf hover and personalized order, open an adventure, drag the book through all faces, scroll across room seams, rail ticks). Commit and push.
+3. Optional polish: persist the reader's theme and font size; animate full-height section reordering on the adventures page (currently only the shelf and rail animate).
 
 ## 5. Run, test, data
 
