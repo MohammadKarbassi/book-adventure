@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Vazirmatn, Markazi_Text, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
+import { INTRO_HEAD_SCRIPT } from "@/components/intro/intro-timeline"
 import { MiniPlayer } from "@/components/player/mini-player"
 import { PlayerProvider } from "@/components/player/player-provider"
 import { SiteFooter } from "@/components/site/site-footer"
@@ -58,6 +59,10 @@ export default function RootLayout({
         fontHeading.variable
       )}
     >
+      <head>
+        {/* Decides before the first paint whether the intro may show. */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_HEAD_SCRIPT }} />
+      </head>
       <body className="flex min-h-svh flex-col">
         <DirectionProvider direction="rtl">
           <ThemeProvider>

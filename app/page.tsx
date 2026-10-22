@@ -5,6 +5,7 @@ import { PodcastsTeaser } from "@/components/home/podcasts-teaser"
 import { Reveal } from "@/components/home/reveal"
 import { pickShelfBooks } from "@/components/home/shelf-books"
 import { SubscriptionTeaser } from "@/components/home/subscription-teaser"
+import { IntroOverlay } from "@/components/intro/intro-overlay"
 import { Container } from "@/components/site/container"
 import {
   getBooksByCategory,
@@ -74,6 +75,7 @@ export default function Page() {
 
   return (
     <>
+      <IntroOverlay />
       <BookShelf books={shelf} storeId={STORE_ID} />
       <Container
         id={STORE_ID}
