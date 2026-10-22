@@ -146,8 +146,8 @@ The font pairing is loaded through next/font in app/layout.tsx. Markazi Text giv
 
 - **Headline:** frontmatter role is the mobile adventure title; it grows to 3rem from 640px, retaining 700 weight and 1.15 line-height.
 - **Narrative:** frontmatter role grows to 1.75rem from 640px, retaining 1.7 line-height. The source uses a prose-width text block.
-- **Title:** ending content headings use the title role. Its section heading uses 3rem and becomes 4.5rem at 900px with 1.25 line-height.
-- **Body:** supporting adventure copy uses the body role; ending copy uses the same size with 2 line-height.
+- **Title:** the listening epilogue heading uses 3.75rem, then 6rem at 900px; its paper closing heading uses 3rem, then 4.5rem. Both use 1.25 line-height.
+- **Body:** supporting adventure copy uses the body role; epilogue copy uses 1.125rem with 2 line-height, with explicit sample disclosure at the label size.
 - **Label:** compact metadata and control hints. Do not infer a universal uppercase or letter-spacing system from individual treatments.
 
 **The Connected Script Rule.** Preserve joined Persian letterforms and RTL reading order; the intro animates Persian words rather than isolated letters.
@@ -158,7 +158,7 @@ The shared shop container is centered, full-width, capped at 80rem, with 1rem in
 
 Adventure interiors switch at 900px to a centered container capped at min(84vw, 1280px): 42% text and 58% model, mirrored for RTL. Desktop content starts at 20svh, with 14svh bottom padding; below that breakpoint a model anchor precedes a single reading column. Praise uses one column initially, two from 640px, and three from 900px, with 4vw horizontal gaps and 2.5rem vertical gaps.
 
-The ending uses a minimum viewport-height region, 80rem maximum width, 1.75rem inline and 6rem block padding; desktop inline padding becomes 7rem. Its two media groups stack before becoming two columns at 900px.
+The listening epilogue uses a minimum viewport-height region, 80rem maximum width, 1.75rem inline padding and 5rem block padding; desktop padding becomes 7rem. At 900px the main narrative and actual audiobook cover form two columns, with a native podcast discovery strip below. A sticky viewport-height original illustration remains behind the content while an opaque warm-paper closing surface scrolls over it. The ending layer covers the preceding fixed book navigation rather than letting pale room ink leak onto paper.
 
 Observed shelf geometry is 82% width on small screens, 52% from 768px, capped at 52rem; gaps are clamp(2.5rem,7svh,5rem). The preceding hero uses a 42/58 text/illustration split from 768px and stacks text before imagery on mobile. Its brand heading uses 60/72/96px steps; the shelf title is a subordinate h2.
 
@@ -207,6 +207,8 @@ The illustrated hero responds only to mouse movement, with bounded 3° horizonta
 A fixed Three.js canvas renders shelf books; another fixed scene serves the adventure route on desktop and mobile. CSS 3D remains the no-WebGL fallback, with native links, focus and drag anchors. Shelf hover/focus reveals a cover band, lifts toward the viewer and reveals a price chip. Tilt and lift use distinct springs recorded in the sidecar; reduced-motion handling remains in the source.
 
 The interior keeps neighboring models in the same scene. Book activation follows the 25% desktop / 30% mobile viewport trigger and keeps route, palette, rail and active model aligned. The ending progressively clips the canvas over one viewport as real audio/podcast DOM content and footer enter; scrolling back reverses the reveal. This is the project's own content adaptation, not an identity rule for unrelated screens.
+
+The ending's sample action uses the existing global player, without autoplay or history mutation. Its disclosure distinguishes the freely licensed demonstration recording from the displayed book's original audio. Stable `--ending-paper` and `--ending-ink` preserve the brand paper/ink pair outside cover-derived room variables. Footer anchors return directly to the home shelf or shop. Original imagery is reused from the project's hero, not copied from the reference.
 
 ## Do's and Don'ts
 

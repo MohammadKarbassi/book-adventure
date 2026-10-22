@@ -1,20 +1,15 @@
 import Image from "next/image"
 import Link from "next/link"
-import {
-  ArrowLeftIcon,
-  ArrowUpIcon,
-  HeadphonesIcon,
-  PodcastIcon,
-} from "lucide-react"
+import { ArrowLeftIcon, ArrowUpIcon, HeadphonesIcon } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
+import { PlayButton } from "@/components/player/play-button"
 import type { AdventureView } from "@/components/adventures/adventure-types"
 import { cn } from "@/lib/utils"
 
 export type EndingPodcast = { id: string; title: string; artwork: string }
 
-/** Project adaptation of the reference's book → media → footer sequence.
- * No Stripe film, artwork or copy is reproduced. The entering DOM surface
- * and the book-canvas clipping share the same measured viewport boundary. */
+/** Native content and the paper footer pass over one sticky image.
+ * Project adaptation, not a claim about Stripe's animation technology. */
 export function JourneyEnding({
   audio,
   podcast,
@@ -26,34 +21,43 @@ export function JourneyEnding({
     <section
       data-journey-ending=""
       aria-labelledby="journey-ending-title"
-      className="relative z-20 bg-background text-foreground"
+      className="relative isolate z-40"
     >
-      <div className="mx-auto flex min-h-svh max-w-7xl flex-col justify-center gap-12 px-7 py-24 min-[900px]:px-28">
-        <h2
-          id="journey-ending-title"
-          className="max-w-xl font-heading text-5xl leading-tight min-[900px]:text-7xl"
-        >
-          قصه هنوز ادامه دارد.
-        </h2>
-        <div className="grid gap-12 min-[900px]:grid-cols-2 min-[900px]:gap-20">
-          <div className="flex items-center gap-6">
-            {audio ? (
-              <Image
-                src={`/adventure-covers/${audio.id}.webp`}
-                alt={audio.book.title}
-                width={128}
-                height={192}
-                className="w-24 -rotate-6 rounded-sm shadow-xl min-[900px]:w-32"
-              />
-            ) : (
-              <HeadphonesIcon aria-hidden="true" className="size-20" />
-            )}
-            <div className="flex flex-col items-start gap-4">
-              <h3 className="font-heading text-3xl">این بار، گوش بسپارید</h3>
-              <p className="max-w-64 text-sm leading-loose text-muted-foreground">
-                سفر بعدی می‌تواند با یک صدا شروع شود؛ در راه، در خانه، یا پیش از
-                خواب.
-              </p>
+      <div
+        data-listening-backdrop=""
+        aria-hidden="true"
+        className="dark pointer-events-none sticky top-0 h-svh overflow-hidden bg-background"
+      >
+        <Image
+          src="/hero/book-journey.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-center opacity-30"
+        />
+        <div className="absolute inset-0 bg-background/60" />
+      </div>
+      <div className="dark relative z-10 -mt-[100svh] text-foreground">
+        <div className="mx-auto grid min-h-svh max-w-7xl items-center gap-12 px-7 py-20 min-[900px]:grid-cols-[1.1fr_1fr] min-[900px]:gap-20 min-[900px]:px-28 min-[900px]:py-28">
+          <div className="flex flex-col items-start gap-6">
+            <h2
+              id="journey-ending-title"
+              className="max-w-lg font-heading text-6xl leading-tight min-[900px]:text-8xl"
+            >
+              سفر را بشنوید
+            </h2>
+            <p className="max-w-md text-lg leading-loose text-foreground/85">
+              گاهی راه از آخرین صفحه ادامه پیدا می‌کند؛ با صدایی که در مسیر، در
+              خانه یا پیش از خواب همراهتان می‌ماند.
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              {audio?.track ? (
+                <PlayButton
+                  track={audio.track}
+                  label="شنیدن نمونهٔ رایگان"
+                  size="lg"
+                />
+              ) : null}
               <Link
                 href="/audiobooks"
                 className={cn(
@@ -61,54 +65,99 @@ export function JourneyEnding({
                   "px-0 text-foreground"
                 )}
               >
-                کتاب‌های صوتی
-                <ArrowLeftIcon data-icon="inline-end" />
+                کتاب‌های صوتی <ArrowLeftIcon data-icon="inline-end" />
               </Link>
             </div>
-          </div>
-          <div className="flex items-center gap-6">
-            {podcast ? (
-              <Image
-                src={podcast.artwork}
-                alt={podcast.title}
-                width={144}
-                height={144}
-                className="aspect-square w-24 rotate-3 rounded-sm shadow-xl min-[900px]:w-32"
-              />
-            ) : (
-              <PodcastIcon aria-hidden="true" className="size-20" />
-            )}
-            <div className="flex flex-col items-start gap-4">
-              <h3 className="font-heading text-3xl">یک روایت دیگر</h3>
-              <p className="max-w-64 text-sm leading-loose text-muted-foreground">
-                برای کنجکاوی‌هایی که با آخرین صفحه تمام نمی‌شوند.
+            {audio?.track ? (
+              <p className="max-w-md text-xs leading-loose text-foreground/75">
+                این صدا نمونه‌ای آزاد برای تجربهٔ پخش است، نه صدای نسخهٔ اصلی «
+                {audio.book.title}». مشخصات و منبع صدا در پخش‌کننده آمده است.
               </p>
+            ) : null}
+          </div>
+          <div className="mx-auto flex w-full max-w-sm flex-col items-center gap-8">
+            {audio ? (
               <Link
-                href="/podcasts"
-                className={cn(
-                  buttonVariants({ variant: "link" }),
-                  "px-0 text-foreground"
-                )}
+                href={`/book/${audio.id}`}
+                aria-label={`دیدن کتاب ${audio.book.title}`}
+                className="block w-44 outline-none focus-visible:ring-3 focus-visible:ring-ring min-[900px]:w-64"
               >
-                پادکست‌ها
-                <ArrowLeftIcon data-icon="inline-end" />
+                <Image
+                  src={`/adventure-covers/${audio.id}.webp`}
+                  alt={audio.book.title}
+                  width={360}
+                  height={540}
+                  sizes="(min-width:900px) 256px,176px"
+                  className="h-auto w-full [transform:perspective(1000px)_rotateY(-14deg)_rotateZ(-5deg)] rounded-s-sm rounded-e-md shadow-2xl"
+                />
               </Link>
+            ) : (
+              <HeadphonesIcon aria-hidden="true" className="size-32" />
+            )}
+            {audio ? (
+              <p className="text-center font-heading text-3xl">
+                {audio.book.title}
+              </p>
+            ) : null}
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-6 border-t border-foreground/25 pt-8 min-[900px]:col-span-2">
+            <div className="flex items-center gap-4">
+              {podcast ? (
+                <Image
+                  src={podcast.artwork}
+                  alt=""
+                  width={64}
+                  height={64}
+                  className="size-14 rounded-sm object-cover"
+                />
+              ) : null}
+              <div>
+                <p className="font-heading text-2xl">
+                  یک روایت دیگر، یک همسفر تازه
+                </p>
+                <p className="mt-1 text-sm text-foreground/75">
+                  {podcast ? podcast.title : "روایت‌هایی برای ادامهٔ کنجکاوی"}
+                </p>
+              </div>
             </div>
+            <Link
+              href="/podcasts"
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "bg-transparent text-foreground"
+              )}
+            >
+              پادکست‌ها <ArrowLeftIcon data-icon="inline-end" />
+            </Link>
           </div>
         </div>
       </div>
-      <footer className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-6 border-t border-foreground/20 px-7 py-12 min-[900px]:px-28">
-        <p className="font-heading text-3xl">ماجراجویی با کتاب</p>
-        <Link
-          href="/"
-          className={cn(
-            buttonVariants({ variant: "outline" }),
-            "bg-transparent"
-          )}
-        >
-          <ArrowUpIcon data-icon="inline-start" />
-          بازگشت به قفسه
-        </Link>
+      <footer
+        data-journey-paper=""
+        className="relative z-20 bg-(--ending-paper) text-(--ending-ink)"
+      >
+        <div className="mx-auto flex min-h-[75svh] max-w-7xl flex-col items-start justify-center gap-8 px-7 py-24 min-[900px]:px-28">
+          <h2 className="max-w-3xl font-heading text-5xl leading-tight min-[900px]:text-7xl">
+            سفر بعدی‌تان از کدام کتاب شروع می‌شود؟
+          </h2>
+          <p className="max-w-lg text-lg leading-loose">
+            به قفسه برگردید؛ شاید قصه‌ای که این بار دنبالش هستید، همان‌جا
+            منتظرتان باشد.
+          </p>
+          <Link
+            href="/#adventure-shelf"
+            className={cn(buttonVariants({ size: "lg" }), "mt-2")}
+          >
+            <ArrowUpIcon data-icon="inline-start" />
+            بازگشت به قفسه
+          </Link>
+          <Link
+            href="/#store"
+            className="text-sm underline underline-offset-4 outline-none focus-visible:ring-3 focus-visible:ring-ring"
+          >
+            یا در فروشگاه کتاب‌ها بگردید
+          </Link>
+        </div>
       </footer>
     </section>
   )

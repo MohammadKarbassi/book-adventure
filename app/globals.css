@@ -49,6 +49,9 @@
 
 /* «کاغذ و فانوس»: کاغذ کرم، جوهر سرمه‌ای، زعفرانی (رنگ اصلی) و فیروزه‌ای (accent) */
 :root {
+  /* Stable paper/ink outside the cover-derived adventure rooms. */
+  --ending-paper: oklch(0.975 0.012 85);
+  --ending-ink: oklch(0.24 0.03 258);
   --background: oklch(0.975 0.012 85);
   --foreground: oklch(0.24 0.03 258);
   --card: oklch(0.993 0.006 85);

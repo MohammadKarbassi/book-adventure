@@ -227,6 +227,11 @@
     ],
     "motion": [
       {
+        "name": "native-listening-epilogue",
+        "value": "sticky viewport image + native-flow opaque paper footer",
+        "purpose": "Reversible book-to-listening-to-paper ending; no autoplay, forced timing or history mutation."
+      },
+      {
         "name": "shop-book-pull-out",
         "value": "240ms cubic-bezier(0.22,1,0.36,1)",
         "purpose": "Brief physical cover lift before native router push; bypassed for reduced motion and modified clicks."
