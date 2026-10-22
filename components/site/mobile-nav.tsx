@@ -46,7 +46,7 @@ export function MobileNav({ categories }: { categories: NavCategory[] }) {
             variant="ghost"
             size="icon"
             aria-label="منو"
-            className="md:hidden"
+            className="lg:hidden"
           />
         }
       >

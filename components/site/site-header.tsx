@@ -50,8 +50,8 @@ export function SiteHeader() {
         <MainNav categories={categories} />
         <div className="ms-auto flex items-center gap-1">
           <SearchCommand index={getSearchIndex()} />
-          <LibraryButton className="hidden md:inline-flex" />
-          <ThemeToggle className="hidden md:inline-flex" />
+          <LibraryButton className="hidden lg:inline-flex" />
+          <ThemeToggle className="hidden lg:inline-flex" />
           <MobileNav categories={categories} />
         </div>
       </Container>

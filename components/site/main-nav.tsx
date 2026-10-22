@@ -25,7 +25,7 @@ export function MainNav({ categories }: { categories: NavCategory[] }) {
   const pathname = usePathname()
 
   return (
-    <NavigationMenu aria-label="منوی اصلی" className="hidden md:flex">
+    <NavigationMenu aria-label="منوی اصلی" className="hidden lg:flex">
       <NavigationMenuList className="gap-1">
         <NavigationMenuItem>
           <NavigationMenuTrigger

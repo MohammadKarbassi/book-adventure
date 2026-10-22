@@ -138,7 +138,7 @@ export function SearchCommand({ index }: { index: SearchIndex }) {
         variant="outline"
         aria-label="جستجو"
         onClick={() => setOpen(true)}
-        className="hidden w-60 justify-start gap-2 bg-muted/50 font-normal text-muted-foreground shadow-none lg:inline-flex xl:w-80 dark:bg-input/20"
+        className="hidden w-80 justify-start gap-2 bg-muted/50 font-normal text-muted-foreground shadow-none xl:inline-flex dark:bg-input/20"
       >
         <SearchIcon />
         <span className="truncate">{placeholder}</span>
@@ -151,7 +151,7 @@ export function SearchCommand({ index }: { index: SearchIndex }) {
         size="icon"
         aria-label="جستجو"
         onClick={() => setOpen(true)}
-        className="lg:hidden"
+        className="xl:hidden"
       >
         <SearchIcon />
       </Button>

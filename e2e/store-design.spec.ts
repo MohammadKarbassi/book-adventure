@@ -1,5 +1,31 @@
 import { expect, test } from "./fixtures"
 
+for (const width of [768, 1024]) {
+  test(`shop navigation remains inside the viewport at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto("/categories")
+    await page.evaluate(() => document.fonts.ready)
+    const controls = page.locator("body > header").locator("a, button")
+    const bounds = await controls.evaluateAll((elements) =>
+      elements
+        .map((element) => element.getBoundingClientRect())
+        .filter((rect) => rect.width > 0)
+        .map((rect) => ({ left: rect.left, right: rect.right }))
+    )
+    for (const control of bounds) {
+      expect(control.left).toBeGreaterThanOrEqual(0)
+      expect(control.right).toBeLessThanOrEqual(width)
+    }
+    await page
+      .getByRole("button", { name: "جستجو", exact: true })
+      .filter({ visible: true })
+      .click()
+    await expect(page.getByRole("dialog")).toBeVisible()
+  })
+}
+
 test("shop titles have room for two lines without shifting the price row", async ({
   page,
 }) => {
