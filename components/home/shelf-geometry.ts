@@ -5,7 +5,11 @@ import type { BookColor, BookType } from "@/lib/catalog"
 
 /** The slim, serializable shape one shelf book needs. */
 export type ShelfBook = {
+  /** The book id; also the adventure's route segment. */
   id: number
+  /** Adventure name, e.g. «سقوط در آمستردام». */
+  name: string
+  categorySlug: string
   title: string
   author: string
   type: BookType

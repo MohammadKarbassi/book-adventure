@@ -1,9 +1,10 @@
 import { BookRow } from "@/components/book/book-row"
 import { BookShelf } from "@/components/home/book-shelf"
 import { CategoryStrip } from "@/components/home/category-strip"
+import { ForeignTeaser } from "@/components/home/foreign-teaser"
 import { PodcastsTeaser } from "@/components/home/podcasts-teaser"
 import { Reveal } from "@/components/home/reveal"
-import { pickShelfBooks } from "@/components/home/shelf-books"
+import { toShelfBook } from "@/components/home/shelf-books"
 import { SubscriptionTeaser } from "@/components/home/subscription-teaser"
 import { IntroOverlay } from "@/components/intro/intro-overlay"
 import { Container } from "@/components/site/container"
@@ -15,6 +16,8 @@ import {
   type ListName,
 } from "@/lib/catalog"
 import { getPodcasts } from "@/lib/podcasts"
+import { getAdventures } from "@/lib/adventures"
+import { getCategoryMap } from "@/components/adventures/adventure-views"
 
 const STORE_ID = "store"
 
@@ -54,12 +57,7 @@ const rows: {
 ]
 
 export default function Page() {
-  const shelf = pickShelfBooks([
-    getList("bestsellers"),
-    getList("plus"),
-    getList("audioBestsellers"),
-    getList("newest"),
-  ])
+  const shelf = getAdventures().map(toShelfBook)
 
   const categories = getCategories().map((category) => ({
     slug: category.slug,
@@ -76,7 +74,11 @@ export default function Page() {
   return (
     <>
       <IntroOverlay />
-      <BookShelf books={shelf} storeId={STORE_ID} />
+      <BookShelf
+        books={shelf}
+        categoryOf={getCategoryMap()}
+        storeId={STORE_ID}
+      />
       <Container
         id={STORE_ID}
         className="flex flex-col gap-16 pt-12 pb-20 md:gap-20"
@@ -109,6 +111,9 @@ export default function Page() {
         ))}
         <Reveal>
           <PodcastsTeaser podcasts={podcasts} />
+        </Reveal>
+        <Reveal>
+          <ForeignTeaser />
         </Reveal>
       </Container>
     </>

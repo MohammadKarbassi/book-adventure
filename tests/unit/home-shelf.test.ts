@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import {
-  colorDistance,
-  pickShelfBooks,
-  SHELF_SIZE,
-} from "@/components/home/shelf-books"
+import { toShelfBook } from "@/components/home/shelf-books"
 import {
   MAX_THICKNESS,
   MAX_TILT,
@@ -16,39 +12,28 @@ import {
   spineThickness,
   type ShelfBook,
 } from "@/components/home/shelf-geometry"
-import { getAllBooks, getList, type Book } from "@/lib/catalog"
+import { getAdventures } from "@/lib/adventures"
+import { getAllBooks } from "@/lib/catalog"
 
-const featuredLists = () => [
-  getList("bestsellers"),
-  getList("plus"),
-  getList("audioBestsellers"),
-  getList("newest"),
-]
+describe("toShelfBook", () => {
+  const adventures = getAdventures()
+  const shelf = adventures.map(toShelfBook)
 
-describe("pickShelfBooks", () => {
-  const shelf = pickShelfBooks(featuredLists())
-
-  it("picks 18 distinct books, all with an author", () => {
-    expect(shelf).toHaveLength(SHELF_SIZE)
-    expect(new Set(shelf.map((book) => book.id)).size).toBe(SHELF_SIZE)
-    expect(shelf.every((book) => book.author.length > 0)).toBe(true)
+  it("one shelf book per adventure, in adventure order", () => {
+    expect(shelf.length).toBe(adventures.length)
+    expect(shelf.length).toBeGreaterThan(0)
+    expect(shelf.map((book) => book.id)).toEqual(
+      adventures.map((adventure) => adventure.book.id)
+    )
+    expect(new Set(shelf.map((book) => book.id)).size).toBe(shelf.length)
   })
 
-  it("mixes ebooks and audiobooks", () => {
-    const audio = shelf.filter((book) => book.type === "audiobook").length
-    expect(audio).toBeGreaterThanOrEqual(3)
-    expect(SHELF_SIZE - audio).toBeGreaterThanOrEqual(3)
-  })
-
-  it("never stacks two near-identical colors", () => {
-    for (let index = 1; index < shelf.length; index++) {
-      expect(
-        colorDistance(
-          shelf[index - 1].color.dominant,
-          shelf[index].color.dominant
-        )
-      ).toBeGreaterThan(40)
-    }
+  it("carries the adventure name, the category and an author", () => {
+    shelf.forEach((book, index) => {
+      expect(book.name).toBe(adventures[index].copy.name)
+      expect(book.categorySlug).toBe(adventures[index].book.categorySlug)
+      expect(book.author.length).toBeGreaterThan(0)
+    })
   })
 
   it("returns only serializable slim props", () => {
@@ -57,26 +42,13 @@ describe("pickShelfBooks", () => {
     expect(keys).not.toContain("reviews")
     expect(JSON.parse(JSON.stringify(shelf))).toEqual(shelf)
   })
-
-  it("dedupes across lists and respects the size", () => {
-    const list = getAllBooks().slice(0, 6)
-    const picked = pickShelfBooks([list, list], 4)
-    expect(picked).toHaveLength(4)
-    expect(new Set(picked.map((book) => book.id)).size).toBe(4)
-  })
-
-  it("skips books without an author", () => {
-    const [book] = getAllBooks()
-    const anonymous: Book = { ...book, id: -1, authors: [] }
-    expect(pickShelfBooks([[anonymous, book]]).map((b) => b.id)).toEqual([
-      book.id,
-    ])
-  })
 })
 
 describe("shelf geometry", () => {
   const ebook = (pages?: number): ShelfBook => ({
     id: 1,
+    name: "n",
+    categorySlug: "c",
     title: "t",
     author: "a",
     type: "ebook",

@@ -5,13 +5,15 @@ import Image from "next/image"
 import Link from "next/link"
 import {
   motion,
+  useMotionValue,
   useScroll,
   useSpring,
   useTransform,
   type MotionValue,
 } from "motion/react"
-import { ArrowLeftIcon, BookOpenIcon, HeadphonesIcon } from "lucide-react"
+import { ArrowLeftIcon } from "lucide-react"
 
+import { BookSpine } from "@/components/book/book-spine"
 import { PriceTag } from "@/components/book/price-tag"
 import {
   STATIC_TILT,
@@ -20,22 +22,13 @@ import {
   spineLayout,
   type ShelfBook as ShelfBookData,
 } from "@/components/home/shelf-geometry"
-import { cn } from "@/lib/utils"
+import { formatNumber } from "@/lib/format"
 
 /** How far the cover (top face) and back (bottom face) reach into the screen. */
 const DEPTH = 180
 const PERSPECTIVE = 1100
-
-// Lighting overlays on top of the book's own color: dark headbands at both
-// ends, a rounded-spine falloff from top to bottom and a fine cloth weave.
-const SPINE_LIGHT: React.CSSProperties = {
-  backgroundImage: [
-    "linear-gradient(to right, rgb(0 0 0 / 0.3), rgb(0 0 0 / 0) 3%, rgb(0 0 0 / 0) 97%, rgb(0 0 0 / 0.3))",
-    "linear-gradient(to bottom, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0) 38%, rgb(0 0 0 / 0) 62%, rgb(0 0 0 / 0.24))",
-    "repeating-linear-gradient(45deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 3px)",
-    "repeating-linear-gradient(-45deg, rgb(0 0 0 / 0.05) 0 1px, transparent 1px 3px)",
-  ].join(", "),
-}
+/** Hovered or focused books tip forward at least this much to show a band of their cover. */
+const HOVER_TILT = -24
 
 const BACK_LIGHT: React.CSSProperties = {
   backgroundImage: [
@@ -47,40 +40,57 @@ const BACK_LIGHT: React.CSSProperties = {
 type ShelfBookProps = {
   book: ShelfBookData
   index: number
+  /** Adventure number in the displayed (possibly personalized) order. */
+  number: number
   /** Static tilt instead of scroll-driven rotation. */
   reduced: boolean
   /** Eagerly load the cover (first books of the stack). */
   priority?: boolean
 }
 
-export function ShelfBook({ book, index, reduced, priority }: ShelfBookProps) {
+export function ShelfBook({
+  book,
+  index,
+  number,
+  reduced,
+  priority,
+}: ShelfBookProps) {
   const itemRef = useRef<HTMLLIElement>(null)
   const priceId = useId()
-  const [active, setActive] = useState(false)
+  const [active, setActiveState] = useState(false)
+  // Mirrors `active` for the tilt, without waiting for a re-render.
+  const lifted = useMotionValue(0)
+  function setActive(next: boolean) {
+    lifted.set(next ? 1 : 0)
+    setActiveState(next)
+  }
   const { thickness, widthPct, offsetPct } = spineLayout(book)
 
   const { scrollYProgress } = useScroll({
     target: itemRef,
     offset: ["start end", "end start"],
   })
-  const tilt = useSpring(
-    useTransform(scrollYProgress, (p) => shelfTilt(p)),
-    {
-      stiffness: 140,
-      damping: 26,
-      mass: 0.5,
+  // Scroll tilt, overridden while hovered or focused: any book, wherever it
+  // is on screen, tips forward to show its cover, then settles back.
+  const targetTilt = useTransform(
+    [scrollYProgress, lifted],
+    ([progress, lift]: number[]) => {
+      const base = reduced ? STATIC_TILT : shelfTilt(progress)
+      return lift ? Math.min(base, HOVER_TILT) : base
     }
   )
+  const tilt = useSpring(targetTilt, {
+    stiffness: 140,
+    damping: 26,
+    mass: 0.5,
+  })
   const zIndex = useTransform(scrollYProgress, shelfZIndex)
-
-  const isAudio = book.type === "audiobook"
-  const ink = book.color.isDark
-    ? "text-white [--rule:rgb(255_255_255/0.35)]"
-    : "text-black/85 [--rule:rgb(0_0_0/0.3)]"
 
   return (
     <motion.li
       ref={itemRef}
+      layout={reduced ? false : "position"}
+      transition={{ layout: { type: "spring", stiffness: 170, damping: 26 } }}
       data-shelf-index={index}
       className="relative"
       style={{
@@ -90,8 +100,8 @@ export function ShelfBook({ book, index, reduced, priority }: ShelfBookProps) {
       }}
     >
       <Link
-        href={`/book/${book.id}`}
-        aria-label={`${book.title} اثر ${book.author}`}
+        href={`/adventures/${book.id}`}
+        aria-label={`ماجراجویی ${formatNumber(number)}: ${book.name} — ${book.title} اثر ${book.author}`}
         aria-describedby={priceId}
         className="group/shelf-book relative block rounded-[3px] outline-none"
         onPointerEnter={(event) => {
@@ -108,7 +118,7 @@ export function ShelfBook({ book, index, reduced, priority }: ShelfBookProps) {
           className="relative block transform-3d"
           style={{
             height: thickness,
-            rotateX: reduced ? STATIC_TILT : tilt,
+            rotateX: reduced ? targetTilt : tilt,
             transformPerspective: PERSPECTIVE,
             transformOrigin: `50% 50% ${-DEPTH / 2}px`,
           }}
@@ -153,36 +163,17 @@ export function ShelfBook({ book, index, reduced, priority }: ShelfBookProps) {
             }}
           />
 
-          {/* Front face: the spine. */}
-          <span
-            className={cn(
-              "absolute inset-0 flex items-center gap-4 overflow-hidden rounded-[3px] px-[6%] shadow-md shadow-black/25 transition-shadow duration-300 backface-hidden group-hover/shelf-book:shadow-2xl group-hover/shelf-book:shadow-black/40 group-focus-visible/shelf-book:shadow-2xl group-focus-visible/shelf-book:ring-3 group-focus-visible/shelf-book:ring-ring group-focus-visible/shelf-book:ring-inset",
-              ink
-            )}
-            style={{ backgroundColor: book.color.dominant, ...SPINE_LIGHT }}
-          >
-            {/* Highlight along the top edge and raised bands near both ends. */}
-            <span className="pointer-events-none absolute inset-x-[2%] top-[3px] h-px bg-white/30" />
-            <span className="pointer-events-none absolute inset-y-0 start-[3.5%] w-[3px] border-x border-(--rule) opacity-70" />
-            <span className="pointer-events-none absolute inset-y-0 end-[3.5%] w-[3px] border-x border-(--rule) opacity-70" />
-
-            <span className="w-[18%] shrink-0 truncate text-[0.7rem] leading-tight font-medium opacity-80 sm:w-[22%] sm:text-xs">
-              {book.author}
-            </span>
-            <span
-              className={cn(
-                "min-w-0 flex-1 truncate text-center font-heading leading-none font-bold",
-                thickness >= 64 ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl"
-              )}
-            >
-              {book.title}
-            </span>
-            <span className="flex w-[12%] shrink-0 items-center justify-end gap-1.5 opacity-80">
-              {isAudio ? <HeadphonesIcon className="size-3.5" /> : null}
-              <span className="flex size-5 items-center justify-center rounded-s-[2px] rounded-e-[5px] border border-current/50">
-                <BookOpenIcon className="size-3" />
-              </span>
-            </span>
+          {/* Front face: the spine, cover art wrapped around it. */}
+          <span className="absolute inset-0 overflow-hidden rounded-[3px] shadow-md shadow-black/25 transition-shadow duration-300 backface-hidden group-hover/shelf-book:shadow-2xl group-hover/shelf-book:shadow-black/40 group-focus-visible/shelf-book:shadow-2xl">
+            <BookSpine
+              title={book.title}
+              author={book.author}
+              image={book.image}
+              color={book.color}
+              number={number}
+              priority={priority}
+            />
+            <span className="pointer-events-none absolute inset-0 rounded-[3px] group-focus-visible/shelf-book:ring-3 group-focus-visible/shelf-book:ring-ring group-focus-visible/shelf-book:ring-inset" />
           </span>
         </motion.span>
 
@@ -194,7 +185,7 @@ export function ShelfBook({ book, index, reduced, priority }: ShelfBookProps) {
         >
           <PriceTag book={book} />
           <span className="flex items-center gap-1 text-xs font-medium text-accent-foreground">
-            مشاهده
+            شروع ماجراجویی
             <ArrowLeftIcon className="size-3.5" />
           </span>
         </span>

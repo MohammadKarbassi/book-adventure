@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { BookOpenTextIcon, HeadphonesIcon } from "lucide-react"
+import { ArrowLeftIcon, BookOpenTextIcon, HeadphonesIcon } from "lucide-react"
 
 import { BookRow } from "@/components/book/book-row"
 import { BookCover3D } from "@/components/book-detail/book-cover-3d"
@@ -30,6 +30,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getAdventureByBookId } from "@/lib/adventures"
 import { getSampleForBook } from "@/lib/audio-samples"
 import {
   getAllBooks,
@@ -113,6 +114,7 @@ export default async function BookPage({ params }: BookPageProps) {
   const sample = isAudio ? getSampleForBook(book.id) : undefined
   const track = sample ? buildBookTrack(book, sample) : undefined
   const similar = getSimilarBooks(book, 12).map(toSummary)
+  const adventure = getAdventureByBookId(book.id)
   const byline = [
     `نوشتهٔ ${join(book.authors) ?? "ناشناس"}`,
     book.translators?.length ? `ترجمهٔ ${join(book.translators)}` : null,
@@ -222,6 +224,16 @@ export default async function BookPage({ params }: BookPageProps) {
                 {book.inPlus && !book.free ? (
                   <Badge variant="accent" className="h-6 px-2.5">
                     اشتراکی
+                  </Badge>
+                ) : null}
+                {adventure ? (
+                  <Badge
+                    variant="outline"
+                    className="h-6 border-foreground/20 px-2.5"
+                    render={<Link href={`/adventures/${book.id}`} />}
+                  >
+                    {`ماجراجویی: ${adventure.copy.name}`}
+                    <ArrowLeftIcon data-icon="inline-end" />
                   </Badge>
                 ) : null}
               </div>

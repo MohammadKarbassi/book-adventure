@@ -10,6 +10,9 @@ import {
 } from "motion/react"
 import { ChevronDownIcon, HeadphonesIcon, PodcastIcon } from "lucide-react"
 
+import { JourneyNote } from "@/components/adventures/journey-note"
+import type { CategoryMap } from "@/components/adventures/journey-order"
+import { useJourneyOrder } from "@/components/adventures/use-journey-order"
 import { ShelfBook } from "@/components/home/shelf-book"
 import type { ShelfBook as ShelfBookData } from "@/components/home/shelf-geometry"
 import { Container } from "@/components/site/container"
@@ -24,7 +27,10 @@ import { useHydrated } from "@/lib/store"
 import { cn } from "@/lib/utils"
 
 type BookShelfProps = {
+  /** The adventures, in their default order. */
   books: ShelfBookData[]
+  /** bookId → categorySlug, to order the adventures by the reader's interests. */
+  categoryOf: CategoryMap
   /** Id of the element the scroll cue jumps to. */
   storeId: string
 }
@@ -34,8 +40,16 @@ const railLinks = [
   { href: "/podcasts", label: "پادکست‌ها", icon: PodcastIcon },
 ]
 
-/** «قفسهٔ ماجراجویی»: a scroll-tilted stack of featured books. */
-export function BookShelf({ books, storeId }: BookShelfProps) {
+/** «سفر ماجراجویی شما»: a scroll-tilted stack of the adventures. */
+export function BookShelf({
+  books: defaultBooks,
+  categoryOf,
+  storeId,
+}: BookShelfProps) {
+  const { items: books, personalized } = useJourneyOrder(
+    defaultBooks,
+    categoryOf
+  )
   const listRef = useRef<HTMLOListElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   // useReducedMotion reads matchMedia on the client only; wait for hydration
@@ -109,11 +123,12 @@ export function BookShelf({ books, storeId }: BookShelfProps) {
           <ol className="flex flex-col items-center">
             {books.map((book, index) => {
               const current = index === activeIndex
+              const label = `ماجراجویی ${formatNumber(index + 1)} · ${book.name}`
               return (
                 <li key={book.id}>
                   <Tooltip>
                     <TooltipTrigger
-                      aria-label={book.title}
+                      aria-label={label}
                       aria-current={current ? "true" : undefined}
                       onClick={() => showBook(index)}
                       className="group/tick flex h-4 w-10 items-center justify-start rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
@@ -127,9 +142,7 @@ export function BookShelf({ books, storeId }: BookShelfProps) {
                         )}
                       />
                     </TooltipTrigger>
-                    <TooltipContent side="inline-end">
-                      {book.title}
-                    </TooltipContent>
+                    <TooltipContent side="inline-end">{label}</TooltipContent>
                   </Tooltip>
                 </li>
               )
@@ -165,17 +178,20 @@ export function BookShelf({ books, storeId }: BookShelfProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <p className="text-xs font-medium tracking-wide text-muted-foreground">
-            قفسهٔ منتخب این هفته
-          </p>
+          <div className="flex flex-col gap-1.5">
+            <p className="text-xs font-medium tracking-wide text-muted-foreground">
+              کتاب‌های انتخاب شده برای سفرتان
+            </p>
+            <JourneyNote show={personalized} />
+          </div>
           <h1
             id="shelf-heading"
             className="font-heading text-5xl leading-[0.95] font-bold text-balance lg:text-6xl"
           >
-            ماجراجویی با کتاب
+            سفر ماجراجویی شما
           </h1>
           <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-            {`${formatNumber(books.length)} کتاب و کتاب صوتی که این روزها دست‌به‌دست می‌شوند؛ نشانگر را روی هر جلد ببرید تا از قفسه بیرون بیاید.`}
+            {`${formatNumber(books.length)} ماجراجویی، هر کدام با یک کتاب یا کتاب صوتی؛ نشانگر را روی هر جلد ببرید تا از قفسه بیرون بیاید و با یک کلیک سفرش را شروع کنید.`}
           </p>
           <div className="mt-2 hidden items-center gap-2 text-xs text-muted-foreground lg:flex">
             <span className="font-heading text-2xl leading-none text-foreground tabular-nums">
@@ -197,6 +213,7 @@ export function BookShelf({ books, storeId }: BookShelfProps) {
               key={book.id}
               book={book}
               index={index}
+              number={index + 1}
               reduced={reduced}
               priority={index < 8}
             />

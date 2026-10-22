@@ -139,3 +139,9 @@ html[data-player="open"] [data-sonner-toaster] {
   --offset-bottom: 6.5rem !important;
   --mobile-offset-bottom: 5rem !important;
 }
+
+/* «مسیر ماجراجویی» is immersive: the site header and footer step aside
+   (pure CSS, so the server render already has the right chrome). */
+html:has([data-immersive]) :is(body header, body footer):not(main *) {
+  display: none;
+}
