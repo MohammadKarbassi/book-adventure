@@ -231,7 +231,7 @@ export function BookShelf({
         </div>
       </nav>
 
-      <Container className="relative max-w-none pt-10 pb-0 md:pt-16">
+      <Container className="relative max-w-none pt-10 pb-0 md:pt-8">
         {/* The title and first spine share one editorial alignment. */}
         <motion.header
           className="relative z-20 mx-auto flex w-[82%] max-w-[52rem] flex-col gap-4 md:w-[52%]"
@@ -287,7 +287,7 @@ export function BookShelf({
         <ol
           ref={listRef}
           aria-label="قفسهٔ منتخب"
-          className="mx-auto flex w-[82%] max-w-[52rem] flex-col gap-[clamp(2.5rem,7svh,5rem)] pt-[10svh] pb-[10svh] md:w-[52%] md:pt-[20svh]"
+          className="mx-auto flex w-[82%] max-w-[52rem] flex-col gap-[clamp(2.5rem,7svh,5rem)] pt-[10svh] pb-[10svh] md:w-[52%] md:pt-[max(20svh,min(18vw,18rem))]"
         >
           {books.map((book, index) => (
             <ShelfBook
