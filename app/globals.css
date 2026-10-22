@@ -133,3 +133,9 @@
     @apply font-sans;
   }
 }
+
+/* Keep toasts above the mini player while it is open (bar: 64px / md 88px). */
+html[data-player="open"] [data-sonner-toaster] {
+  --offset-bottom: 6.5rem !important;
+  --mobile-offset-bottom: 5rem !important;
+}

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { XIcon } from "lucide-react"
@@ -149,6 +149,16 @@ function MobileBar({ track }: { track: Track }) {
 export function MiniPlayer() {
   const { current } = usePlayerControls()
   const reduceMotion = useReducedMotion()
+  const open = current !== null
+
+  // Lets global CSS lift the toasts above the bar while it is open.
+  useEffect(() => {
+    if (!open) return
+    document.documentElement.dataset.player = "open"
+    return () => {
+      delete document.documentElement.dataset.player
+    }
+  }, [open])
 
   return (
     <>
