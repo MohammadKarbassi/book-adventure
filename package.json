@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "data:fidibo": "node scripts/fetch-fidibo.mjs",
-    "data:podcasts": "node scripts/fetch-podcasts.mjs"
+    "data:podcasts": "node scripts/fetch-podcasts.mjs",
+    "data:palettes": "node scripts/extract-palettes.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

@@ -1,0 +1,562 @@
+{
+  "927": {
+    "top": "#6771ae",
+    "bottom": "#352a28",
+    "accent": "#6672af"
+  },
+  "1009": {
+    "top": "#1b1a1c",
+    "bottom": "#7c292d",
+    "accent": "#9e2a2e"
+  },
+  "1137": {
+    "top": "#e8e8e8",
+    "bottom": "#2a2724",
+    "accent": "#2a2724"
+  },
+  "1160": {
+    "top": "#e7d6bb",
+    "bottom": "#2e2e34",
+    "accent": "#c03f2a"
+  },
+  "1202": {
+    "top": "#ded9d5",
+    "bottom": "#beaf96",
+    "accent": "#c9763f"
+  },
+  "1603": {
+    "top": "#c16493",
+    "bottom": "#a79d7a",
+    "accent": "#be5a8f"
+  },
+  "1631": {
+    "top": "#301952",
+    "bottom": "#b6a39c",
+    "accent": "#301952"
+  },
+  "3836": {
+    "top": "#e8e8e8",
+    "bottom": "#e8e8e8",
+    "accent": "#e8e8e8"
+  },
+  "3927": {
+    "top": "#f4e7c7",
+    "bottom": "#e5d0a7",
+    "accent": "#d1bb8d"
+  },
+  "4068": {
+    "top": "#25211f",
+    "bottom": "#3dbdb3",
+    "accent": "#e81114"
+  },
+  "4339": {
+    "top": "#ca2127",
+    "bottom": "#c81e25",
+    "accent": "#c91a1f"
+  },
+  "4351": {
+    "top": "#c5b5a9",
+    "bottom": "#b09a90",
+    "accent": "#db4343"
+  },
+  "4772": {
+    "top": "#b48a64",
+    "bottom": "#9a6048",
+    "accent": "#a13627"
+  },
+  "4922": {
+    "top": "#fcac17",
+    "bottom": "#695ca4",
+    "accent": "#685ba4"
+  },
+  "6063": {
+    "top": "#fadeac",
+    "bottom": "#edae3a",
+    "accent": "#eca731"
+  },
+  "6431": {
+    "top": "#e0bd5f",
+    "bottom": "#bd8e27",
+    "accent": "#caa03b"
+  },
+  "6673": {
+    "top": "#79797b",
+    "bottom": "#494645",
+    "accent": "#494645"
+  },
+  "6928": {
+    "top": "#564551",
+    "bottom": "#7a2d53",
+    "accent": "#99374d"
+  },
+  "7206": {
+    "top": "#798faf",
+    "bottom": "#7eb1b2",
+    "accent": "#788fb1"
+  },
+  "7311": {
+    "top": "#d3bd8c",
+    "bottom": "#d6bf8d",
+    "accent": "#d2bb8a"
+  },
+  "7315": {
+    "top": "#eb2032",
+    "bottom": "#d5d5d5",
+    "accent": "#ed1a2e"
+  },
+  "62470": {
+    "top": "#132f19",
+    "bottom": "#171c23",
+    "accent": "#ca6d31"
+  },
+  "62490": {
+    "top": "#eee60e",
+    "bottom": "#adb3b6",
+    "accent": "#c9c41c"
+  },
+  "62622": {
+    "top": "#2f4078",
+    "bottom": "#3a1f1c",
+    "accent": "#37408e"
+  },
+  "62762": {
+    "top": "#ec1e25",
+    "bottom": "#ec1f27",
+    "accent": "#ec1a22"
+  },
+  "62772": {
+    "top": "#e8e8e8",
+    "bottom": "#58247f",
+    "accent": "#5d2886"
+  },
+  "62882": {
+    "top": "#282828",
+    "bottom": "#575757",
+    "accent": "#d22620"
+  },
+  "62989": {
+    "top": "#989898",
+    "bottom": "#1d1d1d",
+    "accent": "#989898"
+  },
+  "63272": {
+    "top": "#d91f24",
+    "bottom": "#e31e25",
+    "accent": "#e41e25"
+  },
+  "64149": {
+    "top": "#b2a895",
+    "bottom": "#2b292a",
+    "accent": "#d5805a"
+  },
+  "64156": {
+    "top": "#becad0",
+    "bottom": "#272f41",
+    "accent": "#3e85a0"
+  },
+  "64518": {
+    "top": "#d9d5c3",
+    "bottom": "#625b57",
+    "accent": "#b82f36"
+  },
+  "64664": {
+    "top": "#92a2b5",
+    "bottom": "#bac5c9",
+    "accent": "#e3443e"
+  },
+  "64721": {
+    "top": "#334497",
+    "bottom": "#202d87",
+    "accent": "#2a3c97"
+  },
+  "65297": {
+    "top": "#e8e8e8",
+    "bottom": "#e8e8e8",
+    "accent": "#f15419"
+  },
+  "65615": {
+    "top": "#2f2b24",
+    "bottom": "#2f2c25",
+    "accent": "#853f2f"
+  },
+  "66642": {
+    "top": "#ffde63",
+    "bottom": "#ffde63",
+    "accent": "#dcbc3b"
+  },
+  "67218": {
+    "top": "#629cd2",
+    "bottom": "#e8e8e8",
+    "accent": "#538eca"
+  },
+  "67248": {
+    "top": "#e7e8e7",
+    "bottom": "#e8e8e8",
+    "accent": "#e7e8e7"
+  },
+  "67531": {
+    "top": "#ddcb91",
+    "bottom": "#ddcc92",
+    "accent": "#cfbd82"
+  },
+  "67680": {
+    "top": "#e8e8e8",
+    "bottom": "#e8e8e8",
+    "accent": "#e8e8e8"
+  },
+  "67858": {
+    "top": "#e8e8e8",
+    "bottom": "#f3ceba",
+    "accent": "#f3645e"
+  },
+  "68028": {
+    "top": "#2d2318",
+    "bottom": "#574c42",
+    "accent": "#e56c32"
+  },
+  "68121": {
+    "top": "#1b1a1a",
+    "bottom": "#222222",
+    "accent": "#b22025"
+  },
+  "68283": {
+    "top": "#7e3e1f",
+    "bottom": "#401e16",
+    "accent": "#9c5228"
+  },
+  "68358": {
+    "top": "#26221f",
+    "bottom": "#dad8d7",
+    "accent": "#b18352"
+  },
+  "68370": {
+    "top": "#eddad6",
+    "bottom": "#f1ddd8",
+    "accent": "#c57c78"
+  },
+  "68627": {
+    "top": "#f7bfdc",
+    "bottom": "#f6bfdc",
+    "accent": "#ec85b4"
+  },
+  "68650": {
+    "top": "#bbbbbb",
+    "bottom": "#bbbbbb",
+    "accent": "#bbbbbb"
+  },
+  "69084": {
+    "top": "#d4e9f5",
+    "bottom": "#c1daf4",
+    "accent": "#5482f3"
+  },
+  "69108": {
+    "top": "#a7d050",
+    "bottom": "#7f9532",
+    "accent": "#a1ce45"
+  },
+  "69249": {
+    "top": "#ec1f27",
+    "bottom": "#eb1d25",
+    "accent": "#ec1c24"
+  },
+  "71338": {
+    "top": "#e8e8e8",
+    "bottom": "#26304d",
+    "accent": "#dc8e8f"
+  },
+  "71640": {
+    "top": "#722e8f",
+    "bottom": "#ddd5d9",
+    "accent": "#6e2a8d"
+  },
+  "78030": {
+    "top": "#d6cb04",
+    "bottom": "#e6d802",
+    "accent": "#cec21c"
+  },
+  "78283": {
+    "top": "#ec3e27",
+    "bottom": "#e8e8e8",
+    "accent": "#eb3c24"
+  },
+  "78564": {
+    "top": "#efe5e4",
+    "bottom": "#efe5e3",
+    "accent": "#ab3c34"
+  },
+  "78602": {
+    "top": "#e8c480",
+    "bottom": "#dba768",
+    "accent": "#dcb972"
+  },
+  "79469": {
+    "top": "#895c48",
+    "bottom": "#2f2826",
+    "accent": "#c62826"
+  },
+  "79542": {
+    "top": "#a41f22",
+    "bottom": "#6a221b",
+    "accent": "#a42023"
+  },
+  "79891": {
+    "top": "#e3dbba",
+    "bottom": "#e1e1cd",
+    "accent": "#e2b928"
+  },
+  "79932": {
+    "top": "#381615",
+    "bottom": "#bb696a",
+    "accent": "#d4392c"
+  },
+  "81059": {
+    "top": "#e6e8e8",
+    "bottom": "#e6e8e8",
+    "accent": "#da9193"
+  },
+  "82069": {
+    "top": "#1b1b1b",
+    "bottom": "#e8e8e7",
+    "accent": "#e8e8e7"
+  },
+  "82084": {
+    "top": "#3a3232",
+    "bottom": "#382d2e",
+    "accent": "#b06153"
+  },
+  "82090": {
+    "top": "#6ebcea",
+    "bottom": "#65fdca",
+    "accent": "#6bbbeb"
+  },
+  "82114": {
+    "top": "#150a58",
+    "bottom": "#191b1d",
+    "accent": "#150a58"
+  },
+  "82306": {
+    "top": "#e8e8e8",
+    "bottom": "#f4c78f",
+    "accent": "#eab170"
+  },
+  "82313": {
+    "top": "#b1afb0",
+    "bottom": "#87cfb3",
+    "accent": "#6ac4a3"
+  },
+  "82321": {
+    "top": "#906b47",
+    "bottom": "#ae9a85",
+    "accent": "#9a754b"
+  },
+  "82331": {
+    "top": "#e7e7e1",
+    "bottom": "#e2ddd2",
+    "accent": "#85a818"
+  },
+  "82333": {
+    "top": "#330b0b",
+    "bottom": "#471917",
+    "accent": "#c42a28"
+  },
+  "84391": {
+    "top": "#cccccc",
+    "bottom": "#d5d5d5",
+    "accent": "#f61e2d"
+  },
+  "84590": {
+    "top": "#dcd7d3",
+    "bottom": "#dfe0da",
+    "accent": "#e02c31"
+  },
+  "84633": {
+    "top": "#d9d9d4",
+    "bottom": "#dfe0db",
+    "accent": "#3b6fa4"
+  },
+  "84635": {
+    "top": "#dcdcd6",
+    "bottom": "#b18e95",
+    "accent": "#c15d72"
+  },
+  "85181": {
+    "top": "#ffc446",
+    "bottom": "#ffc446",
+    "accent": "#edb32e"
+  },
+  "87696": {
+    "top": "#f2c9b4",
+    "bottom": "#dadad8",
+    "accent": "#eba27e"
+  },
+  "87739": {
+    "top": "#0691ba",
+    "bottom": "#59d4ee",
+    "accent": "#13a4cf"
+  },
+  "88172": {
+    "top": "#db0004",
+    "bottom": "#db0004",
+    "accent": "#dc0004"
+  },
+  "88327": {
+    "top": "#ee1931",
+    "bottom": "#e8e8e7",
+    "accent": "#31b33c"
+  },
+  "89641": {
+    "top": "#b83563",
+    "bottom": "#cf888e",
+    "accent": "#b93362"
+  },
+  "90296": {
+    "top": "#23b4be",
+    "bottom": "#299993",
+    "accent": "#0fa4a4"
+  },
+  "90446": {
+    "top": "#696969",
+    "bottom": "#686868",
+    "accent": "#dcb416"
+  },
+  "92139": {
+    "top": "#8bbfb8",
+    "bottom": "#1e2326",
+    "accent": "#79b3ab"
+  },
+  "93370": {
+    "top": "#3570c0",
+    "bottom": "#2868bc",
+    "accent": "#2668bd"
+  },
+  "93755": {
+    "top": "#030d5d",
+    "bottom": "#1e1252",
+    "accent": "#bcc925"
+  },
+  "95127": {
+    "top": "#ed2124",
+    "bottom": "#ed2124",
+    "accent": "#ed1d20"
+  },
+  "96493": {
+    "top": "#cacaca",
+    "bottom": "#1a1a1c",
+    "accent": "#1a1a1c"
+  },
+  "96873": {
+    "top": "#231e1e",
+    "bottom": "#1d1a18",
+    "accent": "#8f5740"
+  },
+  "96899": {
+    "top": "#e2ded2",
+    "bottom": "#e0e1db",
+    "accent": "#b67248"
+  },
+  "97165": {
+    "top": "#8c9daf",
+    "bottom": "#535c5b",
+    "accent": "#cfae54"
+  },
+  "98521": {
+    "top": "#262425",
+    "bottom": "#1b1b1b",
+    "accent": "#865d54"
+  },
+  "99791": {
+    "top": "#e8e8e8",
+    "bottom": "#e8e8e8",
+    "accent": "#e88b67"
+  },
+  "100126": {
+    "top": "#272320",
+    "bottom": "#252c3b",
+    "accent": "#364963"
+  },
+  "102872": {
+    "top": "#1b1a1b",
+    "bottom": "#604945",
+    "accent": "#906a62"
+  },
+  "108430": {
+    "top": "#f69c1d",
+    "bottom": "#f69c1d",
+    "accent": "#f89c1d"
+  },
+  "110470": {
+    "top": "#c9b172",
+    "bottom": "#c8b178",
+    "accent": "#c9b071"
+  },
+  "110581": {
+    "top": "#9c9c9b",
+    "bottom": "#c9c9c9",
+    "accent": "#30547f"
+  },
+  "121545": {
+    "top": "#19986d",
+    "bottom": "#1b976e",
+    "accent": "#19996e"
+  },
+  "133956": {
+    "top": "#6f7172",
+    "bottom": "#89817e",
+    "accent": "#9c2a30"
+  },
+  "153377": {
+    "top": "#7c8288",
+    "bottom": "#797f87",
+    "accent": "#443c8d"
+  },
+  "155532": {
+    "top": "#917339",
+    "bottom": "#8e6f38",
+    "accent": "#937436"
+  },
+  "162926": {
+    "top": "#426f84",
+    "bottom": "#436e83",
+    "accent": "#3f6d82"
+  },
+  "197335": {
+    "top": "#212e7d",
+    "bottom": "#212e7d",
+    "accent": "#2c3e90"
+  },
+  "198778": {
+    "top": "#ccd6e4",
+    "bottom": "#25205c",
+    "accent": "#334297"
+  },
+  "199125": {
+    "top": "#3474be",
+    "bottom": "#302923",
+    "accent": "#3676bf"
+  },
+  "199194": {
+    "top": "#deceb1",
+    "bottom": "#5b3c2d",
+    "accent": "#985e3a"
+  },
+  "199461": {
+    "top": "#bec9e5",
+    "bottom": "#bec9e5",
+    "accent": "#b2bdda"
+  },
+  "199480": {
+    "top": "#fcb913",
+    "bottom": "#ec1f26",
+    "accent": "#f0b21b"
+  },
+  "199488": {
+    "top": "#f2ceaa",
+    "bottom": "#e5c59f",
+    "accent": "#dab792"
+  },
+  "199490": {
+    "top": "#181e36",
+    "bottom": "#181e36",
+    "accent": "#9c57c8"
+  }
+}
