@@ -3,7 +3,7 @@ import Link from "next/link"
 import { BookXIcon, HouseIcon, SearchIcon } from "lucide-react"
 
 import { Container } from "@/components/site/container"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import {
   Empty,
   EmptyContent,
@@ -37,19 +37,17 @@ export default function NotFound() {
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent className="flex-row justify-center">
-          <Button size="lg" nativeButton={false} render={<Link href="/" />}>
+          <Link href="/" className={buttonVariants({ size: "lg" })}>
             <HouseIcon data-icon="inline-start" />
             بازگشت به خانه
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            nativeButton={false}
-            render={<Link href="/search" />}
+          </Link>
+          <Link
+            href="/search"
+            className={buttonVariants({ size: "lg", variant: "outline" })}
           >
             <SearchIcon data-icon="inline-start" />
             جستجوی کتاب
-          </Button>
+          </Link>
         </EmptyContent>
       </Empty>
     </Container>

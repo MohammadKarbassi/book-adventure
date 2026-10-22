@@ -2,7 +2,8 @@ import Link from "next/link"
 import { SearchIcon } from "lucide-react"
 
 import { getCategoryIcon } from "@/components/site/nav-config"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { serializeSearchParams } from "@/lib/browse"
 
 type SearchSuggestionsProps = {
@@ -19,42 +20,40 @@ export function SearchSuggestions({
     <div className="flex w-full max-w-2xl flex-col gap-6">
       <SuggestionGroup title="نویسنده‌های محبوب">
         {authors.map((author) => (
-          <Button
+          <Link
             key={author}
-            variant="outline"
-            size="sm"
-            className="rounded-full bg-card"
-            nativeButton={false}
-            render={
-              <Link href={`/search${serializeSearchParams({ q: author })}`} />
-            }
+            href={`/search${serializeSearchParams({ q: author })}`}
+            className={cn(
+              buttonVariants({ variant: "outline", size: "sm" }),
+              "rounded-full bg-card"
+            )}
           >
             <SearchIcon
               data-icon="inline-start"
               className="text-muted-foreground"
             />
             {author}
-          </Button>
+          </Link>
         ))}
       </SuggestionGroup>
       <SuggestionGroup title="دسته‌بندی‌ها">
         {categories.map((category) => {
           const Icon = getCategoryIcon(category.slug)
           return (
-            <Button
+            <Link
               key={category.slug}
-              variant="outline"
-              size="sm"
-              className="rounded-full bg-card"
-              nativeButton={false}
-              render={<Link href={`/category/${category.slug}`} />}
+              href={`/category/${category.slug}`}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "sm" }),
+                "rounded-full bg-card"
+              )}
             >
               <Icon
                 data-icon="inline-start"
                 className="text-accent-foreground"
               />
               {category.title}
-            </Button>
+            </Link>
           )
         })}
       </SuggestionGroup>

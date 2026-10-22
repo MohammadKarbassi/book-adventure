@@ -3,7 +3,7 @@ import Link from "next/link"
 import { ArrowLeftIcon } from "lucide-react"
 
 import { SectionHeader } from "@/components/book/section-header"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 
 export type PodcastTeaserItem = {
   id: string
@@ -24,15 +24,13 @@ export function PodcastsTeaser({
         title="پادکست‌ها"
         description="گفت‌وگو، روایت و داستان؛ برای وقتی که چشم‌هایتان استراحت می‌خواهند"
         action={
-          <Button
-            variant="ghost"
-            size="sm"
-            nativeButton={false}
-            render={<Link href="/podcasts" />}
+          <Link
+            href="/podcasts"
+            className={buttonVariants({ variant: "ghost", size: "sm" })}
           >
             همهٔ پادکست‌ها
             <ArrowLeftIcon data-icon="inline-end" />
-          </Button>
+          </Link>
         }
       />
       <ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-5">

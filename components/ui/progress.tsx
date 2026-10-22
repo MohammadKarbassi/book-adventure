@@ -7,11 +7,14 @@ function Progress({
   className,
   children,
   value,
+  // A fixed locale keeps the server and client ARIA value text identical.
+  locale = "fa-IR",
   ...props
 }: ProgressPrimitive.Root.Props) {
   return (
     <ProgressPrimitive.Root
       value={value}
+      locale={locale}
       data-slot="progress"
       className={cn("flex flex-wrap gap-3", className)}
       {...props}

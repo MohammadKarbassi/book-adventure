@@ -52,8 +52,7 @@ test.describe("home page", () => {
   })
 
   test("the scroll cue jumps to the store", async ({ page }) => {
-    // Base UI renders the anchor with role="button".
-    await page.getByRole("button", { name: "به فروشگاه بروید" }).click()
+    await page.getByRole("link", { name: "به فروشگاه بروید" }).click()
     await expect(
       page.getByRole("heading", { name: "دسته‌بندی‌ها" })
     ).toBeInViewport()
@@ -82,7 +81,10 @@ test.describe("home page", () => {
       main.locator("a", { hasText: "همهٔ پادکست‌ها" })
     ).toHaveAttribute("href", "/podcasts")
     await expect(
-      page.getByRole("region", { name: "پادکست‌ها" }).getByRole("link")
+      page
+        .getByRole("region", { name: "پادکست‌ها" })
+        .getByRole("listitem")
+        .getByRole("link")
     ).toHaveCount(5)
   })
 

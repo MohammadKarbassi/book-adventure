@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ArrowLeftIcon } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 type SectionHeaderProps = {
@@ -43,15 +43,13 @@ export function SectionHeader({
       {href || action ? (
         <div className="flex shrink-0 items-center gap-2">
           {href ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              nativeButton={false}
-              render={<Link href={href} />}
+            <Link
+              href={href}
+              className={buttonVariants({ variant: "ghost", size: "sm" })}
             >
               مشاهدهٔ همه
               <ArrowLeftIcon data-icon="inline-end" />
-            </Button>
+            </Link>
           ) : null}
           {action}
         </div>

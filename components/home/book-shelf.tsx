@@ -13,7 +13,7 @@ import { ChevronDownIcon, HeadphonesIcon, PodcastIcon } from "lucide-react"
 import { ShelfBook } from "@/components/home/shelf-book"
 import type { ShelfBook as ShelfBookData } from "@/components/home/shelf-geometry"
 import { Container } from "@/components/site/container"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
@@ -206,18 +206,20 @@ export function BookShelf({ books, storeId }: BookShelfProps) {
 
       {/* Scroll cue, pinned to the bottom of the screen while the shelf shows. */}
       <div className="pointer-events-none sticky bottom-5 z-[300] -mt-16 flex justify-center pb-5">
-        <Button
-          variant="outline"
-          className="pointer-events-auto h-10 rounded-full bg-background/80 px-4 shadow-lg backdrop-blur-md dark:bg-background/70"
-          nativeButton={false}
-          render={<a href={`#${storeId}`} onClick={goToStore} />}
+        <a
+          href={`#${storeId}`}
+          onClick={goToStore}
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "pointer-events-auto h-10 rounded-full bg-background/80 px-4 shadow-lg backdrop-blur-md dark:bg-background/70"
+          )}
         >
           به فروشگاه بروید
           <ChevronDownIcon
             data-icon="inline-end"
             className="animate-bounce motion-reduce:animate-none"
           />
-        </Button>
+        </a>
       </div>
     </section>
   )

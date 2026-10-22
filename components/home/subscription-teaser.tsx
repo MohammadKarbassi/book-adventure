@@ -2,7 +2,8 @@ import Link from "next/link"
 import { ArrowLeftIcon, CheckIcon, CrownIcon } from "lucide-react"
 
 import { BookCover } from "@/components/book/book-cover"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import {
   Card,
   CardContent,
@@ -61,15 +62,13 @@ export function SubscriptionTeaser({ covers }: { covers: BookSummary[] }) {
           </ul>
         </CardContent>
         <CardFooter className="border-0 bg-transparent px-6 py-0 md:px-10">
-          <Button
-            size="lg"
-            className="h-10 px-4"
-            nativeButton={false}
-            render={<Link href="/subscription" />}
+          <Link
+            href="/subscription"
+            className={cn(buttonVariants({ size: "lg" }), "h-10 px-4")}
           >
             مشاهدهٔ طرح‌های اشتراک
             <ArrowLeftIcon data-icon="inline-end" />
-          </Button>
+          </Link>
         </CardFooter>
       </div>
       <div
