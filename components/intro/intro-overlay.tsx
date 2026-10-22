@@ -29,7 +29,6 @@ import { cn } from "@/lib/utils"
 import { createIntroScore } from "@/components/intro/intro-score"
 
 const EASE_OUT: Transition["ease"] = [0.22, 1, 0.36, 1]
-const EASE_IN_OUT: Transition["ease"] = [0.65, 0, 0.35, 1]
 
 const discoverWords = splitWords(INTRO_LINES.discover)
 const adventureWords = splitWords(INTRO_LINES.adventure)
@@ -44,10 +43,7 @@ const GRAIN = {
   backgroundPosition: "0 0, 1px 2px",
 }
 
-// The night sky is one full-screen gradient shared by both halves: each half
-// shows its own side, so they meet seamlessly at the spine.
-const SKY =
-  "bg-[radial-gradient(ellipse_at_center,var(--card)_0%,var(--background)_70%)] bg-size-[200%_100%]"
+const MUSIC_MUTED_KEY = "book-adventure:v1:introMusicMuted"
 
 function subscribeReducedMotion(callback: () => void) {
   const query = window.matchMedia(REDUCED_MOTION_QUERY)
@@ -146,13 +142,24 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
   const dialogRef = useRef<HTMLDivElement>(null)
   const exiting = step === "exit"
   const scoreRef = useRef<ReturnType<typeof createIntroScore> | null>(null)
-  const [soundOn, setSoundOn] = useState(false)
+  const [soundOn, setSoundOn] = useState(true)
+  const [soundBlocked, setSoundBlocked] = useState(false)
+  const soundEnabledRef = useRef(true)
 
   useEffect(() => {
     if (!playing) return
     const score = createIntroScore()
     scoreRef.current = score
-    void score.start().then(setSoundOn)
+    let enabled = true
+    try {
+      enabled = localStorage.getItem(MUSIC_MUTED_KEY) !== "true"
+    } catch {}
+    soundEnabledRef.current = enabled
+    void Promise.resolve().then(() => setSoundOn(enabled))
+    if (enabled)
+      void score.start().then((started) => {
+        if (soundEnabledRef.current) setSoundBlocked(!started)
+      })
     return () => {
       score.stop()
       scoreRef.current = null
@@ -160,7 +167,7 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
   }, [playing])
 
   useEffect(() => {
-    if (exiting) scoreRef.current?.stop()
+    if (exiting) scoreRef.current?.fadeOut(STEP_MS.exit)
   }, [exiting])
 
   const skip = useCallback(() => setStep("exit"), [])
@@ -216,7 +223,7 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
   }, [playing, exiting, skip])
 
   return (
-    <div
+    <motion.div
       ref={dialogRef}
       data-intro-overlay=""
       tabIndex={-1}
@@ -224,33 +231,22 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
       aria-modal="true"
       aria-label="معرفی ماجراجویی با کتاب"
       onClick={playing ? skip : undefined}
+      initial={false}
+      animate={{ opacity: exiting ? 0 : 1 }}
+      transition={{ duration: STEP_MS.exit / 1000, ease: "easeInOut" }}
       className={cn(
-        "dark fixed inset-0 z-100 overflow-hidden text-foreground outline-none select-none perspective-[1400px]",
+        "dark fixed inset-0 z-100 overflow-hidden bg-background text-foreground outline-none select-none",
         exiting && "pointer-events-none"
       )}
     >
-      {/* The cover: two halves that open around their outer edges. */}
-      <CoverHalf side="start" open={exiting} />
-      <CoverHalf side="end" open={exiting} />
-      {/* The spine glints as the cover opens. */}
-      <motion.div
-        aria-hidden
-        className="absolute inset-y-0 start-1/2 w-px bg-linear-to-b from-transparent via-primary to-transparent"
-        initial={{ opacity: 0, scaleY: 0.4 }}
-        animate={
-          exiting
-            ? { opacity: [0, 0.9, 0], scaleY: [0.4, 1, 1] }
-            : { opacity: 0, scaleY: 0.4 }
-        }
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      />
+      <div aria-hidden className="absolute inset-0 opacity-10" style={GRAIN} />
 
       <motion.div
         className="absolute inset-0"
         initial={false}
         animate={
           exiting
-            ? { opacity: 0, scale: 1.04, filter: "blur(6px)" }
+            ? { opacity: 0, scale: 1, filter: "blur(0px)" }
             : { opacity: 1, scale: 1, filter: "blur(0px)" }
         }
         transition={{ duration: 0.35, ease: "easeIn" }}
@@ -299,16 +295,29 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
             event.stopPropagation()
             const score = scoreRef.current
             if (!score) return
-            if (soundOn) {
+            if (soundOn && !soundBlocked) {
               score.mute()
+              soundEnabledRef.current = false
               setSoundOn(false)
+              try {
+                localStorage.setItem(MUSIC_MUTED_KEY, "true")
+              } catch {}
             } else {
-              void score.start().then(setSoundOn)
+              soundEnabledRef.current = true
+              setSoundOn(true)
+              try {
+                localStorage.setItem(MUSIC_MUTED_KEY, "false")
+              } catch {}
+              void score.start().then((started) => setSoundBlocked(!started))
             }
           }}
           className="absolute start-4 bottom-4 h-9 px-3 text-muted-foreground sm:start-8 sm:bottom-8"
         >
-          {soundOn ? "قطع موسیقی" : "پخش موسیقی"}
+          {soundOn
+            ? soundBlocked
+              ? "فعال‌کردن صدا"
+              : "قطع موسیقی"
+            : "پخش موسیقی"}
         </Button>
         <Button
           type="button"
@@ -326,35 +335,6 @@ function IntroStage({ playing, onFinish }: IntroStageProps) {
           </Kbd>
         </Button>
       </motion.div>
-    </div>
-  )
-}
-
-type CoverHalfProps = {
-  /** start is the right half in RTL; it opens around the right edge. */
-  side: "start" | "end"
-  open: boolean
-}
-
-function CoverHalf({ side, open }: CoverHalfProps) {
-  const isStart = side === "start"
-  return (
-    <motion.div
-      aria-hidden
-      className={cn(
-        SKY,
-        "absolute inset-y-0 w-1/2 overflow-hidden",
-        isStart ? "start-0 bg-right" : "end-0 bg-left"
-      )}
-      style={{ transformOrigin: isStart ? "right center" : "left center" }}
-      initial={false}
-      animate={open ? { rotateY: isStart ? -82 : 82, opacity: 0 } : {}}
-      transition={{
-        rotateY: { duration: 0.85, ease: EASE_IN_OUT },
-        opacity: { duration: 0.5, delay: 0.35, ease: "easeIn" },
-      }}
-    >
-      <div className="absolute inset-0 opacity-10" style={GRAIN} />
     </motion.div>
   )
 }

@@ -1,5 +1,6 @@
 /** Locally hosted CC BY recording; credits in public/audio/README.md. */
-export function createIntroScore() {
+export function createIntroScore(durationMs = 4700) {
+  const startedAt = performance.now()
   let context: AudioContext | null = null
   let master: GainNode | null = null
   let source: AudioBufferSourceNode | null = null
@@ -11,15 +12,18 @@ export function createIntroScore() {
       if (stopped) return false
       try {
         context ??= new AudioContext()
-        const resumed = context.resume()
+        void context.resume().catch(() => {})
         buffer ??= fetch("/audio/adventure-intro.mp3")
           .then((response) => {
             if (!response.ok) throw new Error("Intro music unavailable")
             return response.arrayBuffer()
           })
           .then((bytes) => context!.decodeAudioData(bytes))
-        const [decoded] = await Promise.all([buffer, resumed])
+        const decoded = await buffer
         if (stopped || context.state !== "running") return false
+        const elapsed = (performance.now() - startedAt) / 1000
+        const remaining = durationMs / 1000 - elapsed
+        if (remaining <= 0) return false
         if (!master) {
           master = context.createGain()
           master.gain.value = 0
@@ -30,8 +34,16 @@ export function createIntroScore() {
           source = context.createBufferSource()
           source.buffer = decoded
           source.connect(master)
-          source.start()
+          source.start(0, elapsed)
+          const end = context.currentTime + remaining
+          source.stop(end)
         }
+        const end = context.currentTime + remaining
+        master.gain.setValueAtTime(
+          0.55,
+          Math.max(context.currentTime, end - 0.9)
+        )
+        master.gain.linearRampToValueAtTime(0, end)
         return true
       } catch {
         buffer = null
@@ -39,8 +51,18 @@ export function createIntroScore() {
       }
     },
     mute() {
-      if (context && master)
+      if (context && master) {
+        master.gain.cancelScheduledValues(context.currentTime)
         master.gain.setTargetAtTime(0, context.currentTime, 0.04)
+      }
+    },
+    fadeOut(durationMs: number) {
+      if (!context || !master) return
+      master.gain.cancelAndHoldAtTime(context.currentTime)
+      master.gain.linearRampToValueAtTime(
+        0,
+        context.currentTime + durationMs / 1000
+      )
     },
     stop() {
       if (stopped) return

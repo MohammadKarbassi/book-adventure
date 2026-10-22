@@ -29,6 +29,23 @@ const storedSeen = (page: Page) =>
   )
 
 test.describe("cinematic intro", () => {
+  test("music is enabled by default and remembers an explicit mute", async ({
+    page,
+  }) => {
+    await page.goto("/", { timeout: 120_000 })
+    const sound = intro(page).locator("[data-intro-sound]")
+    await expect(sound).toHaveAttribute("aria-pressed", "true")
+    if ((await sound.textContent())?.includes("فعال‌کردن")) await sound.click()
+    await expect(sound).toHaveText("قطع موسیقی")
+    await sound.click()
+    await expect(sound).toHaveText("پخش موسیقی")
+    await page.reload()
+    await expect(intro(page).locator("[data-intro-sound]")).toHaveAttribute(
+      "aria-pressed",
+      "false"
+    )
+  })
+
   test("music control does not skip the intro and audio closes on exit", async ({
     page,
   }) => {
@@ -46,8 +63,10 @@ test.describe("cinematic intro", () => {
     await page.goto("/", { timeout: 120_000 })
     await expect(intro(page).getByText("هر کتاب")).toBeVisible()
     const sound = intro(page).locator("[data-intro-sound]")
-    if ((await sound.getAttribute("aria-pressed")) === "true")
-      await sound.click()
+    if ((await sound.textContent())?.includes("فعال‌کردن")) await sound.click()
+    await expect(sound).toHaveText("قطع موسیقی")
+    await sound.click()
+    await expect(sound).toHaveAttribute("aria-pressed", "false")
     await sound.click()
     await expect(sound).toHaveAttribute("aria-pressed", "true")
     await expect(intro(page)).toBeVisible()

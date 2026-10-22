@@ -6,6 +6,8 @@ Last updated: 2026-10-22 (۳۰ مهر ۱۴۰۵). Deadline: Friday 2026-10-23 (۱
 
 ## 1. Snapshot
 
+- Intro timing/refinement (2026-10-22): removed the rotating cover halves (which produced gray panels across the home page); exit is one 900 ms full-overlay crossfade. Audio starts at the offset elapsed since intro start and has a hard scheduled end at 4.7 seconds; early exit fades it over the same 900 ms. Music defaults enabled; explicit mute is persisted in `book-adventure:v1:introMusicMuted`. When autoplay is blocked, the enabled control says «فعال‌کردن صدا». Reduced motion still skips the intro and audio.
+
 - Music revision (2026-10-22): replaced the synthesized oscillator sting with a locally hosted 4.7-second orchestral recording excerpt, “Adventures in Adventureland” by Kevin MacLeod, CC BY 4.0. Asset: `public/audio/adventure-intro.mp3` (~96 KB); source/edit/license details: `public/audio/README.md`. Visible attribution links are in the intro. Web Audio decodes the recording, and exit fades gain before closing the context. This supersedes the original synthesized score described below.
 
 - Intro update (2026-10-22): the session marker now stores `performance.timeOrigin`; reopening or reloading the home page replays the intro, while client navigation in the same document does not. An original local Web Audio adventure sting accompanies it, with a shadcn Button sound toggle. Autoplay is attempted; browsers that block it require pressing «پخش موسیقی». Exit/unmount closes the audio context; reduced motion skips both animation and music. Verified: lint, typecheck, 216 unit tests, production build with `next build --webpack`, and 9 intro Playwright tests. Default Turbopack build hit an environment port-binding restriction; Webpack succeeded.
