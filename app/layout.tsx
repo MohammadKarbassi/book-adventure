@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import { Vazirmatn, Markazi_Text, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
+import { MiniPlayer } from "@/components/player/mini-player"
+import { PlayerProvider } from "@/components/player/player-provider"
 import { SiteFooter } from "@/components/site/site-footer"
 import { SiteHeader } from "@/components/site/site-header"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -60,21 +62,24 @@ export default function RootLayout({
         <DirectionProvider direction="rtl">
           <ThemeProvider>
             <TooltipProvider>
-              <a
-                href="#main"
-                className={cn(
-                  buttonVariants(),
-                  "sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-3 focus:z-50"
-                )}
-              >
-                پرش به محتوای اصلی
-              </a>
-              <SiteHeader />
-              <main id="main" tabIndex={-1} className="flex-1 outline-none">
-                {children}
-              </main>
-              <SiteFooter />
-              <Toaster position="bottom-left" richColors={false} dir="rtl" />
+              <PlayerProvider>
+                <a
+                  href="#main"
+                  className={cn(
+                    buttonVariants(),
+                    "sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-3 focus:z-50"
+                  )}
+                >
+                  پرش به محتوای اصلی
+                </a>
+                <SiteHeader />
+                <main id="main" tabIndex={-1} className="flex-1 outline-none">
+                  {children}
+                </main>
+                <SiteFooter />
+                <MiniPlayer />
+                <Toaster position="bottom-left" richColors={false} dir="rtl" />
+              </PlayerProvider>
             </TooltipProvider>
           </ThemeProvider>
         </DirectionProvider>
