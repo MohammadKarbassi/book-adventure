@@ -360,6 +360,8 @@ export function AdventureJourney({
         <JourneyEnding
           audio={items.find((item) => item.book.type === "audiobook")}
           podcast={podcast}
+          adventures={items}
+          onSelect={(id) => select(items.findIndex((item) => item.id === id))}
         />
       </div>
     </MotionConfig>

@@ -162,3 +162,7 @@ export function roomColors(palette: { top: string; bottom: string }): Room {
     },
   }
 }
+
+/** The room's background: its gradient from top to bottom. */
+export const roomGradient = (room: Pick<Room, "top" | "bottom">) =>
+  `linear-gradient(to bottom, ${room.top}, ${room.bottom})`

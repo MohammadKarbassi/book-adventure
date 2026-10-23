@@ -4,6 +4,8 @@ import { ArrowLeftIcon, ArrowUpIcon, HeadphonesIcon } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { PlayButton } from "@/components/player/play-button"
 import type { AdventureView } from "@/components/adventures/adventure-types"
+import { endingPicks } from "@/components/adventures/ending-picks"
+import { BookCover } from "@/components/book/book-cover"
 import { cn } from "@/lib/utils"
 
 export type EndingPodcast = { id: string; title: string; artwork: string }
@@ -13,10 +15,17 @@ export type EndingPodcast = { id: string; title: string; artwork: string }
 export function JourneyEnding({
   audio,
   podcast,
+  adventures = [],
+  onSelect,
 }: {
   audio?: AdventureView
   podcast?: EndingPodcast
+  /** The journey in its displayed order; the last one was just finished. */
+  adventures?: AdventureView[]
+  /** Scrolls the journey back to a room instead of reloading the route. */
+  onSelect?: (id: number) => void
 }) {
+  const { others, category } = endingPicks(adventures)
   return (
     <section
       data-journey-ending=""
@@ -157,6 +166,67 @@ export function JourneyEnding({
           >
             یا در فروشگاه کتاب‌ها بگردید
           </Link>
+          {others.length > 0 ? (
+            <nav
+              aria-labelledby="journey-others-title"
+              className="mt-6 flex w-full max-w-4xl flex-col gap-5 border-t border-(--ending-ink)/15 pt-8"
+            >
+              <h3
+                id="journey-others-title"
+                className="font-heading text-3xl leading-tight"
+              >
+                سفرهای دیگر
+              </h3>
+              <ul className="grid gap-5 sm:grid-cols-3">
+                {others.map((adventure) => (
+                  <li key={adventure.id}>
+                    <Link
+                      href={`/adventures/${adventure.id}`}
+                      onClick={(event) => {
+                        if (
+                          !onSelect ||
+                          event.metaKey ||
+                          event.ctrlKey ||
+                          event.shiftKey ||
+                          event.altKey
+                        )
+                          return
+                        event.preventDefault()
+                        onSelect(adventure.id)
+                      }}
+                      className="group flex items-center gap-4 rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring"
+                    >
+                      <BookCover
+                        book={adventure.book}
+                        size="sm"
+                        className="ring-(--ending-ink)/10 transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transition-none"
+                      />
+                      <span className="flex min-w-0 flex-col gap-1">
+                        <span className="font-heading text-xl leading-snug group-hover:underline group-hover:underline-offset-4">
+                          {adventure.name}
+                        </span>
+                        <span className="line-clamp-1 text-sm text-(--ending-ink)/75">
+                          {adventure.book.title}
+                        </span>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              {category ? (
+                <Link
+                  href={`/category/${category.slug}`}
+                  className={cn(
+                    buttonVariants({ variant: "link" }),
+                    "self-start px-0 text-(--ending-ink)"
+                  )}
+                >
+                  {`ادامه در فروشگاه: ${category.title}`}
+                  <ArrowLeftIcon data-icon="inline-end" />
+                </Link>
+              ) : null}
+            </nav>
+          ) : null}
         </div>
       </footer>
     </section>
