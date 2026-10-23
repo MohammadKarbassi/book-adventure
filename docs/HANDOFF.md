@@ -6,6 +6,16 @@ Last updated: 2026-10-23 (۱ آبان ۱۴۰۵). Deadline: Friday 2026-10-23 (۱
 
 ## 1. Snapshot
 
+### Shop ↔ journey design unification (2026-10-23)
+
+User asked for a full design review and a more unified language between the shop and «سفر ماجراجویی شما». Impeccable critique ran as two isolated agents (design review 27/40; detector + browser evidence); findings were implemented in four commits:
+
+- **Shop leads into the journey:** nav entry «سفر ماجراجویی» (`/#adventure-shelf`, desktop from 1280px only because 1024px has no room; always in mobile Sheet and footer); `BookSummary.adventure` flag and a «ماجراجویی» badge on cards; adventures in ⌘K and `/search` (`lib/adventure-search.ts`, «سفر» now finds them).
+- **Book page = small room:** adventure books render their room band (`roomColors` vars + `roomGradient`) with a hard seam and an `Item` «ورود به ماجرا»; others get a 26%/12% wash with stronger muted ink. Trap fixed during QA: on phones the band occupied the only grid column, so the header was auto-placed in an implicit narrow column — header/content now carry explicit `col-start-1`. Journey ending adds «سفرهای دیگر» (3 rooms, scroll via `select`) and a link back to the last book's category.
+- **One shop header language:** `components/site/page-hero.tsx` on categories, category, audiobooks, podcasts, foreign, subscription, library; `SectionHeader` accent word; «ماجراهای این قفسه» on category pages; subscription h1 is now «اشتراک ماجراجویی پلاس»; `lib/feature-safe.ts` keeps suicide-titled books out of cover fans and curated home rows (search still finds them).
+- **Transitions:** warm oklch dusk instead of grey mid-shelf (`shelf-dusk.ts`); header adopts dark tokens over the night stage (`data-home-night`); shop entrance is `bg-background` (no cream band in dark) and the rail fades there; shelf spine click wipes in the room color before navigating (`data-adventure-wipe`, reduced motion navigates at once); `lib/motion.ts` tokens; drag hint hides offscreen; light `--destructive` 0.55 for ≥4.5:1.
+- Verification: lint, typecheck, 247 unit tests, webpack build (229 pages), full Playwright 110/110 plus 12 new tests in `e2e/journey-links{,.mobile}.spec.ts`. Detector on changed files: only the advisory 10px player skip label. Screenshots reviewed desktop/mobile/dark.
+
 ### Deployed (2026-10-23)
 
 - **Live: https://book-adventure.vercel.app** (Vercel project `book-adventure` under `mkarbassi-9480s-projects`, hobby). The site had never been deployed before this; the earlier "owner imported the repo" note was wrong. The project was created with `vercel link`, connected to the GitHub repo with `vercel git connect` (every push to `master` deploys), and the first production deploy was run by the owner (`vercel deploy --prod`). The default Turbopack `next build` succeeded on Vercel in about 1 minute; no `--webpack` override needed. `.vercel/` and `.env.local` (Vercel OIDC token) are git-ignored.
