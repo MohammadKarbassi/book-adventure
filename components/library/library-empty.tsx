@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { LucideIcon } from "lucide-react"
 
+import { BookJourneyScene } from "@/components/site/book-journey-scene"
 import { buttonVariants } from "@/components/ui/button"
 import {
   Empty,
@@ -29,11 +30,13 @@ export function LibraryEmpty({
   return (
     <Empty className="border bg-card/60 py-16">
       <EmptyHeader>
-        <EmptyMedia
-          variant="icon"
-          className="size-14 rounded-s-md rounded-e-2xl bg-accent text-accent-foreground"
-        >
-          <Icon className="size-7" />
+        <EmptyMedia className="relative">
+          <BookJourneyScene className="w-52" />
+          {/* The tab's own icon as a small badge, so each empty state keeps
+              its meaning next to the shared scene. */}
+          <span className="absolute start-0 -bottom-1 flex size-9 items-center justify-center rounded-full bg-accent text-accent-foreground ring-4 ring-card">
+            <Icon className="size-4" />
+          </span>
         </EmptyMedia>
         <EmptyTitle className="text-2xl font-bold">{title}</EmptyTitle>
         <EmptyDescription>{description}</EmptyDescription>
