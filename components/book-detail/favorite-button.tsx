@@ -1,6 +1,7 @@
 "use client"
 
 import { HeartIcon } from "lucide-react"
+import { useAnimate, useReducedMotion } from "motion/react"
 import { toast } from "sonner"
 
 import { toastSaveError } from "@/components/site/save-error"
@@ -10,6 +11,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { EASE_OUT } from "@/lib/motion"
 import { useFavorites } from "@/lib/store"
 import { cn } from "@/lib/utils"
 
@@ -29,6 +31,8 @@ export function FavoriteButton({
 }: FavoriteButtonProps) {
   const { isFavorite, toggleFavorite } = useFavorites()
   const active = isFavorite(bookId)
+  const [heartRef, animate] = useAnimate<SVGSVGElement>()
+  const reduceMotion = useReducedMotion()
   const label = active ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"
 
   function handleChange() {
@@ -39,6 +43,14 @@ export function FavoriteButton({
     }
     onToggle?.(added)
     if (added) {
+      // Only a real add pops the heart; removing just changes its color.
+      if (!reduceMotion) {
+        animate(
+          heartRef.current,
+          { scale: [1, 1.3, 1] },
+          { duration: 0.28, ease: EASE_OUT }
+        )
+      }
       toast.success("به علاقه‌مندی‌ها اضافه شد", { description: title })
     } else {
       toast("از علاقه‌مندی‌ها حذف شد", { description: title })
@@ -60,6 +72,7 @@ export function FavoriteButton({
         }
       >
         <HeartIcon
+          ref={heartRef}
           className={cn(
             "size-4.5 transition-colors",
             active && "fill-destructive text-destructive"

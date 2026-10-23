@@ -18,6 +18,7 @@ import {
   usePlayer,
   usePlayerControls,
 } from "@/components/player/player-provider"
+import { IconSwap } from "@/components/player/play-button"
 import { PLAYBACK_RATES, SKIP_SECONDS } from "@/components/player/progress"
 import type { Track } from "@/components/player/types"
 import { Button } from "@/components/ui/button"
@@ -143,17 +144,21 @@ export function PlayPauseButton({
       aria-label={playing ? "توقف" : "پخش"}
       onClick={toggle}
     >
-      {playing && buffering ? (
-        <Spinner
-          aria-hidden="true"
-          role="presentation"
-          className={cn("size-5", iconClassName)}
-        />
-      ) : playing ? (
-        <PauseIcon className={cn("size-5 fill-current", iconClassName)} />
-      ) : (
-        <PlayIcon className={cn("size-5 fill-current", iconClassName)} />
-      )}
+      <IconSwap
+        id={playing && buffering ? "buffering" : playing ? "pause" : "play"}
+      >
+        {playing && buffering ? (
+          <Spinner
+            aria-hidden="true"
+            role="presentation"
+            className={cn("size-5", iconClassName)}
+          />
+        ) : playing ? (
+          <PauseIcon className={cn("size-5 fill-current", iconClassName)} />
+        ) : (
+          <PlayIcon className={cn("size-5 fill-current", iconClassName)} />
+        )}
+      </IconSwap>
     </Button>
   )
 }

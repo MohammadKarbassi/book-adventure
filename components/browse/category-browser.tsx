@@ -1,11 +1,13 @@
 "use client"
 
+import { useState } from "react"
 import {
   ArrowDownUpIcon,
   CrownIcon,
   FilterXIcon,
   SearchXIcon,
 } from "lucide-react"
+import { motion } from "motion/react"
 
 import { TypeToggleGroup } from "@/components/browse/type-toggle-group"
 import { useUrlState } from "@/components/browse/use-url-state"
@@ -48,6 +50,7 @@ import {
   type SortKey,
 } from "@/lib/browse"
 import { formatNumber } from "@/lib/format"
+import { EASE_OUT } from "@/lib/motion"
 import { cn } from "@/lib/utils"
 
 export type SubcategoryChip = {
@@ -82,6 +85,11 @@ export function CategoryBrowser({
     serverState,
     serializeBrowseParams
   )
+
+  // Re-enter the results when a new server render settles (never while
+  // pending); the first render is not animated.
+  const settledKey = serializeBrowseParams(serverState)
+  const [firstKey] = useState(settledKey)
 
   // Any filter change starts again from the first page.
   const update = (patch: Partial<BrowseState>) =>
@@ -180,37 +188,44 @@ export function CategoryBrowser({
           isPending && "opacity-60"
         )}
       >
-        {total === 0 ? (
-          <Empty className="border border-border bg-card py-16">
-            <EmptyHeader>
-              <EmptyMedia
-                variant="icon"
-                className="size-14 rounded-full bg-accent text-accent-foreground"
-              >
-                <SearchXIcon className="size-7" />
-              </EmptyMedia>
-              <EmptyTitle className="text-2xl font-bold">
-                کتابی با این فیلترها پیدا نشد
-              </EmptyTitle>
-              <EmptyDescription>
-                فیلترها را کمتر کنید یا همهٔ کتاب‌های این دسته را ببینید.
-              </EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-              <Button
-                variant="outline"
-                onClick={() =>
-                  navigate({ ...defaultBrowseState, sort: state.sort })
-                }
-              >
-                <FilterXIcon data-icon="inline-start" />
-                پاک کردن فیلترها
-              </Button>
-            </EmptyContent>
-          </Empty>
-        ) : (
-          children
-        )}
+        <motion.div
+          key={settledKey}
+          initial={settledKey === firstKey ? false : { opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2, ease: EASE_OUT }}
+        >
+          {total === 0 ? (
+            <Empty className="border border-border bg-card py-16">
+              <EmptyHeader>
+                <EmptyMedia
+                  variant="icon"
+                  className="size-14 rounded-full bg-accent text-accent-foreground"
+                >
+                  <SearchXIcon className="size-7" />
+                </EmptyMedia>
+                <EmptyTitle className="text-2xl font-bold">
+                  کتابی با این فیلترها پیدا نشد
+                </EmptyTitle>
+                <EmptyDescription>
+                  فیلترها را کمتر کنید یا همهٔ کتاب‌های این دسته را ببینید.
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    navigate({ ...defaultBrowseState, sort: state.sort })
+                  }
+                >
+                  <FilterXIcon data-icon="inline-start" />
+                  پاک کردن فیلترها
+                </Button>
+              </EmptyContent>
+            </Empty>
+          ) : (
+            children
+          )}
+        </motion.div>
 
         {pageCount > 1 ? (
           <Pagination aria-label="صفحه‌بندی">

@@ -1,5 +1,8 @@
 "use client"
 
+import { useState } from "react"
+import { motion } from "motion/react"
+
 import { TypeToggleGroup } from "@/components/browse/type-toggle-group"
 import { useUrlState } from "@/components/browse/use-url-state"
 import { Spinner } from "@/components/ui/spinner"
@@ -8,6 +11,7 @@ import {
   type SearchState,
   type TypeFilter,
 } from "@/lib/browse"
+import { EASE_OUT } from "@/lib/motion"
 import { cn } from "@/lib/utils"
 
 type SearchResultsProps = {
@@ -29,6 +33,11 @@ export function SearchResults({
     serializeSearchParams
   )
 
+  // Re-enter the results when a new server render settles (never while
+  // pending); the first render is not animated.
+  const settledKey = serializeSearchParams(serverState)
+  const [firstKey] = useState(settledKey)
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-wrap items-center gap-3">
@@ -46,7 +55,15 @@ export function SearchResults({
           isPending && "opacity-60"
         )}
       >
-        {children}
+        <motion.div
+          key={settledKey}
+          initial={settledKey === firstKey ? false : { opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2, ease: EASE_OUT }}
+          className="flex flex-col gap-14"
+        >
+          {children}
+        </motion.div>
       </div>
     </div>
   )
