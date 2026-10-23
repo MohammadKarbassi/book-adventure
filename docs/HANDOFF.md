@@ -6,6 +6,18 @@ Last updated: 2026-10-23 (۱ آبان ۱۴۰۵). Deadline: Friday 2026-10-23 (۱
 
 ## 1. Snapshot
 
+### Shop design upgrade + purposeful motion (2026-10-23)
+
+User asked for a design pass on every shop surface so it stands next to «سفر ماجراجویی شما», plus an animation-opportunity sweep (`find-animation-opportunities`); all 6 gated suggestions were approved and built.
+
+- **Home store reads like a book:** `SectionHeader` has an `eyebrow` («فصل ۱» … «فصل ۸», sequential in display order; the subscription and foreign teasers are unnumbered interludes). Bestsellers is a ranked top-10 (`BookRow ranked` → `BookCard rank`: Markazi 7.5rem numerals, saffron 30% fill + ink stroke, `aria-hidden` with an sr-only «رتبهٔ n»).
+- **Physical shelf:** `BookCard shelf` draws a token-colored plank under the cover (outside the tilting `data-book-card-object`, so it stays put on hover); planks bleed across gaps via `--shelf-bleed` and read as one continuous shelf in every `BookRow` and `BookGrid` site-wide.
+- **Spotlight room:** `components/home/book-spotlight.tsx` is a full-bleed band in the cover palette (`roomColors` + `roomGradient`, hard seams, 3D cover), the shop's own room. Editorial pick is «سمفونی مردگان» (`SPOTLIGHT_ID` in `app/page.tsx`) with a scored fallback. `lib/adventures.ts` now exports `getBookPalette`. The store surface wrapper got `overflow-x-clip` for the full-bleed band.
+- **Category tiles:** three most-read covers fan up from the inline-end edge of each `Item`, washed in the front cover's color.
+- **Motion (all reduced-motion safe, none on first hydrated render):** purchase card CTA/badge swap (`AnimatePresence popLayout`, mounted only after hydration); header library-count pulse on increase only; favorite heart pop on add only; play/pause icon crossfade (`IconSwap` in `play-button.tsx`); category/search results re-enter keyed by the settled `serverState` (pagination stays outside the keyed wrapper so focus survives); `BookRow` staggers its header + first 6 cards once in view (rows are no longer wrapped in `Reveal`).
+- Grading pass: shadcn audit checklist consulted; scan found no native button/input/select, no `asChild`, no raw palette colors or physical RTL classes outside `components/ui`.
+- Note: the in-app preview pane runs as a background page, so CSS/WAAPI timelines sit at 0 there (page heroes look invisible in its screenshots); finish animations via `document.getAnimations()` before capturing. Not a site bug.
+
 ### Shop ↔ journey design unification (2026-10-23)
 
 User asked for a full design review and a more unified language between the shop and «سفر ماجراجویی شما». Impeccable critique ran as two isolated agents (design review 27/40; detector + browser evidence); findings were implemented in four commits:
