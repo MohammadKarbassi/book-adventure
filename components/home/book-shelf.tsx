@@ -10,6 +10,7 @@ import {
 } from "motion/react"
 import { ChevronDownIcon, HeadphonesIcon, PodcastIcon } from "lucide-react"
 
+import { JourneyRouteMark } from "@/components/home/journey-route-mark"
 import { JourneyNote } from "@/components/adventures/journey-note"
 import type { CategoryMap } from "@/components/adventures/journey-order"
 import { useJourneyOrder } from "@/components/adventures/use-journey-order"
@@ -259,7 +260,7 @@ export function BookShelf({
       <Container className="relative max-w-none pt-10 pb-0 md:pt-8">
         {/* The title and first spine share one editorial alignment. */}
         <motion.header
-          className="relative z-20 mx-auto flex w-[82%] max-w-[52rem] flex-col gap-4 md:w-[52%]"
+          className="relative z-20 mx-auto flex w-[82%] max-w-[52rem] flex-col gap-4 md:w-[52%] md:gap-3"
           initial={reduced ? false : "rest"}
           whileInView="arrived"
           viewport={{ once: true, amount: 0.7 }}
@@ -272,37 +273,43 @@ export function BookShelf({
             id="shelf-heading"
             className="font-heading text-[clamp(2rem,10vw,3rem)] leading-[1.15] font-bold text-balance md:text-6xl lg:text-7xl"
           >
-            {["سفر", "ماجراجویی", "شما"].map((word, index) => (
-              <span key={word}>
-                {index > 0 ? " " : null}
-                <motion.span
-                  className={cn(
-                    "inline-block motion-reduce:transform-none! motion-reduce:opacity-100!",
-                    index === 1 && "text-accent-foreground"
-                  )}
-                  variants={{
-                    rest: { opacity: 0.65, x: 10 },
-                    arrived: { opacity: 1, x: 0 },
-                  }}
-                  transition={{
-                    duration: reduced ? 0 : 0.4,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                >
-                  {word}
-                </motion.span>
-              </span>
-            ))}
+            <span className="relative inline-block">
+              {["سفر", "ماجراجویی", "شما"].map((word, index) => (
+                <span key={word}>
+                  {index > 0 ? " " : null}
+                  <motion.span
+                    className={cn(
+                      "inline-block motion-reduce:transform-none! motion-reduce:opacity-100!",
+                      index === 1 && "text-accent-foreground"
+                    )}
+                    variants={{
+                      rest: { opacity: 0.65, x: 10 },
+                      arrived: { opacity: 1, x: 0 },
+                    }}
+                    transition={{
+                      duration: reduced ? 0 : 0.4,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                  >
+                    {word}
+                  </motion.span>
+                </span>
+              ))}
+              {/* Desktop: the trail leaves from the end of the title's last word
+                into the margin, so the title itself never wraps. */}
+              <JourneyRouteMark className="absolute start-full top-1/2 ms-6 w-44 -translate-y-[46%] max-md:hidden xl:w-56" />
+            </span>
           </h2>
-          <div className="flex flex-col gap-2">
-            <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
+          {/* One line on desktop keeps the header no taller than before, so
+              the first spine still opens above the fold. */}
+          <div className="flex flex-col gap-2 md:flex-row md:flex-wrap md:items-baseline md:gap-x-5">
+            <p className="font-heading text-2xl leading-snug text-foreground/80 md:text-[1.75rem] md:leading-tight">
               کتاب‌های انتخاب شده برای سفرتان
             </p>
-            <JourneyNote
-              show={personalized}
-              className="text-muted-foreground"
-            />
+            <JourneyNote show={personalized} className="text-sm md:text-base" />
           </div>
+          {/* Phones: the same scene after the copy, at the end. */}
+          <JourneyRouteMark className="w-28 self-end md:hidden" />
           <p className="max-w-xs text-xs leading-relaxed text-muted-foreground md:sr-only">
             {`${formatNumber(books.length)} ماجراجویی، هر کدام با یک کتاب یا کتاب صوتی؛ نشانگر را روی هر جلد ببرید تا از قفسه بیرون بیاید و با یک کلیک سفرش را شروع کنید.`}
           </p>

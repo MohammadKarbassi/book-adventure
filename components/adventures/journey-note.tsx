@@ -28,7 +28,7 @@ export function JourneyNote({
             className
           )}
         >
-          <SparklesIcon aria-hidden="true" className="size-3.5 shrink-0" />
+          <SparklesIcon aria-hidden="true" className="size-[1.15em] shrink-0" />
           بر اساس علاقه‌مندی‌های شما
         </motion.p>
       ) : null}
