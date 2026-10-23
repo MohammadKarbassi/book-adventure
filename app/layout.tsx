@@ -30,6 +30,8 @@ const fontMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
+  // Absolute base for the shared preview image (app/opengraph-image.png).
+  metadataBase: new URL("https://book-adventure.vercel.app"),
   title: {
     template: "%s | ماجراجویی با کتاب",
     default: "ماجراجویی با کتاب",
@@ -38,7 +40,9 @@ export const metadata: Metadata = {
   openGraph: {
     siteName: "ماجراجویی با کتاب",
     locale: "fa_IR",
+    type: "website",
   },
+  twitter: { card: "summary_large_image" },
 }
 
 export default function RootLayout({
