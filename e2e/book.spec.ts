@@ -70,6 +70,12 @@ test("favorite toggles and persists", async ({ page }) => {
   await add.click()
   await expect(remove).toHaveAttribute("aria-pressed", "true")
   await expect(add).toHaveCount(0)
+  // The toast keeps the site's Persian font, not Sonner's system font.
+  const toast = page.locator("[data-sonner-toast]").first()
+  await expect(toast).toBeVisible()
+  expect(
+    await toast.evaluate((element) => getComputedStyle(element).fontFamily)
+  ).toMatch(/Vazirmatn/i)
 
   await page.reload()
   await waitForHydration(page)

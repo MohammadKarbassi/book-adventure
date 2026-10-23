@@ -26,6 +26,9 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
+          // Sonner's unlayered CSS sets a system font on the toaster, which
+          // beats Tailwind's font-sans; keep toasts in the site's Vazirmatn.
+          fontFamily: "var(--font-sans)",
           "--normal-bg": "var(--popover)",
           "--normal-text": "var(--popover-foreground)",
           "--normal-border": "var(--border)",
