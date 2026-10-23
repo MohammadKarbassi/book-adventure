@@ -8,7 +8,6 @@ import { Container } from "@/components/site/container"
 import { PageHero } from "@/components/site/page-hero"
 import { serializeBrowseParams, sortBooks } from "@/lib/browse"
 import { getBooksByType, getCategories, toSummary } from "@/lib/catalog"
-import { isFeatureSafe } from "@/lib/feature-safe"
 import { formatNumber } from "@/lib/format"
 
 export const metadata: Metadata = {
@@ -38,7 +37,7 @@ export default function AudiobooksPage() {
         meta={`${formatNumber(audiobooks.length)} کتاب صوتی با صدای ${formatNumber(narratorCount)} گوینده`}
         aside={
           <CoverFan
-            books={audiobooks.filter(isFeatureSafe).slice(0, 3).map(toSummary)}
+            books={audiobooks.slice(0, 3).map(toSummary)}
             priority
             className="group/fan w-56 md:w-72 lg:w-96"
           />

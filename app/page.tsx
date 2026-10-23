@@ -21,7 +21,6 @@ import {
   toSummary,
   type ListName,
 } from "@/lib/catalog"
-import { isFeatureSafe } from "@/lib/feature-safe"
 import { formatNumber } from "@/lib/format"
 import { getPodcasts } from "@/lib/podcasts"
 import {
@@ -77,7 +76,7 @@ const rows: {
 ]
 
 function renderRow(row: (typeof rows)[number], chapterNumber: number) {
-  const books = getList(row.list).filter(isFeatureSafe).map(toSummary)
+  const books = getList(row.list).map(toSummary)
   return (
     <BookRow
       key={row.list}
@@ -105,7 +104,6 @@ function getSpotlight() {
         (book) =>
           book.type === "ebook" &&
           book.description.length > 0 &&
-          isFeatureSafe(book) &&
           !getAdventureByBookId(book.id)
       )
       .sort((a, b) => b.rating * b.ratingsCount - a.rating * a.ratingsCount)[0]
@@ -128,10 +126,7 @@ export default function Page() {
       slug: category.slug,
       title: category.title,
       count: books.length,
-      covers: sortBooks(books, "popular")
-        .filter(isFeatureSafe)
-        .slice(0, 3)
-        .map(toSummary),
+      covers: sortBooks(books, "popular").slice(0, 3).map(toSummary),
     }
   })
 
@@ -155,7 +150,10 @@ export default function Page() {
       />
       {/* Native opaque paper covers the fixed canvas even when compositor
           scrolling gets ahead of its RAF-driven clip. Keep this full bleed. */}
-      <div data-home-store-surface="" className="relative z-20 overflow-x-clip bg-background">
+      <div
+        data-home-store-surface=""
+        className="relative z-20 overflow-x-clip bg-background"
+      >
         <Container
           id={STORE_ID}
           className="flex flex-col gap-16 pt-12 pb-20 md:gap-20"

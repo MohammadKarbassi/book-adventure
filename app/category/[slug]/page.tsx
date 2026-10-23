@@ -21,7 +21,6 @@ import {
   getCategory,
   toSummary,
 } from "@/lib/catalog"
-import { isFeatureSafe } from "@/lib/feature-safe"
 
 type CategoryPageProps = {
   params: Promise<{ slug: string }>
@@ -86,10 +85,7 @@ export default async function CategoryPage({
         title={category.title}
         bookCount={books.length}
         audioCount={books.filter((book) => book.type === "audiobook").length}
-        covers={sortBooks(books, "popular")
-          .filter(isFeatureSafe)
-          .slice(0, 3)
-          .map(toSummary)}
+        covers={sortBooks(books, "popular").slice(0, 3).map(toSummary)}
       />
       <Container className="flex flex-col gap-12 py-10">
         <CategoryAdventures adventures={adventures} />

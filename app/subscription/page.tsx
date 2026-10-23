@@ -14,7 +14,6 @@ import { SubscriptionFaq } from "@/components/subscription/subscription-faq"
 import { SubscriptionStatus } from "@/components/subscription/subscription-status"
 import { buttonVariants } from "@/components/ui/button"
 import { getAllBooks, getList, toSummary } from "@/lib/catalog"
-import { isFeatureSafe } from "@/lib/feature-safe"
 import { formatNumber } from "@/lib/format"
 
 export const metadata: Metadata = {
@@ -31,7 +30,6 @@ export default function SubscriptionPage() {
     (book) => book.type === "audiobook"
   ).length
   const fanBooks = getList("plus")
-    .filter(isFeatureSafe)
     .slice(0, 5)
     .map(({ id, title, image, color }) => ({ id, title, image, color }))
 

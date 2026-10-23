@@ -147,9 +147,14 @@ test.describe("shelf to adventure", () => {
   })
 })
 
-test("curated home rows leave out the sensitive title", async ({ page }) => {
+// Owner decision: «مغازه خودکشی» is a novel's title; the shop filters no titles.
+test("home rows show every catalog title, including the novel «مغازه خودکشی»", async ({
+  page,
+}) => {
   await page.goto("/")
   const store = page.locator("#store")
   await expect(store).toBeAttached()
-  await expect(store.getByText("مغازه خودکشی")).toHaveCount(0)
+  await expect(
+    store.getByRole("heading", { name: "مغازه خودکشی", level: 3 }).first()
+  ).toBeAttached()
 })

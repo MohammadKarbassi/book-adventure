@@ -7,7 +7,6 @@ import { ForeignShelfError } from "@/components/foreign/foreign-shelf-error"
 import { Container } from "@/components/site/container"
 import { PageHero } from "@/components/site/page-hero"
 import { buttonVariants } from "@/components/ui/button"
-import { isFeatureSafe } from "@/lib/feature-safe"
 import { FOREIGN_SUBJECTS } from "@/lib/foreign"
 import { OpenLibraryError, getForeignShelf } from "@/lib/openlibrary"
 import { cn } from "@/lib/utils"
@@ -43,7 +42,6 @@ export default async function ForeignPage() {
     .flatMap(({ result }) =>
       result.status === "fulfilled" ? result.value : []
     )
-    .filter(isFeatureSafe)
     .slice(0, 3)
 
   return (

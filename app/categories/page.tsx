@@ -5,7 +5,6 @@ import { Container } from "@/components/site/container"
 import { PageHero } from "@/components/site/page-hero"
 import { sortBooks } from "@/lib/browse"
 import { getBooksByCategory, getCategories, toSummary } from "@/lib/catalog"
-import { isFeatureSafe } from "@/lib/feature-safe"
 import { formatNumber } from "@/lib/format"
 
 export const metadata: Metadata = {
@@ -21,10 +20,7 @@ export default function CategoriesPage() {
       title: category.title,
       bookCount: books.length,
       audioCount: books.filter((book) => book.type === "audiobook").length,
-      covers: sortBooks(books, "popular")
-        .filter(isFeatureSafe)
-        .slice(0, 3)
-        .map(toSummary),
+      covers: sortBooks(books, "popular").slice(0, 3).map(toSummary),
     }
   })
   const total = categories.reduce(
