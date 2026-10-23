@@ -1,18 +1,13 @@
 import Link from "next/link"
-import { BookOpenIcon } from "lucide-react"
 
+import { BrandMark } from "@/components/site/brand-mark"
 import { cn } from "@/lib/utils"
 
 /** The brand mark and name, without a link (e.g. for the footer). */
 export function SiteBrand({ className }: { className?: string }) {
   return (
     <span className={cn("flex shrink-0 items-center gap-2", className)}>
-      <span
-        aria-hidden="true"
-        className="flex size-8 items-center justify-center rounded-s-sm rounded-e-lg bg-primary text-primary-foreground shadow-sm"
-      >
-        <BookOpenIcon className="size-4.5" />
-      </span>
+      <BrandMark className="drop-shadow-sm" />
       <span className="font-heading text-2xl leading-none font-bold whitespace-nowrap">
         ماجراجویی با کتاب
       </span>
