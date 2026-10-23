@@ -6,6 +6,13 @@ Last updated: 2026-10-23 (۱ آبان ۱۴۰۵). Deadline: Friday 2026-10-23 (۱
 
 ## 1. Snapshot
 
+### Deployed (2026-10-23)
+
+- **Live: https://book-adventure.vercel.app** (Vercel project `book-adventure` under `mkarbassi-9480s-projects`, hobby). The site had never been deployed before this; the earlier "owner imported the repo" note was wrong. The project was created with `vercel link`, connected to the GitHub repo with `vercel git connect` (every push to `master` deploys), and the first production deploy was run by the owner (`vercel deploy --prod`). The default Turbopack `next build` succeeded on Vercel in about 1 minute; no `--webpack` override needed. `.vercel/` and `.env.local` (Vercel OIDC token) are git-ignored.
+- [PR #1](https://github.com/MohammadKarbassi/book-adventure/pull/1) merged by fast-forward push of `master` (`86d8b72`); local and remote `master` are in sync.
+- Live HTTP check: all main routes return 200 in under ~1.3 s, unknown paths 404, intro music loads, `/foreign` renders live Open Library covers (first uncached request 8.6 s, then ~1 s). NOT checked in a real browser (Playwright MCP was disconnected): Fidibo cover loading, audiobook/podcast playback, 3D drag smoothness.
+- README and `docs/demo-script.md` now cover the adventures route, home media sequence, foreign books and the live link. Remaining: browser check of the live site, record the demo video, put its link in README.
+
 ### Completed whole-site shop review (2026-10-23)
 
 Delivery update: user authorized both local integration and push/PR. `codex/store-consistency` is published and [PR #1](https://github.com/MohammadKarbassi/book-adventure/pull/1) is OPEN against GitHub `master`. Local `master` fast-forwarded to the reviewed implementation (`14b783c`), with227 unit tests passing again; lint/typecheck and229-page webpack build also passed during integration. This delivery note travels on the PR branch and is fast-forwarded locally as well. Remote `master` was NOT pushed/merged, so the PR remains reviewable. The PR includes10 previously unpublished local commits plus3 reviewed UI commits (and this delivery documentation). No deployment is claimed.
@@ -97,7 +104,7 @@ This is the authoritative continuation point; the chronological notes below incl
 - Intro update (2026-10-22): the session marker now stores `performance.timeOrigin`; reopening or reloading the home page replays the intro, while client navigation in the same document does not. An original local Web Audio adventure sting accompanies it, with a shadcn Button sound toggle. Autoplay is attempted; browsers that block it require pressing «پخش موسیقی». Exit/unmount closes the audio context; reduced motion skips both animation and music. Verified: lint, typecheck, 216 unit tests, production build with `next build --webpack`, and 9 intro Playwright tests. Default Turbopack build hit an environment port-binding restriction; Webpack succeeded.
 
 - Repo: https://github.com/MohammadKarbassi/book-adventure (public), branch `master`, remote `origin`.
-- Vercel: imported by the owner; live URL not known yet (see §4.1). Every push to `master` should deploy.
+- Vercel: live at https://book-adventure.vercel.app; every push to `master` deploys (see §1).
 - Push baseline before this delivery: `origin/master` previously ended before 9 local implementation commits, through `d8c327d`; push this documentation commit and those commits together. Use `git rev-list --left-right --count origin/master...HEAD` to verify synchronization after push.
 - Historical verification before the refinements above: 215 unit tests and 72 browser tests. Current totals are recorded at the top of this snapshot; do not use these historical totals as the delivery result.
 
@@ -128,8 +135,8 @@ The home shelf and the per-book inner pages reproduce the press.stripe.com exper
 
 ## 4. Remaining work, in order
 
-1. Vercel: the owner imported the repo (2026-10-22) but the live URL is unknown — `book-adventure.vercel.app` and similar guesses return 404, and GitHub shows no deployment statuses. Get the URL from the Vercel project's Domains section; if the deployment failed, read its Build Logs and fix. Then on the live site check that Fidibo covers, `/foreign` (live Open Library API), audio samples and podcast audio load, and that the adventures page drags smoothly.
-2. Update `README.md` (adventures page, foreign books, live link) and `docs/demo-script.md` (add: shelf hover and personalized order, open an adventure, drag the book through all faces, scroll across room seams, rail ticks). Commit and push.
+1. In a real browser on https://book-adventure.vercel.app, check that Fidibo covers, audio samples and podcast audio load and that the adventures page drags smoothly (HTTP-level checks already pass, see §1).
+2. Record the demo video following `docs/demo-script.md` and add its link to `README.md`.
 3. Optional polish: persist the reader's theme and font size; animate full-height section reordering on the adventures page (currently only the shelf and rail animate).
 
 ## 5. Run, test, data

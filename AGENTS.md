@@ -89,4 +89,4 @@ This file is the single source of truth for every coding agent: `CLAUDE.md` is a
 
 ## وضعیت فعلی
 
-- همهٔ نیازها به‌جز بازطراحی «مسیر ماجراجویی» ساخته و commit شده‌اند. وضعیت دقیق، کارهای باقی‌مانده و نحوهٔ ادامه در `docs/HANDOFF.md` است و پس از هر بخش به‌روز می‌شود.
+- همهٔ نیازها ساخته و commit شده‌اند و سایت روی https://book-adventure.vercel.app مستقر است (هر push به `master` خودکار منتشر می‌شود). وضعیت دقیق، کارهای باقی‌مانده و نحوهٔ ادامه در `docs/HANDOFF.md` است و پس از هر بخش به‌روز می‌شود.
