@@ -1,7 +1,6 @@
 "use client"
 
 import { useCallback, useMemo, useSyncExternalStore } from "react"
-import Link from "next/link"
 import {
   CrownIcon,
   HeartIcon,
@@ -18,12 +17,9 @@ import {
   type LibraryItem,
 } from "@/components/library/library-grid"
 import { toastSaveError } from "@/components/site/save-error"
-import { Badge } from "@/components/ui/badge"
-import { buttonVariants } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { BookSummary } from "@/lib/catalog"
-import { formatDate, formatNumber } from "@/lib/format"
+import { formatNumber } from "@/lib/format"
 import type { ForeignBook } from "@/lib/foreign"
 import {
   useFavorites,
@@ -63,7 +59,7 @@ export function LibraryView({ books }: { books: BookSummary[] }) {
   const hydrated = useHydrated()
   const { favorites, toggleFavorite } = useFavorites()
   const { purchases } = usePurchases()
-  const { subscription, isActive } = useSubscription()
+  const { isActive } = useSubscription()
   const { books: foreignBooks } = useForeignBooks()
   const tab = useSyncExternalStore(
     subscribeHash,
@@ -138,38 +134,6 @@ export function LibraryView({ books }: { books: BookSummary[] }) {
 
   return (
     <div className="flex flex-col gap-8">
-      <header className="flex flex-col gap-4 border-b pb-8 sm:flex-row sm:items-end sm:justify-between">
-        <div className="flex flex-col gap-2">
-          <h1 className="font-heading text-5xl leading-tight font-bold">
-            کتابخانهٔ من
-          </h1>
-          <p className="max-w-xl text-muted-foreground">
-            کتاب‌هایی که خریده‌اید، نشان کرده‌اید یا با اشتراک در دسترس دارید،
-            همه در یک قفسه.
-          </p>
-        </div>
-        {!hydrated ? (
-          <Skeleton className="h-7 w-44 rounded-full" />
-        ) : isActive && subscription ? (
-          <Badge
-            variant="accent"
-            className="h-7 px-3 text-sm"
-            render={<Link href="/subscription" />}
-          >
-            <CrownIcon data-icon="inline-start" />
-            {`اشتراک فعال تا ${formatDate(subscription.expiresAt)}`}
-          </Badge>
-        ) : (
-          <Link
-            href="/subscription"
-            className={buttonVariants({ variant: "outline", size: "sm" })}
-          >
-            <CrownIcon data-icon="inline-start" />
-            اشتراک ندارید؟ مشاهدهٔ طرح‌ها
-          </Link>
-        )}
-      </header>
-
       <Tabs
         value={tab}
         onValueChange={(value) => {
@@ -244,7 +208,7 @@ export function LibraryView({ books }: { books: BookSummary[] }) {
             <LibraryEmpty
               icon={CrownIcon}
               title="اشتراک فعالی ندارید"
-              description={`با اشتراک ماجراجویی، ${formatNumber(plusItems.length)} کتاب اشتراکی بدون خرید برایتان باز می‌شوند.`}
+              description={`با اشتراک ماجراجویی پلاس، ${formatNumber(plusItems.length)} کتاب اشتراکی بدون خرید برایتان باز می‌شوند.`}
               primary={{
                 href: "/subscription",
                 label: "مشاهدهٔ طرح‌های اشتراک",

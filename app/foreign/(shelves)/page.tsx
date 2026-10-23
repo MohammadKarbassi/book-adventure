@@ -1,12 +1,13 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { GlobeIcon } from "lucide-react"
 
 import { CoverFan } from "@/components/browse/cover-fan"
 import { ForeignBookRow } from "@/components/foreign/foreign-book-row"
 import { ForeignShelfError } from "@/components/foreign/foreign-shelf-error"
 import { Container } from "@/components/site/container"
+import { PageHero } from "@/components/site/page-hero"
 import { buttonVariants } from "@/components/ui/button"
+import { isFeatureSafe } from "@/lib/feature-safe"
 import { FOREIGN_SUBJECTS } from "@/lib/foreign"
 import { OpenLibraryError, getForeignShelf } from "@/lib/openlibrary"
 import { cn } from "@/lib/utils"
@@ -42,56 +43,51 @@ export default async function ForeignPage() {
     .flatMap(({ result }) =>
       result.status === "fulfilled" ? result.value : []
     )
+    .filter(isFeatureSafe)
     .slice(0, 3)
 
   return (
     <>
-      <header className="overflow-hidden border-b border-border bg-card/60">
-        <Container className="flex items-end justify-between gap-8 pt-10 md:pt-14">
-          <div className="flex max-w-xl flex-col gap-5 pb-10 md:pb-14">
-            <span className="flex size-16 items-center justify-center rounded-full bg-accent text-accent-foreground ring-8 ring-accent/40">
-              <GlobeIcon className="size-8" aria-hidden="true" />
-            </span>
-            <div className="flex flex-col gap-2">
-              <h1 className="font-heading text-5xl leading-tight font-bold md:text-6xl">
-                کتاب‌های خارجی
-              </h1>
-              <p className="text-sm font-medium text-accent-foreground">
-                به زبان اصلی، از کتابخانهٔ باز Open Library
-              </p>
-            </div>
-            <p className="text-lg/relaxed text-pretty text-muted-foreground">
-              رمان‌ها و کتاب‌هایی که دنیا می‌خواند، همان‌طور که نوشته شده‌اند.
-              فهرست‌ها و توضیح‌ها از{" "}
-              <a
-                href="https://openlibrary.org"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-foreground underline underline-offset-4 hover:text-accent-foreground"
-              >
-                Open Library
-              </a>{" "}
-              می‌آیند؛ قیمت‌ها نمایشی‌اند.
-            </p>
-            <nav aria-label="قفسه‌های کتاب خارجی">
-              <ul className="flex flex-wrap gap-2">
-                {FOREIGN_SUBJECTS.map((subject) => (
-                  <li key={subject.slug}>
-                    <Link
-                      href={`#${subject.slug}`}
-                      className={cn(
-                        buttonVariants({ variant: "outline", size: "sm" }),
-                        "rounded-full"
-                      )}
-                    >
-                      {subject.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-          {fanBooks.length > 0 ? (
+      <PageHero
+        title="کتاب‌های خارجی"
+        accent="خارجی"
+        description={
+          <>
+            رمان‌ها و کتاب‌هایی که دنیا می‌خواند، همان‌طور که نوشته شده‌اند.
+            فهرست‌ها و توضیح‌ها از{" "}
+            <a
+              href="https://openlibrary.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-foreground underline underline-offset-4 hover:text-accent-foreground"
+            >
+              Open Library
+            </a>{" "}
+            می‌آیند؛ قیمت‌ها نمایشی‌اند.
+          </>
+        }
+        meta="به زبان اصلی، از کتابخانهٔ باز Open Library"
+        actions={
+          <nav aria-label="قفسه‌های کتاب خارجی">
+            <ul className="flex flex-wrap gap-2">
+              {FOREIGN_SUBJECTS.map((subject) => (
+                <li key={subject.slug}>
+                  <Link
+                    href={`#${subject.slug}`}
+                    className={cn(
+                      buttonVariants({ variant: "outline", size: "sm" }),
+                      "rounded-full"
+                    )}
+                  >
+                    {subject.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        }
+        aside={
+          fanBooks.length > 0 ? (
             <CoverFan
               books={fanBooks.map((book) => ({
                 id: book.id,
@@ -99,11 +95,11 @@ export default async function ForeignPage() {
                 image: book.cover,
               }))}
               priority
-              className="hidden w-72 shrink-0 translate-y-2 md:flex lg:w-96"
+              className="group/fan w-56 md:w-72 lg:w-96"
             />
-          ) : null}
-        </Container>
-      </header>
+          ) : null
+        }
+      />
 
       <Container className="flex flex-col gap-16 py-12">
         {shelves.map(({ slug, title, description, result }, index) => (

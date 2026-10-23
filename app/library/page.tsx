@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
 
+import { LibrarySubscriptionLink } from "@/components/library/library-subscription-link"
 import { LibraryView } from "@/components/library/library-view"
 import { Container } from "@/components/site/container"
+import { PageHero } from "@/components/site/page-hero"
 import { getAllBooks, toSummary } from "@/lib/catalog"
 
 export const metadata: Metadata = {
@@ -14,8 +16,16 @@ export const metadata: Metadata = {
 export default function LibraryPage() {
   const books = getAllBooks().map(toSummary)
   return (
-    <Container className="py-10 lg:py-14">
-      <LibraryView books={books} />
-    </Container>
+    <>
+      <PageHero
+        title="کتابخانهٔ من"
+        accent="کتابخانهٔ"
+        description="کتاب‌هایی که خریده‌اید، نشان کرده‌اید یا با اشتراک در دسترس دارید، همه در یک قفسه."
+        actions={<LibrarySubscriptionLink />}
+      />
+      <Container className="py-10 lg:py-12">
+        <LibraryView books={books} />
+      </Container>
+    </>
   )
 }

@@ -9,9 +9,9 @@ test.describe("subscription page", () => {
   })
 
   test("shows the hero, plans, plus books and FAQ", async ({ page }) => {
-    await expect(page).toHaveTitle(/اشتراک ماجراجویی/)
+    await expect(page).toHaveTitle(/اشتراک ماجراجویی پلاس/)
     await expect(
-      page.getByRole("heading", { level: 1, name: "اشتراک ماجراجویی" })
+      page.getByRole("heading", { level: 1, name: "اشتراک ماجراجویی پلاس" })
     ).toBeVisible()
     await expect(page.getByRole("radio")).toHaveCount(3)
     await expect(page.getByRole("radio", { name: "طرح سه‌ماهه" })).toBeChecked()

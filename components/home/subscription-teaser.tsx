@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import type { BookSummary } from "@/lib/catalog"
+import { isFeatureSafe } from "@/lib/feature-safe"
 import { formatPrice } from "@/lib/format"
 import { SUBSCRIPTION_PLANS } from "@/lib/plans"
 
@@ -79,14 +80,17 @@ export function SubscriptionTeaser({ covers }: { covers: BookSummary[] }) {
       >
         <div className="pointer-events-none absolute inset-0 bg-radial-[circle_at_50%_60%] from-primary/20 to-transparent to-70%" />
         <div className="relative flex -space-x-10 py-10">
-          {covers.slice(0, fan.length).map((book, index) => (
-            <BookCover
-              key={book.id}
-              book={book}
-              size="md"
-              className={`${fan[index]} shadow-xl`}
-            />
-          ))}
+          {covers
+            .filter(isFeatureSafe)
+            .slice(0, fan.length)
+            .map((book, index) => (
+              <BookCover
+                key={book.id}
+                book={book}
+                size="md"
+                className={`${fan[index]} shadow-xl`}
+              />
+            ))}
         </div>
       </div>
     </Card>

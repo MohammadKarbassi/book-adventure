@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { PodcastIcon, RssIcon } from "lucide-react"
+import { RssIcon } from "lucide-react"
 
 import { SectionHeader } from "@/components/book/section-header"
 import { PlayButton } from "@/components/player/play-button"
@@ -12,6 +12,7 @@ import {
   latestEpisodes,
 } from "@/components/podcasts/podcast-data"
 import { Container } from "@/components/site/container"
+import { PageHero } from "@/components/site/page-hero"
 import {
   Item,
   ItemActions,
@@ -38,26 +39,16 @@ export default function PodcastsPage() {
 
   return (
     <>
-      <section className="border-b bg-linear-to-b from-accent/70 to-background">
-        <Container className="flex flex-col gap-6 py-12 sm:flex-row sm:items-center md:py-16">
-          <span className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-accent text-accent-foreground shadow-sm ring-1 ring-accent-foreground/15 md:size-20">
-            <PodcastIcon aria-hidden="true" className="size-8 md:size-10" />
+      <PageHero
+        title="پادکست‌ها"
+        description={`${formatNumber(podcasts.length)} پادکست فارسی منتخب دربارهٔ کتاب، داستان و تاریخ`}
+        meta={
+          <span className="flex items-center gap-1.5">
+            <RssIcon aria-hidden="true" className="size-3.5" />
+            از فیدهای عمومی RSS
           </span>
-          <div className="flex flex-col gap-2">
-            <h1 className="font-heading text-5xl leading-tight font-bold md:text-6xl">
-              پادکست‌ها
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              {formatNumber(podcasts.length)} پادکست فارسی منتخب دربارهٔ کتاب،
-              داستان و تاریخ
-            </p>
-            <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <RssIcon aria-hidden="true" className="size-3.5" />
-              از فیدهای عمومی RSS
-            </p>
-          </div>
-        </Container>
-      </section>
+        }
+      />
 
       <Container className="flex flex-col gap-16 py-12">
         <section aria-labelledby="all-podcasts" className="flex flex-col gap-6">

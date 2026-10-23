@@ -48,7 +48,7 @@ export function CoverFan({ books }: { books: FanBook[] }) {
           <motion.div
             key={book.id}
             variants={fanVariants(offset, reduce)}
-            className="absolute inset-x-0 top-2 mx-auto w-28 origin-bottom sm:w-44"
+            className="absolute inset-x-0 top-2 mx-auto w-28 origin-bottom sm:w-36 lg:w-44"
             style={{ zIndex: 10 - Math.abs(offset) }}
           >
             <BookCover

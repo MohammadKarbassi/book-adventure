@@ -16,6 +16,7 @@ import {
   toSummary,
   type ListName,
 } from "@/lib/catalog"
+import { isFeatureSafe } from "@/lib/feature-safe"
 import { getPodcasts } from "@/lib/podcasts"
 import { getAdventures } from "@/lib/adventures"
 import { getCategoryMap } from "@/components/adventures/adventure-views"
@@ -99,7 +100,7 @@ export default function Page() {
                 title={row.title}
                 description={row.description}
                 href={row.href}
-                books={getList(row.list).map(toSummary)}
+                books={getList(row.list).filter(isFeatureSafe).map(toSummary)}
               />
             </Reveal>
           ))}
@@ -112,7 +113,7 @@ export default function Page() {
                 title={row.title}
                 description={row.description}
                 href={row.href}
-                books={getList(row.list).map(toSummary)}
+                books={getList(row.list).filter(isFeatureSafe).map(toSummary)}
               />
             </Reveal>
           ))}

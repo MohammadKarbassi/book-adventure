@@ -4,9 +4,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 export default function Loading() {
   return (
     <div role="status" aria-label="در حال بارگذاری کتاب‌های خارجی">
-      <div className="border-b border-border bg-card/60">
-        <Container className="flex flex-col gap-5 pt-10 pb-10 md:pt-14 md:pb-14">
-          <Skeleton className="size-16 rounded-full" />
+      <div className="border-b border-border">
+        <Container className="flex flex-col gap-5 pt-10 pb-8 md:pt-16 md:pb-10">
           <Skeleton className="h-14 w-72" />
           <Skeleton className="h-4 w-56" />
           <Skeleton className="h-5 w-full max-w-xl" />
