@@ -58,8 +58,22 @@ test("foreign books pull out from their left binding and preserve native history
   ).toMatch(/^0px /)
   const before = await page.evaluate(() => history.length)
   const href = await card.getAttribute("href")
+  await page.evaluate(() => {
+    const observer = new MutationObserver(() => {
+      const flight = document.querySelector<HTMLElement>("[data-book-flight]")
+      if (!flight) return
+      document.documentElement.dataset.flightDirection =
+        getComputedStyle(flight).direction
+      observer.disconnect()
+    })
+    observer.observe(document.body, { childList: true })
+  })
   await card.press("Enter")
   await expect(page).toHaveURL(new RegExp(`${href}$`))
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-flight-direction",
+    "ltr"
+  )
   expect(await page.evaluate(() => history.length)).toBe(before + 1)
   await expect(page.locator("[data-book-flight]")).toHaveCount(0)
   const cover = page.locator("[data-book-detail-object]")

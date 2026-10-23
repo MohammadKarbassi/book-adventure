@@ -47,6 +47,8 @@ export function BookTravelLink({
         navigating.current = true
         const rect = cover.getBoundingClientRect()
         const clone = cover.cloneNode(true) as HTMLElement
+        // The portal leaves the cover's LTR/RTL ancestor; retain its binding.
+        clone.dir = getComputedStyle(cover).direction
         clone.setAttribute("aria-hidden", "true")
         clone.setAttribute("data-book-flight", "")
         clone.inert = true

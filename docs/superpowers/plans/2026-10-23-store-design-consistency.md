@@ -104,6 +104,16 @@ Every row requires desktop/mobile visual inspection and its relevant interaction
 - [ ] Review diff, triage hook findings individually, record counts/limitations and completed coverage in HANDOFF. Stop the agent-owned test server; leave the user's3000 process intact.
 - [ ] Commit final acceptance documentation only after all required checks pass. Report what changed, what was reviewed unchanged and any external/live-data checks that remain unverified. No push/deployment implied.
 
-## Approval status
+## Execution and acceptance — 2026-10-23
 
-Plan prepared from source inspection. Rendered whole-site audit, implementation and new test execution have not started. The user previously chose direct implementation over mock variants; preserve that execution method after this plan is confirmed.
+User authorized continuation after shadcn connected and explicitly confirmed same-directory/separate-branch work. Completed on `codex/store-consistency`, without modifying adventure/shelf/media choreography.
+
+| Task | Outcome |
+| --- | --- |
+| 1: discovery | Two-line shared card rhythm, native-safe physical motion preserved, exact Plus heading; no unnecessary new controls. |
+| 2: details | Foreign cards and detail share physical-book conventions with left binding; optional color/null-image type support uses the existing titled fallback. Clone direction regression fixed after independent review. |
+| 3: subscription/library/shell | Subscription/library flows retained after review. Fixed proven tablet/intermediate-header overflow using coherent navigation/search breakpoints, not overflow masking. |
+| 4: listening/reading | Podcast, player/phone Sheet and reader reviewed unchanged; existing interaction/access/resume tests pass. External media availability is not claimed from mocked tests. |
+| 5: acceptance | Fourteen route templates captured desktop/phone;14routes×3widths×2themes checked with reduced motion and no runtime errors/overflow. Independent code review completed;227 unit tests, lint/typecheck,229-page webpack build and110 production E2E tests passed after the last fix. |
+
+Execution adjustment: tasks1/2 form one shared-capability commit because binding direction crosses card and detail. Existing coherent pages were reviewed unchanged rather than cosmetically rewritten. No blanket design ignores: one file/value exception preserves existing neutral cover lighting. Detailed evidence, earlier failed runs and limits are in docs/HANDOFF.md. Checklist steps above remain the proposed workflow, not fabricated individual test claims (missing-cover handling was source-reviewed; live API outage was not fault-injected). No push/merge/deployment authorized.
