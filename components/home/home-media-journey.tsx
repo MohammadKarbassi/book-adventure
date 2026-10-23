@@ -1,10 +1,37 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowDownIcon, ArrowLeftIcon } from "lucide-react"
+import {
+  ArrowDownIcon,
+  ArrowLeftIcon,
+  HeadphonesIcon,
+  PodcastIcon,
+  type LucideIcon,
+} from "lucide-react"
 import { PlayButton } from "@/components/player/play-button"
+import { SoundBars } from "@/components/player/sound-bars"
 import type { Track } from "@/components/player/types"
 import { buttonVariants } from "@/components/ui/button"
 import { HOME_POSTER } from "@/data/home-poster"
+
+/** The shop's chapter-label look with the rail's icon for this medium. */
+function MediaEyebrow({
+  icon: Icon,
+  children,
+}: {
+  icon: LucideIcon
+  children: string
+}) {
+  return (
+    <p className="flex items-center gap-3 text-sm font-medium text-accent-foreground">
+      <span aria-hidden="true" className="h-px w-8 bg-primary" />
+      <span className="inline-flex items-center gap-1.5">
+        <Icon aria-hidden="true" className="size-4" />
+        {children}
+      </span>
+      <span aria-hidden="true" className="h-px w-8 bg-primary" />
+    </p>
+  )
+}
 
 export type HomeMediaProps = { audio: Track; podcast: Track; storeId: string }
 
@@ -42,6 +69,9 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
             />
           </div>
           <div className="relative z-20 flex max-w-xl flex-col items-center gap-3 text-center">
+            <MediaEyebrow icon={HeadphonesIcon}>
+              کتاب صوتی · نمونهٔ رایگان
+            </MediaEyebrow>
             <h2
               id="home-audio-title"
               className="font-heading text-2xl leading-tight md:text-4xl"
@@ -49,7 +79,14 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
               هر قصه، یک صدای تازه
             </h2>
             <div className="flex flex-wrap items-center justify-center gap-3">
-              <PlayButton track={audio} label="شنیدن نمونهٔ رایگان" size="lg" />
+              <span className="inline-flex items-center gap-2.5">
+                <SoundBars trackId={audio.id} />
+                <PlayButton
+                  track={audio}
+                  label="شنیدن نمونهٔ رایگان"
+                  size="lg"
+                />
+              </span>
               <Link
                 href="/audiobooks"
                 className={buttonVariants({ variant: "link" })}
@@ -98,6 +135,7 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
               className="h-full w-full rounded-md shadow-xl"
             />
           </div>
+          <MediaEyebrow icon={PodcastIcon}>پادکست</MediaEyebrow>
           <h2
             id="home-podcast-title"
             className="max-w-3xl font-heading text-5xl leading-tight md:text-7xl"
@@ -109,7 +147,10 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
             <br />
             <span className="text-sm text-foreground/85">{podcast.title}</span>
           </p>
-          <PlayButton track={podcast} label="شنیدن پادکست" size="lg" />
+          <span className="inline-flex items-center gap-2.5">
+            <SoundBars trackId={podcast.id} />
+            <PlayButton track={podcast} label="شنیدن پادکست" size="lg" />
+          </span>
           <a
             href={podcast.href}
             target="_blank"
