@@ -14,13 +14,17 @@ export type PodcastTeaserItem = {
 
 export function PodcastsTeaser({
   podcasts,
+  eyebrow,
 }: {
   podcasts: PodcastTeaserItem[]
+  /** Chapter label for the section header. */
+  eyebrow?: string
 }) {
   return (
     <section aria-labelledby="podcasts-heading" className="flex flex-col gap-5">
       <SectionHeader
         id="podcasts-heading"
+        eyebrow={eyebrow}
         title="پادکست‌ها"
         description="گفت‌وگو، روایت و داستان؛ برای وقتی که چشم‌هایتان استراحت می‌خواهند"
         action={

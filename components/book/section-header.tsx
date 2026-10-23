@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils"
 
 type SectionHeaderProps = {
   title: string
+  /** Small chapter label above the title, e.g. «فصل ۲». */
+  eyebrow?: string
   /** A whole word (or words) of `title` shown in the accent color. */
   accent?: string
   description?: string
@@ -21,6 +23,7 @@ type SectionHeaderProps = {
 
 export function SectionHeader({
   title,
+  eyebrow,
   accent,
   description,
   href,
@@ -34,6 +37,12 @@ export function SectionHeader({
       data-slot="section-header"
     >
       <div className="flex min-w-0 flex-col gap-1">
+        {eyebrow ? (
+          <p className="flex items-center gap-3 text-sm font-medium text-accent-foreground">
+            {eyebrow}
+            <span aria-hidden="true" className="h-px w-8 bg-primary" />
+          </p>
+        ) : null}
         <h2
           id={id}
           className="font-heading text-3xl leading-tight font-bold text-balance md:text-4xl"

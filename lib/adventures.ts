@@ -42,7 +42,8 @@ export type Adventure = {
 
 const palettes = palettesData as Record<string, BookPalette>
 
-function paletteFor(book: Book): BookPalette {
+/** The cover's sampled palette, or its dominant color when none was sampled. */
+export function getBookPalette(book: Book): BookPalette {
   return (
     palettes[String(book.id)] ?? {
       top: book.color.dominant,
@@ -55,7 +56,7 @@ function paletteFor(book: Book): BookPalette {
 const adventures: Adventure[] = ADVENTURE_COPY.flatMap((copy, index) => {
   const book = getBook(copy.bookId)
   return book
-    ? [{ number: index + 1, book, copy, palette: paletteFor(book) }]
+    ? [{ number: index + 1, book, copy, palette: getBookPalette(book) }]
     : []
 })
 

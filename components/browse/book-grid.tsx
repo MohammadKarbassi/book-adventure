@@ -19,9 +19,11 @@ export function BookGrid({
   className,
 }: BookGridProps) {
   return (
+    // Each plank bleeds half the 1rem column gap so a grid row reads as one
+    // shelf; the outer ends stay inside the Container's side padding.
     <ul
       className={cn(
-        "grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6",
+        "grid grid-cols-2 gap-x-4 gap-y-8 [--shelf-bleed:0.5rem] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6",
         className
       )}
     >
@@ -31,6 +33,7 @@ export function BookGrid({
             book={book}
             priority={index < priorityCount}
             sizes={gridSizes}
+            shelf
           />
         </li>
       ))}
