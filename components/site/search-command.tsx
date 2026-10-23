@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { SearchIcon } from "lucide-react"
+import { RouteIcon, SearchIcon } from "lucide-react"
 
 import { BookCover } from "@/components/book/book-cover"
 import { Button } from "@/components/ui/button"
@@ -19,9 +19,14 @@ import {
 } from "@/components/ui/command"
 import { Kbd } from "@/components/ui/kbd"
 import type { BookType } from "@/lib/catalog"
+import {
+  matchAdventures,
+  type AdventureSearchItem,
+} from "@/lib/adventure-search"
 import { normalizePersian } from "@/lib/text"
 
 export type SearchIndex = {
+  adventures?: AdventureSearchItem[]
   books: {
     id: number
     title: string
@@ -102,8 +107,13 @@ export function SearchCommand({ index }: { index: SearchIndex }) {
     const matches = (haystack: string) =>
       terms.every((term) => haystack.includes(term))
 
+    const adventures = matchAdventures(index.adventures ?? [], query).slice(
+      0,
+      groupLimit
+    )
     const books = index.books.filter((_, i) => matches(haystacks.books[i]))
     return {
+      adventures,
       ebooks: books
         .filter((book) => book.type === "ebook")
         .slice(0, groupLimit),
@@ -117,7 +127,8 @@ export function SearchCommand({ index }: { index: SearchIndex }) {
   }, [index, haystacks, query])
 
   const hasResults =
-    results.ebooks.length +
+    results.adventures.length +
+      results.ebooks.length +
       results.audiobooks.length +
       results.podcasts.length >
     0
@@ -171,6 +182,24 @@ export function SearchCommand({ index }: { index: SearchIndex }) {
           />
           <CommandList className="max-h-[min(60vh,28rem)]">
             <CommandEmpty>نتیجه‌ای پیدا نشد</CommandEmpty>
+            {results.adventures.length > 0 ? (
+              <CommandGroup heading="ماجراجویی‌ها">
+                {results.adventures.map((adventure) => (
+                  <CommandItem
+                    key={adventure.bookId}
+                    value={`adventure-${adventure.bookId}`}
+                    onSelect={() => go(`/adventures/${adventure.bookId}`)}
+                    className="gap-3"
+                  >
+                    <RouteIcon />
+                    <ItemText
+                      title={adventure.name}
+                      subtitle={adventure.tagline}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            ) : null}
             {results.ebooks.length > 0 ? (
               <CommandGroup heading="کتاب‌ها">
                 {results.ebooks.map((book) => (

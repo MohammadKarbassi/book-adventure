@@ -22,6 +22,7 @@ export function SiteFooter() {
     {
       title: "قفسه‌های دیگر",
       links: [
+        { href: "/#adventure-shelf", label: "سفر ماجراجویی" },
         { href: "/audiobooks", label: "کتاب‌های صوتی" },
         { href: "/podcasts", label: "پادکست‌ها" },
         { href: "/foreign", label: "کتاب‌های خارجی" },

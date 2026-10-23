@@ -10,6 +10,7 @@ import { SiteLogo } from "@/components/site/site-logo"
 import { ThemeToggle } from "@/components/site/theme-toggle"
 import { Container } from "@/components/site/container"
 import { getAllBooks, getBooksByCategory, getCategories } from "@/lib/catalog"
+import { getAdventureSearchItems } from "@/lib/adventure-search-items"
 import { getPodcasts } from "@/lib/podcasts"
 
 function getNavCategories(): NavCategory[] {
@@ -23,6 +24,7 @@ function getNavCategories(): NavCategory[] {
 // Only the fields the command palette shows and matches on.
 function getSearchIndex(): SearchIndex {
   return {
+    adventures: getAdventureSearchItems(),
     books: getAllBooks().map((book) => ({
       id: book.id,
       title: book.title,
@@ -44,7 +46,10 @@ export function SiteHeader() {
   const categories = getNavCategories()
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-md supports-backdrop-filter:bg-background/70">
+    <header
+      data-site-header=""
+      className="sticky top-0 z-40 border-b bg-background/80 text-foreground backdrop-blur-md transition-[background-color,border-color,color] duration-240 ease-out supports-backdrop-filter:bg-background/70 motion-reduce:transition-none"
+    >
       <Container className="flex h-16 items-center gap-6">
         <SiteLogo />
         <MainNav categories={categories} />

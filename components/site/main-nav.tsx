@@ -67,7 +67,10 @@ export function MainNav({ categories }: { categories: NavCategory[] }) {
         {mainLinks.map((link) => {
           const active = isActivePath(pathname, link.href)
           return (
-            <NavigationMenuItem key={link.href}>
+            <NavigationMenuItem
+              key={link.href}
+              className={cn(link.wideOnly && "hidden xl:block")}
+            >
               <NavigationMenuLink
                 active={active}
                 render={<Link href={link.href} />}

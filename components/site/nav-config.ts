@@ -15,6 +15,7 @@ import {
   LightbulbIcon,
   LibraryBigIcon,
   PodcastIcon,
+  RouteIcon,
   type LucideIcon,
 } from "lucide-react"
 
@@ -29,9 +30,17 @@ export type NavLink = {
   href: string
   label: string
   icon: LucideIcon
+  /** Header: shown from 1280px only, so the 1024px bar never overflows. */
+  wideOnly?: boolean
 }
 
 export const mainLinks: NavLink[] = [
+  {
+    href: "/#adventure-shelf",
+    label: "سفر ماجراجویی",
+    icon: RouteIcon,
+    wideOnly: true,
+  },
   { href: "/audiobooks", label: "کتاب‌های صوتی", icon: HeadphonesIcon },
   { href: "/podcasts", label: "پادکست‌ها", icon: PodcastIcon },
   { href: "/foreign", label: "کتاب‌های خارجی", icon: LanguagesIcon },
@@ -61,5 +70,8 @@ export function getCategoryIcon(slug: string): LucideIcon {
 
 /** Active when on the link itself or one of its sub-pages. */
 export function isActivePath(pathname: string, href: string) {
+  // Hash links point into the home page: they are «active» on the adventure
+  // routes the section leads to, never on `/` itself.
+  if (href.includes("#")) return pathname.startsWith("/adventures/")
   return pathname === href || pathname.startsWith(`${href}/`)
 }

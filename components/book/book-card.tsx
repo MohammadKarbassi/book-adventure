@@ -1,5 +1,5 @@
 import { BookTravelLink } from "@/components/book/book-travel-link"
-import { HeadphonesIcon } from "lucide-react"
+import { HeadphonesIcon, RouteIcon } from "lucide-react"
 
 import { BookCover } from "@/components/book/book-cover"
 import { PriceTag } from "@/components/book/price-tag"
@@ -42,6 +42,15 @@ export function BookCard({ book, priority, sizes, className }: BookCardProps) {
           sizes={sizes ?? defaultSizes}
           className="w-full transition-shadow duration-300 group-hover/book-card:shadow-xl motion-reduce:transition-none"
         />
+        {book.adventure ? (
+          <Badge
+            variant="outline"
+            className="absolute start-2 top-2 bg-background/90 shadow-sm backdrop-blur-sm dark:bg-background/90"
+          >
+            <RouteIcon data-icon="inline-start" />
+            ماجراجویی
+          </Badge>
+        ) : null}
         <div className="absolute end-2 top-2 flex flex-col items-end gap-1">
           {hasDiscount ? (
             <Badge

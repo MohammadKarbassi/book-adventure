@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import { SearchIcon, SearchXIcon } from "lucide-react"
+import Link from "next/link"
+import { RouteIcon, SearchIcon, SearchXIcon } from "lucide-react"
 
 import { SectionHeader } from "@/components/book/section-header"
 import { BookGrid } from "@/components/browse/book-grid"
@@ -30,6 +31,8 @@ import {
   searchBooks,
   toSummary,
 } from "@/lib/catalog"
+import { matchAdventures } from "@/lib/adventure-search"
+import { getAdventureSearchItems } from "@/lib/adventure-search-items"
 import { formatNumber } from "@/lib/format"
 import { getPodcasts } from "@/lib/podcasts"
 
@@ -51,8 +54,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   const books = searchBooks(q)
   const podcasts = searchPodcasts(getPodcasts(), q)
+  const adventures = matchAdventures(getAdventureSearchItems(), q)
   const counts = {
-    all: books.length + podcasts.length,
+    all: books.length + podcasts.length + adventures.length,
     ebook: filterBooks(books, { type: "ebook" }).length,
     audio: filterBooks(books, { type: "audio" }).length,
   }
@@ -125,6 +129,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 {podcasts.length > 0
                   ? ` و ${formatNumber(podcasts.length)} پادکست`
                   : null}
+                {adventures.length > 0
+                  ? ` و ${formatNumber(adventures.length)} ماجراجویی`
+                  : null}
               </p>
             </header>
             <SearchResults state={state} counts={counts}>
@@ -142,7 +149,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                     priorityCount={6}
                   />
                 </section>
-              ) : (
+              ) : type === "all" && adventures.length > 0 ? null : (
                 <Empty className="border border-border bg-card py-12">
                   <EmptyHeader>
                     <EmptyTitle className="text-2xl font-bold">
@@ -154,6 +161,37 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                   </EmptyHeader>
                 </Empty>
               )}
+              {type === "all" && adventures.length > 0 ? (
+                <section
+                  aria-labelledby="adventure-results"
+                  className="flex flex-col gap-6"
+                >
+                  <SectionHeader
+                    id="adventure-results"
+                    title={`ماجراجویی‌ها (${formatNumber(adventures.length)})`}
+                  />
+                  <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {adventures.map((adventure) => (
+                      <li key={adventure.bookId}>
+                        <Link
+                          href={`/adventures/${adventure.bookId}`}
+                          className="flex h-full items-start gap-3 rounded-lg border border-border bg-card p-4 transition-colors outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50"
+                        >
+                          <RouteIcon className="mt-1 size-4 shrink-0 text-accent-foreground" />
+                          <span className="flex min-w-0 flex-col gap-1">
+                            <span className="font-medium">
+                              {adventure.name}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {adventure.tagline}
+                            </span>
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
               {shownPodcasts.length > 0 ? (
                 <section
                   aria-labelledby="podcast-results"
