@@ -4,6 +4,8 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, type ReactNode } from "react"
 
+import { DURATION, EASE_OUT_CSS, ms } from "@/lib/motion"
+
 /** Native links remain native for modified clicks and reduced motion. */
 export function BookTravelLink({
   href,
@@ -77,8 +79,8 @@ export function BookTravelLink({
             },
           ],
           {
-            duration: 240,
-            easing: "cubic-bezier(0.22,1,0.36,1)",
+            duration: ms(DURATION.base),
+            easing: EASE_OUT_CSS,
             fill: "forwards",
           }
         )

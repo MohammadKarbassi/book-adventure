@@ -14,6 +14,7 @@ import { JourneyNote } from "@/components/adventures/journey-note"
 import type { CategoryMap } from "@/components/adventures/journey-order"
 import { useJourneyOrder } from "@/components/adventures/use-journey-order"
 import { ShelfBook } from "@/components/home/shelf-book"
+import { lampShare } from "@/components/home/shelf-dusk"
 import { ShelfScene } from "@/components/home/shelf-scene"
 import {
   HomeMediaJourney,
@@ -72,6 +73,10 @@ export function BookShelf({
   const [activeIndex, setActiveIndex] = useState(0)
   const [phase, setPhase] = useState("books")
   const [dimmed, setDimmed] = useState(false)
+  // The night stage sits under the sticky site header.
+  const [night, setNight] = useState(false)
+  // The shop entrance is coming up: the rail steps aside.
+  const [railAway, setRailAway] = useState(false)
   // useReducedMotion reads matchMedia on the client only; wait for hydration
   // so the first client render matches the server.
   const prefersReduced = useReducedMotion()
@@ -90,6 +95,10 @@ export function BookShelf({
         currentPhase = section.dataset.homeMediaPhase ?? "paper"
     })
     setPhase(currentPhase)
+    const entranceTop = document
+      .querySelector("[data-home-shop-entrance]")
+      ?.getBoundingClientRect().top
+    setRailAway(entranceTop !== undefined && entranceTop < innerHeight * 0.85)
     const store = document.getElementById(storeId)
     const shelfTop = listRef.current
       ?.closest("section")
@@ -101,16 +110,26 @@ export function BookShelf({
           store.getBoundingClientRect().top > 81
       )
     const items = listRef.current?.children
-    if (!items?.length) return
+    if (!items?.length) {
+      setNight(false)
+      return
+    }
     const last = items[items.length - 1].getBoundingClientRect()
     const dim = Math.max(
       0,
       Math.min(1, (innerHeight * 1.6 - last.top) / (innerHeight * 1.1))
     )
-    listRef.current
-      ?.closest<HTMLElement>("[data-press-shelf]")
-      ?.style.setProperty("--shelf-dim", `${dim * 100}%`)
+    const shelf = listRef.current?.closest<HTMLElement>("[data-press-shelf]")
+    shelf?.style.setProperty("--shelf-dim", `${dim * 100}%`)
+    shelf?.style.setProperty("--shelf-lamp", `${lampShare(dim) * 100}%`)
     setDimmed(dim > 0.5)
+    // Night under the header (64px) until the paper entrance reaches it.
+    setNight(
+      dim > 0.5 &&
+        entranceTop !== undefined &&
+        entranceTop > 64 &&
+        (shelf?.getBoundingClientRect().top ?? 0) < 64
+    )
     const middle = window.innerHeight / 2
     let nearest = 0
     let nearestDistance = Infinity
@@ -125,6 +144,14 @@ export function BookShelf({
     setActiveIndex(nearest)
   }, [storeId])
   useMotionValueEvent(scrollY, "change", updateActive)
+  // A page-level flag the header's CSS reads; cleared when leaving home.
+  useEffect(() => {
+    document.documentElement.toggleAttribute("data-home-night", night)
+  }, [night])
+  useEffect(
+    () => () => document.documentElement.removeAttribute("data-home-night"),
+    []
+  )
   useEffect(() => {
     const frame = requestAnimationFrame(updateActive)
     window.addEventListener("resize", updateActive)
@@ -159,10 +186,7 @@ export function BookShelf({
       data-press-shelf=""
       data-shelf-in-view={shelfInView ? "true" : "false"}
       data-home-phase={phase}
-      style={{
-        backgroundColor:
-          "color-mix(in oklab, var(--background) calc(100% - var(--shelf-dim, 0%)), var(--home-media-night) var(--shelf-dim, 0%))",
-      }}
+      // Background: the dusk mix in app/globals.css ([data-press-shelf]).
       className="relative isolate min-h-svh overflow-x-clip bg-background text-foreground"
     >
       <ShelfScene books={books} />
@@ -170,7 +194,8 @@ export function BookShelf({
       <nav
         aria-label="فهرست قفسه"
         className={cn(
-          "absolute inset-y-0 start-3 z-30 hidden w-10 text-foreground md:block lg:start-6",
+          "absolute inset-y-0 start-3 z-30 hidden w-10 text-foreground transition-[opacity,visibility] duration-240 motion-reduce:transition-none md:block lg:start-6",
+          railAway && "invisible opacity-0",
           (phase === "audio" ||
             phase === "podcast" ||
             (phase === "books" && dimmed)) &&

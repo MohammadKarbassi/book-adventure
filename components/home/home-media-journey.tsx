@@ -122,25 +122,26 @@ export function HomeMediaJourney({ audio, podcast, storeId }: HomeMediaProps) {
             صدا و کاور: ناسا · پس‌زمینه: تصویر ارسالی افق زمین
           </p>
         </section>
-        <section
-          data-home-shop-entrance=""
-          aria-labelledby="home-shop-title"
-          className="relative z-20 flex min-h-[65svh] flex-col items-center justify-center gap-7 bg-(--ending-paper) px-7 py-20 text-center text-(--ending-ink)"
-        >
-          <h2
-            id="home-shop-title"
-            className="max-w-3xl font-heading text-5xl leading-tight md:text-7xl"
-          >
-            کتاب بعدی‌تان را پیدا کنید
-          </h2>
-          <p className="max-w-xl text-lg leading-loose">
-            حالا نوبت انتخاب شماست؛ قصه‌ای برای خواندن، شنیدن یا کشف کردن.
-          </p>
-          <a href={`#${storeId}`} className={buttonVariants({ size: "lg" })}>
-            قدم به فروشگاه بگذارید <ArrowDownIcon data-icon="inline-end" />
-          </a>
-        </section>
       </div>
+      {/* Outside the night wrapper: the entrance takes the site's own theme. */}
+      <section
+        data-home-shop-entrance=""
+        aria-labelledby="home-shop-title"
+        className="relative z-20 flex min-h-[45svh] flex-col items-center justify-center gap-7 bg-background px-7 py-20 text-center text-foreground"
+      >
+        <h2
+          id="home-shop-title"
+          className="max-w-3xl font-heading text-5xl leading-tight md:text-7xl"
+        >
+          کتاب بعدی‌تان را پیدا کنید
+        </h2>
+        <p className="max-w-xl text-lg leading-loose">
+          حالا نوبت انتخاب شماست؛ قصه‌ای برای خواندن، شنیدن یا کشف کردن.
+        </p>
+        <a href={`#${storeId}`} className={buttonVariants({ size: "lg" })}>
+          قدم به فروشگاه بگذارید <ArrowDownIcon data-icon="inline-end" />
+        </a>
+      </section>
     </div>
   )
 }

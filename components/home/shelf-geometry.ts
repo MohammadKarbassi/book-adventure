@@ -15,6 +15,8 @@ export type ShelfBook = {
   type: BookType
   image: string
   color: BookColor
+  /** The adventure room's top color ("#rrggbb"): the shelf → room wipe. */
+  roomColor?: string
   finalPrice: number
   price?: number
   discountPct?: number

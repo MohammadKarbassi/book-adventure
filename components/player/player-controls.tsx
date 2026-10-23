@@ -120,7 +120,7 @@ function SkipIcon({ forward }: { forward: boolean }) {
       <Icon className="size-6" strokeWidth={1.75} />
       <span
         aria-hidden="true"
-        className="absolute pt-0.5 text-[0.55rem] leading-none font-bold"
+        className="absolute pt-0.5 text-[0.625rem] leading-none font-bold"
       >
         {formatNumber(SKIP_SECONDS)}
       </span>

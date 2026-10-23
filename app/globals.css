@@ -2,7 +2,8 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+/* The site header also counts as dark while it floats over the home night. */
+@custom-variant dark (&:is(.dark *, html[data-home-night] [data-site-header] *));
 
 @theme inline {
   --font-heading: var(--font-heading);
@@ -67,7 +68,7 @@
   --muted-foreground: oklch(0.5 0.025 258);
   --accent: oklch(0.93 0.035 200);
   --accent-foreground: oklch(0.42 0.08 200);
-  --destructive: oklch(0.58 0.2 27);
+  --destructive: oklch(0.55 0.2 27);
   --border: oklch(0.89 0.015 85);
   --input: oklch(0.87 0.015 85);
   --ring: oklch(0.72 0.14 72);
@@ -87,7 +88,8 @@
   --sidebar-ring: oklch(0.72 0.14 72);
 }
 
-.dark {
+.dark,
+html[data-home-night] [data-site-header] {
   --background: oklch(0.17 0.025 258);
   --foreground: oklch(0.95 0.012 85);
   --card: oklch(0.21 0.028 258);
@@ -119,6 +121,36 @@
   --sidebar-accent-foreground: oklch(0.84 0.09 195);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.7 0.13 75);
+}
+
+/* Over the home media night the header takes the night tokens (above). */
+html[data-home-night] [data-site-header] {
+  color-scheme: dark;
+}
+
+/* The shelf's dusk (light theme): paper → night along the longer hue arc
+   (amber, rose, violet), with a lantern share of --primary mid-way; see
+   components/home/shelf-dusk.ts. The scroll handler sets both shares. */
+[data-press-shelf] {
+  background-color: color-mix(
+    in oklab,
+    color-mix(
+        in oklch longer hue,
+        var(--background) calc(100% - var(--shelf-dim, 0%)),
+        var(--home-media-night) var(--shelf-dim, 0%)
+      )
+      calc(100% - var(--shelf-lamp, 0%)),
+    var(--primary) var(--shelf-lamp, 0%)
+  );
+}
+
+/* Dark theme: the paper is already night; no hue sweep, no lantern. */
+.dark [data-press-shelf] {
+  background-color: color-mix(
+    in oklab,
+    var(--background) calc(100% - var(--shelf-dim, 0%)),
+    var(--home-media-night) var(--shelf-dim, 0%)
+  );
 }
 
 /* The pre-paint script marks returning and reduced-motion visitors. */

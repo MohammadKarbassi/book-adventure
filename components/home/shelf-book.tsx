@@ -1,8 +1,9 @@
 "use client"
 
-import { useId, useRef, useState } from "react"
+import { useEffect, useId, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   motion,
   useMotionValue,
@@ -23,12 +24,25 @@ import {
   type ShelfBook as ShelfBookData,
 } from "@/components/home/shelf-geometry"
 import { formatNumber } from "@/lib/format"
+import { DURATION, EASE_OUT_CSS, ms } from "@/lib/motion"
 
 /** How far the cover (top face) and back (bottom face) reach into the screen. */
 const DEPTH = "66cqw"
 const PERSPECTIVE = 1100
 /** Hovered or focused books tip forward at least this much to show a band of their cover. */
 const HOVER_TILT = -24
+
+/** The room wipe: how long it sweeps in, after the book has been pulled out. */
+const WIPE_SECONDS = 0.36
+/** Safety net: never leave the wipe up if the navigation does not land. */
+const WIPE_TIMEOUT_MS = 8000
+
+/** Removes leftover wipes (unmount, bfcache restore). */
+function clearWipes() {
+  document
+    .querySelectorAll("[data-adventure-wipe]")
+    .forEach((el) => el.remove())
+}
 
 const BACK_LIGHT: React.CSSProperties = {
   backgroundImage: [
@@ -65,6 +79,66 @@ export function ShelfBook({
     setActiveState(next)
   }
   const { thickness, widthPct, offsetPct } = spineLayout(book)
+
+  // Plain clicks: pull the book out, wipe in its room color from the
+  // reading edge, then navigate. Modified clicks, new tabs and reduced motion
+  // stay native (onNavigate only fires for plain same-tab navigations).
+  const router = useRouter()
+  const navigating = useRef(false)
+  useEffect(() => {
+    // Back/forward cache restores the page as it was left: drop the wipe.
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (!event.persisted) return
+      clearWipes()
+      navigating.current = false
+    }
+    window.addEventListener("pageshow", onPageShow)
+    return () => {
+      window.removeEventListener("pageshow", onPageShow)
+      // The route changed (or the shelf left): the room is underneath now.
+      clearWipes()
+    }
+  }, [])
+  function travel(event: { preventDefault: () => void }, href: string) {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    if (typeof document.body.animate !== "function") return
+    event.preventDefault()
+    if (navigating.current) return
+    navigating.current = true
+    const pulled = lifted.get() === 1
+    setActive(true)
+    const wipe = document.createElement("div")
+    wipe.setAttribute("aria-hidden", "true")
+    wipe.setAttribute("data-adventure-wipe", "")
+    Object.assign(wipe.style, {
+      position: "fixed",
+      inset: "0",
+      zIndex: "600",
+      pointerEvents: "none",
+      backgroundColor: book.roomColor ?? book.color.dominant,
+      clipPath: "inset(0 0 0 100%)",
+    })
+    document.body.append(wipe)
+    // From the right edge (RTL reading direction) across the viewport.
+    const animation = wipe.animate(
+      [{ clipPath: "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0)" }],
+      {
+        duration: ms(WIPE_SECONDS),
+        delay: pulled ? 0 : ms(DURATION.base),
+        easing: EASE_OUT_CSS,
+        fill: "forwards",
+      }
+    )
+    void animation.finished
+      .catch(() => undefined)
+      .then(() => {
+        router.push(href)
+        setTimeout(() => {
+          wipe.remove()
+          navigating.current = false
+        }, WIPE_TIMEOUT_MS)
+      })
+  }
 
   const { scrollYProgress } = useScroll({
     target: itemRef,
@@ -103,6 +177,7 @@ export function ShelfBook({
         href={`/adventures/${book.id}`}
         aria-label={`ماجراجویی ${formatNumber(number)}: ${book.name} — ${book.title} اثر ${book.author}`}
         aria-describedby={priceId}
+        onNavigate={(event) => travel(event, `/adventures/${book.id}`)}
         className="group/shelf-book relative block rounded-[3px] outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
         onPointerEnter={(event) => {
           if (event.pointerType === "mouse") setActive(true)

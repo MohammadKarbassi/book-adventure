@@ -444,11 +444,12 @@ export function AdventureBook3D({
         />
       </div>
 
+      {/* Only while this book is on screen: the hint leaves with it. */}
       <p
-        aria-hidden={!showHint}
+        aria-hidden={!(showHint && inView)}
         className={cn(
           "text-xs text-muted-foreground transition-opacity duration-700 motion-reduce:transition-none",
-          showHint ? "opacity-100" : "opacity-0"
+          showHint && inView ? "opacity-100" : "opacity-0"
         )}
       >
         برای چرخاندن، کتاب را بکشید
