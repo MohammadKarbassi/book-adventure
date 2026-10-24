@@ -47,3 +47,6 @@ next-env.d.ts
 
 # Local visual comparison captures, not production assets
 /.impeccable/review/
+
+# Demo video working files (audio, frames, clips)
+/demo/
